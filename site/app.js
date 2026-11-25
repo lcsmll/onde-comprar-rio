@@ -45,6 +45,7 @@ const ICONES = {
   barulho: '<path d="M4 10v4h4l5 4V6L8 10z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
   preco: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
   local: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  whats: '<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.2-1.4-2-1-1 .8a4 4 0 0 1-2.1-2.1l.8-1-1-2z"/>',
 };
 const icone = (k, cls = "icone") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONES[k]}</svg>`;
 
@@ -652,6 +653,12 @@ function radar(series, tam = 300) {
       <span class="rd-item"><span class="rd-traco"></span>mediana do Rio (nota 5)</span></figcaption></figure>`;
 }
 
+/* ---------------- compartilhar ---------------- */
+// O link compartilhado e o da pagina do bairro (com previa no WhatsApp). Nunca leva renda,
+// prioridades ou qualquer dado digitado.
+const linkBairro = (b) => `${D.bairros.site_url}bairro/${b.slug}/`;
+const textoCompartilhar = (b) => `Veja ${b.nome} no Onde Comprar no Rio (notas com dados oficiais, preço do m² e simulação de financiamento): ${linkBairro(b)}`;
+
 /* ---------------- comparar bairros ---------------- */
 const MAX_COMPARAR = 3;
 const nomeDe = (cod) => D.bairros.bairros.find((b) => b.codbairro === cod)?.nome || cod;
@@ -882,6 +889,13 @@ function desenharBairro(cod) {
       ${radar([{ nome: b.nome, notas: n, cor: CORES_SERIE[0] }], 300)}
     </div>
     ${!estado.perfil ? '<p class="destaque">Nota final com todos os critérios com o mesmo peso. <a href="#perfil">Responda as perguntas</a> para ajustar às suas prioridades.</p>' : ""}
+    <div class="compartilhar">
+      <a class="btn btn-whats" id="whats" target="_blank" rel="noopener noreferrer"
+         href="https://wa.me/?text=${encodeURIComponent(textoCompartilhar(b))}">${icone("whats", "icone")}Compartilhar no WhatsApp</a>
+      ${navigator.share ? '<button class="btn" id="compartilhar-nativo" type="button">Compartilhar</button>' : ""}
+      <button class="btn" id="copiar-bairro" type="button">Copiar link</button>
+      <span id="msg-compartilhar" class="pequeno" role="status"></span>
+    </div>
     <div class="acoes-detalhe">
       <button class="btn-principal" id="ir-simulador">Simular financiamento</button>
       <button class="btn" id="add-comparar" aria-pressed="${estado.comparar.includes(b.codbairro)}">${estado.comparar.includes(b.codbairro) ? "✓ Na comparação" : "+ Adicionar à comparação"}</button>
@@ -897,6 +911,13 @@ function desenharBairro(cod) {
       <p><strong>Para alugar:</strong></p><div class="links-portais">${portais("aluguel")}</div>
     </div>`;
   $("#ir-simulador").addEventListener("click", () => ir("financiamento/" + cod));
+  $("#copiar-bairro").addEventListener("click", () => {
+    const ok = () => ($("#msg-compartilhar").textContent = "Link copiado.");
+    if (navigator.clipboard) navigator.clipboard.writeText(linkBairro(b)).then(ok, () => ($("#msg-compartilhar").textContent = linkBairro(b)));
+    else $("#msg-compartilhar").textContent = linkBairro(b);
+  });
+  if ($("#compartilhar-nativo")) $("#compartilhar-nativo").addEventListener("click", () =>
+    navigator.share({ title: `${b.nome} · Onde Comprar no Rio`, text: `Veja ${b.nome} no Onde Comprar no Rio`, url: linkBairro(b) }).catch(() => {}));
   $("#add-comparar").addEventListener("click", () => { alternarComparar(cod); desenharBairro(cod); atualizarBarraComparar("bairro"); });
   if ($("#mapa-detalhe")) ligarMapa($("#mapa-detalhe"));
 }

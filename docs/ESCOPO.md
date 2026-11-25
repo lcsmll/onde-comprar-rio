@@ -413,3 +413,10 @@ Motivo: a Tijuca aparecia com segurança pior que a Penha (5,7 x 6,5) e transpor
 
 - **Segurança:** letalidade violenta passa de 50% para **70%**; roubo de veículo, de rua e a residência ficam com **10% cada** (eram 20/20/10). Diagnóstico: roubo por morador infla em áreas de passagem (20% da Tijuca está na 18ª DP, entorno do Maracanã e Praça da Bandeira) e é subnotificado onde se denuncia menos (a 22ª DP, da Penha, cobre 190 mil pessoas, incluindo o Complexo do Alemão). A letalidade é o dado mais confiável. Resultado: Tijuca 7,0, Penha 6,4.
 - **Transporte:** sai a contagem de "estações a até 1 km" (contava cada parada de BRT, a cada ~600 m, como uma estação de metrô). Agora: **50% distância até qualquer estação** (metrô, trem, BRT, VLT) **+ 50% distância até metrô ou trem**. Resultado: Tijuca 7,4, Penha 6,4. Efeito colateral aceito: bairros servidos só por BRT (Jacarepaguá) caem (Praça Seca 7,1 → 4,8).
+
+## 18. Página por bairro e compartilhar no WhatsApp (item 4 do plano de melhorias, 25/11/2026)
+
+- `etl/12_paginas_bairros.py` gera, para cada bairro exibido, `site/bairro/<slug>/index.html` (ex.: `/bairro/tijuca/`) com etiquetas Open Graph (título "Tijuca: nota 6,3 de 10", descrição gerada pelos números e imagem) e `previa.png` (1200x630, desenhada com o visual do app e fotografada pelo Chrome). Quem abre o link é levado ao bairro no app (`#bairro/COD`). Também gera `site/img/previa.png` para a página inicial, que ganhou as mesmas etiquetas.
+- Na prévia, a nota final usa os 6 critérios com o mesmo peso (a prévia não conhece as prioridades de quem abre), e a imagem diz isso.
+- No detalhe do bairro: "Compartilhar no WhatsApp" (link `wa.me` com texto e o endereço da página do bairro), "Compartilhar" (menu nativo do celular, quando existe) e "Copiar link". Nada digitado pela pessoa vai no link.
+- `config.SITE_URL` guarda o endereço público (a prévia exige URL completa da imagem). Se o site mudar de endereço, altere ali e rode o ETL.

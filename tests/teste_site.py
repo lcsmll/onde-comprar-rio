@@ -137,6 +137,9 @@ def fluxo(page, nome):
     notas_crit = {round(float(t.replace(",", ".")), 1) for t in page.locator(".criterio .anel-valor").all_inner_texts()}
     checar(notas_txt <= {round(v, 1) for v in notas_crit} or not notas_txt,
            f"resumo coerente com as notas ({sorted(notas_txt)})")
+    href = page.get_attribute("#whats", "href")
+    checar(href.startswith("https://wa.me/?text=") and "%2Fbairro%2F" in href and "6000" not in href and "9500" not in href,
+           "botao WhatsApp compartilha a pagina do bairro, sem renda")
     page.click("#add-comparar")
     checar("Na comparação" in page.inner_text("#add-comparar") and page.is_visible("#barra-comparar"),
            "detalhe: adicionar a comparacao")
@@ -189,6 +192,16 @@ def fluxo(page, nome):
     checar(not page.is_visible("#renda2"), "voltar para renda unica esconde o 2o comprador")
     page.click("#tela-renda >> text=Avançar")
     checar(not page.is_visible("#trabalho2"), "solteiro: sem campo de trabalho da 2a pessoa")
+
+    # pagina do bairro (previa do WhatsApp): etiquetas Open Graph e redirecionamento para o app
+    page.goto(URL + "bairro/tijuca/")
+    page.wait_for_selector("#tela-bairro:not([hidden])")
+    checar("#bairro/033" in page.url and page.locator(".detalhe-topo h2").inner_text() == "Tijuca",
+           "pagina bairro/tijuca/ abre a Tijuca no app")
+    import urllib.request
+    pagina = urllib.request.urlopen(URL + "bairro/tijuca/").read().decode()
+    checar(all(t in pagina for t in ('og:title', 'og:image" content="https://', 'og:description', 'Tijuca: nota')),
+           "pagina do bairro tem as etiquetas de previa (Open Graph)")
 
     # link compartilhado: abre com perfil e pesos
     page.goto(URL + "?p=solteiro&w=111155&e=tanto_faz#resultado")

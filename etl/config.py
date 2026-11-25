@@ -113,3 +113,6 @@ PESOS_PERFIL = {
     "casal":    {"violencia": 4, "alagamento": 4, "escolas": 2, "transporte": 4, "emprego": 4, "barulho": 3},
     "solteiro": {"violencia": 4, "alagamento": 3, "escolas": 1, "transporte": 5, "emprego": 5, "barulho": 3},
 }
+
+# Endereco publico do site (usado nas previas de link do WhatsApp, que exigem URL completa)
+SITE_URL = "https://lcsmll.github.io/onde-comprar-rio/"

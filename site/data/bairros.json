@@ -9,6 +9,7 @@
   "emprego",
   "barulho"
  ],
+ "site_url": "https://lcsmll.github.io/onde-comprar-rio/",
  "referencia_codigos": [
   "013",
   "098",
@@ -1275,6 +1276,7 @@
   {
    "codbairro": "063",
    "nome": "Méier",
+   "slug": "meier",
    "regiao": "Méier",
    "populacao_2022": 39700,
    "tem_nota": true,
@@ -1513,6 +1515,7 @@
   {
    "codbairro": "065",
    "nome": "Cachambi",
+   "slug": "cachambi",
    "regiao": "Méier",
    "populacao_2022": 38673,
    "tem_nota": true,
@@ -1747,6 +1750,7 @@
   {
    "codbairro": "033",
    "nome": "Tijuca",
+   "slug": "tijuca",
    "regiao": "Tijuca",
    "populacao_2022": 142326,
    "tem_nota": true,
@@ -1981,6 +1985,7 @@
   {
    "codbairro": "036",
    "nome": "Vila Isabel",
+   "slug": "vila-isabel",
    "regiao": "Tijuca",
    "populacao_2022": 65790,
    "tem_nota": true,
@@ -2211,6 +2216,7 @@
   {
    "codbairro": "038",
    "nome": "Grajaú",
+   "slug": "grajau",
    "regiao": "Tijuca",
    "populacao_2022": 32816,
    "tem_nota": true,
@@ -2441,6 +2447,7 @@
   {
    "codbairro": "083",
    "nome": "Madureira",
+   "slug": "madureira",
    "regiao": "Madureira",
    "populacao_2022": 39712,
    "tem_nota": true,
@@ -2675,6 +2682,7 @@
   {
    "codbairro": "076",
    "nome": "Irajá",
+   "slug": "iraja",
    "regiao": "Madureira",
    "populacao_2022": 85906,
    "tem_nota": true,
@@ -2905,6 +2913,7 @@
   {
    "codbairro": "043",
    "nome": "Penha",
+   "slug": "penha",
    "regiao": "Penha",
    "populacao_2022": 58516,
    "tem_nota": true,
@@ -3135,6 +3144,7 @@
   {
    "codbairro": "074",
    "nome": "Vila da Penha",
+   "slug": "vila-da-penha",
    "regiao": "Madureira",
    "populacao_2022": 23336,
    "tem_nota": true,
@@ -3369,6 +3379,7 @@
   {
    "codbairro": "124",
    "nome": "Praça Seca",
+   "slug": "praca-seca",
    "regiao": "Jacarepaguá",
    "populacao_2022": 63284,
    "tem_nota": true,
@@ -3599,6 +3610,7 @@
   {
    "codbairro": "123",
    "nome": "Tanque",
+   "slug": "tanque",
    "regiao": "Jacarepaguá",
    "populacao_2022": 36839,
    "tem_nota": true,
@@ -3837,6 +3849,7 @@
   {
    "codbairro": "122",
    "nome": "Taquara",
+   "slug": "taquara",
    "regiao": "Jacarepaguá",
    "populacao_2022": 107427,
    "tem_nota": true,
@@ -4071,6 +4084,7 @@
   {
    "codbairro": "120",
    "nome": "Freguesia (Jacarepaguá)",
+   "slug": "freguesia-jacarepagua",
    "regiao": "Jacarepaguá",
    "populacao_2022": 74803,
    "tem_nota": true,
@@ -4301,6 +4315,7 @@
   {
    "codbairro": "121",
    "nome": "Pechincha",
+   "slug": "pechincha",
    "regiao": "Jacarepaguá",
    "populacao_2022": 39070,
    "tem_nota": true,
@@ -4535,6 +4550,7 @@
   {
    "codbairro": "125",
    "nome": "Vila Valqueire",
+   "slug": "vila-valqueire",
    "regiao": "Jacarepaguá",
    "populacao_2022": 34024,
    "tem_nota": true,

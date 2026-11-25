@@ -162,3 +162,10 @@ def casador_bairros():
         return None
 
     return casar
+
+
+def slug(nome: str) -> str:
+    """'Freguesia (Jacarepaguá)' -> 'freguesia-jacarepagua' (mesma regra do app.js)."""
+    s = unicodedata.normalize("NFKD", nome).encode("ascii", "ignore").decode().lower()
+    s = re.sub(r"[()]", "", s).strip()
+    return re.sub(r"\s+", "-", s)

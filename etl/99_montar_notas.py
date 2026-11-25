@@ -15,7 +15,7 @@ from datetime import date
 import numpy as np
 import pandas as pd
 
-from comum import PROC, SITE_DATA, carregar_bairros, codigos_mvp, config, referencia
+from comum import PROC, SITE_DATA, carregar_bairros, codigos_mvp, config, referencia, slug
 
 
 def ler(crit):
@@ -81,7 +81,7 @@ def main():
     bairros_json = []
     for cod in exibidos:
         linha = b.loc[cod]
-        item = {"codbairro": cod, "nome": linha["nome"], "regiao": linha["rp"],
+        item = {"codbairro": cod, "nome": linha["nome"], "slug": slug(linha["nome"]), "regiao": linha["rp"],
                 "populacao_2022": int(linha["pop2022_oficial"]) if pd.notna(linha["pop2022_oficial"]) else int(linha["pop2022"]),
                 "tem_nota": cod in ref, "criterios": {}, "ruido_db_oficial": None}
         for crit, c in criterios.items():
@@ -123,6 +123,7 @@ def main():
         "metodo_nota": "Nota de 0 a 10 = posição do bairro entre os bairros do Rio com pelo menos "
                        f"{config.POP_MINIMA} moradores ({len(ref)} bairros). Ex.: 8,0 = melhor que 80% deles.",
         "criterios": config.CRITERIOS,
+        "site_url": config.SITE_URL,
         "referencia_codigos": ref,
         # mediana do R$/m2 (ITBI) dos bairros de referencia: usada no resumo em texto do site
         "preco_mediana_rs_m2": int(round(preco.reindex(ref)["rs_m2"].median())),

@@ -562,3 +562,11 @@ h3 { font-weight: 700; letter-spacing: 0; }
 }
 .ver-mais { display: flex; align-items: center; min-height: 44px; margin-top: 8px; }
 .btn-comparar { bottom: 16px; }
+
+/* ---------- compartilhar ---------- */
+.compartilhar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 4px; }
+.compartilhar .btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+.btn-whats { background: #e7f6ec; border-color: #b9e3c6; color: #11603a; font-weight: 700; }
+.btn-whats:hover { background: #d8f0e0; border-color: #8fd1a6; }
+.btn-whats .icone { width: 18px; height: 18px; }
+#msg-compartilhar { flex-basis: 100%; margin: 0; }
