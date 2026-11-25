@@ -477,3 +477,12 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .rd-item { display: inline-flex; align-items: center; gap: 6px; }
 .rd-cor { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
 .rd-traco { width: 16px; border-top: 1.5px dashed var(--suave); display: inline-block; }
+
+/* ---------- visual mais acolhedor (referencia: paginas de cidade do BairroSafe) ---------- */
+:root { --fundo: #f6f3ec; --fundo-2: #efeadf; --cartao: #fffdf8; --linha: #e6dfd0; --linha-forte: #d6cdb9; --raio: 20px; }
+@media (prefers-color-scheme: dark) { :root { --fundo: #0e1311; --cartao: #161d1a; } }
+.btn, .btn-principal, .btn-comparar, .links-portais a { border-radius: 99px; }
+.btn-principal { box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--principal) 70%, transparent); }
+.cartao-bairro, .criterio, .bloco, .sobre-fonte, .peso, .passos li, .exemplo-cartao { box-shadow: 0 1px 0 rgba(60, 45, 20, .04), 0 10px 30px -18px rgba(60, 45, 20, .25); }
+h1, h2 { letter-spacing: -.02em; }
+.titulo-secao::before, #tela-resultado h2::before { content: ""; display: block; width: 36px; height: 4px; border-radius: 99px; background: var(--principal); margin-bottom: 10px; }
