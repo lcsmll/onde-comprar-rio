@@ -1,5 +1,7 @@
 # Publica a pasta site/ no GitHub Pages a cada push na branch main.
 # (Dados brutos, ETL e testes ficam no repositorio, mas so site/ vai para o ar.)
+# Dois jobs, como no modelo oficial do GitHub: o pacote do site so fica disponivel
+# para publicacao depois que o job que o criou termina.
 name: Publicar site
 
 on:
@@ -14,19 +16,24 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  publicar:
+  empacotar:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
           path: site
+
+  publicar:
+    needs: empacotar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
       - id: deploy
         uses: actions/deploy-pages@v5
