@@ -1,7 +1,7 @@
 """
 Teste do site no navegador (Chrome instalado, via Playwright), em tamanho de celular e de computador.
 
-Como rodar (com o servidor local ligado):
+Como rodar (com o servidor local ligado; ou contra o site publicado com URL_SITE=...):
     cd site && python3 -m http.server 8765 --bind 127.0.0.1      (em outro terminal)
     .venv/bin/python tests/teste_site.py
 Capturas de tela vao para tests/capturas/.
@@ -11,7 +11,8 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-URL = "http://127.0.0.1:8765/"
+import os
+URL = os.environ.get("URL_SITE", "http://127.0.0.1:8765/")  # ex.: URL_SITE=https://lcsmll.github.io/onde-comprar-rio/
 CAP = Path(__file__).parent / "capturas"
 CAP.mkdir(exist_ok=True)
 erros, falhas = [], []
