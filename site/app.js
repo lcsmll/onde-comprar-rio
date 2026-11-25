@@ -271,6 +271,7 @@ async function mostrar() {
   if (tela === "bairro") { estado.bairroAtual = arg; desenharBairro(arg); }
   if (tela === "financiamento") { estado.bairroAtual = arg || estado.bairroAtual; desenharSimulador(); }
   if (tela === "sobre") desenharSobre();
+  if (tela === "perguntas") desenharPerguntas();
   if (tela === "comparar") desenharComparacao(arg || "");
   if (!["sobre", "financiamento"].includes(tela)) estado.telaAnterior = h;
   atualizarBarraComparar(tela);
@@ -304,6 +305,23 @@ function montarSelectTrabalho() {
   $("#trabalho1").innerHTML = ops.join("");
   $("#trabalho2").innerHTML = ops.join("");
 }
+
+/* ---------------- imprimir / salvar PDF (impressao do navegador, sem servidor) ---------------- */
+function imprimir() {
+  const tela = location.hash.slice(1).split("/")[0] || "inicio";
+  const titulo = { bairro: "Resumo do bairro", financiamento: "Simulação de financiamento", comparar: "Comparação de bairros" }[tela] || "Onde Comprar no Rio";
+  $("#cabecalho-impressao").innerHTML = `<strong>Onde Comprar no Rio · ${esc(titulo)}</strong>
+    <span>Gerado em ${new Date().toLocaleDateString("pt-BR")} · ${esc(D.bairros.site_url)} · dados de ${fmtData(D.bairros.gerado_em)}</span>
+    <span>${esc(D.params.aviso_geral)} Notas de 0 a 10: posição entre os bairros do Rio.</span>`;
+  window.print();
+}
+let detalhesFechados = [];
+window.addEventListener("beforeprint", () => {
+  detalhesFechados = $$("details:not([open])");
+  detalhesFechados.forEach((d) => (d.open = true));
+});
+window.addEventListener("afterprint", () => detalhesFechados.forEach((d) => (d.open = false)));
+document.addEventListener("click", (e) => { if (e.target.closest("[data-imprimir]")) imprimir(); });
 
 function ligarFormulario() {
   document.addEventListener("click", (e) => {
@@ -773,6 +791,7 @@ function desenharComparacao(arg) {
     ${D.mapa ? `<div class="bloco"><h3>No mapa</h3><div id="mapa-comparar">${svgMapa({ destaque: cods })}</div></div>` : ""}
     <div class="navegacao"><button class="btn" data-ir="resultado">Voltar à lista</button>
       <button class="btn" id="copiar-comparacao">Copiar link desta comparação</button></div>
+    <button class="btn nao-imprimir" type="button" data-imprimir>Imprimir ou salvar em PDF</button>
     <p id="msg-comparacao" class="pequeno" role="status"></p>`;
   if ($("#mapa-comparar")) ligarMapa($("#mapa-comparar"));
   $("#copiar-comparacao").addEventListener("click", () => {
@@ -894,6 +913,7 @@ function desenharBairro(cod) {
          href="https://wa.me/?text=${encodeURIComponent(textoCompartilhar(b))}">${icone("whats", "icone")}Compartilhar no WhatsApp</a>
       ${navigator.share ? '<button class="btn" id="compartilhar-nativo" type="button">Compartilhar</button>' : ""}
       <button class="btn" id="copiar-bairro" type="button">Copiar link</button>
+      <button class="btn" type="button" data-imprimir>Imprimir ou PDF</button>
       <span id="msg-compartilhar" class="pequeno" role="status"></span>
     </div>
     <div class="acoes-detalhe">
@@ -1085,6 +1105,58 @@ function calcular(preco, renda, anos, juros, lin, b) {
     aluguel();
   }));
   aluguel();
+}
+
+/* ---------------- perguntas frequentes (numeros lidos dos JSON) ---------------- */
+function desenharPerguntas() {
+  const P = D.params, F = D.bairros.fontes, M = P.mcmv, N = D.bairros.referencia_codigos.length;
+  const pct = (x) => fmtN(x * 100, 0) + "%";
+  const faixas = [];
+  for (const f of M.faixas) {
+    const ult = faixas[faixas.length - 1];
+    if (ult && ult.faixa === f.faixa) { ult.ate = f.renda_ate; ult.jmax = Math.max(ult.jmax, f.juros_nao_cotista); }
+    else faixas.push({ faixa: f.faixa, ate: f.renda_ate, teto: f.teto_imovel, jmin: f.juros_cotista, jmax: f.juros_nao_cotista });
+  }
+  const perguntas = [
+    ["Como a nota de 0 a 10 é calculada?",
+     `Cada nota é a posição do bairro entre os ${N} bairros do Rio com pelo menos mil moradores. Nota 8, por exemplo, quer dizer que o bairro está melhor que 80% deles naquele critério.
+      Cada indicador é calculado para os setores do Censo 2022 e vira a média dos moradores do bairro. A nota final é a média das 6 notas, pesada pelas prioridades que você escolhe.`],
+    ["Por que nota alta em \"Menos alagamento\" e \"Menos barulho\" é bom?",
+     `Em todos os critérios, nota alta = melhor. "Menos alagamento" 8 quer dizer que o bairro alaga menos que 80% dos bairros do Rio. Por isso os nomes estão no sentido positivo; nos pontos de atenção aparece o nome do problema (ex.: "Atenção: Alagamento").`],
+    ["O que entra na nota de segurança?",
+     `Dados do ISP-RJ (${esc(F.violencia.periodo)}), por 100 mil habitantes: letalidade violenta (${pct(F.violencia.indicadores.letalidade_100k.peso)}), roubo de veículo, roubo de rua e roubo a residência (${pct(F.violencia.indicadores.roubo_rua_100k.peso)} cada).
+      A letalidade pesa mais por ser o dado mais confiável: roubos são mais registrados em áreas de passagem e menos onde se denuncia menos.`],
+    ["Por que bairros vizinhos têm a mesma nota de segurança?",
+     "O ISP publica os números por área de delegacia (CISP), não por bairro. Bairros na mesma área de delegacia recebem números iguais ou parecidos. O detalhe de cada bairro mostra qual delegacia cobre os moradores."],
+    ["De onde vem o preço do m²?",
+     `Das transações declaradas no ITBI à Prefeitura (${esc(F.preco.periodo)}). É o valor médio dividido pela área média das vendas de cada bairro. Mistura casas e apartamentos, novos e usados, e serve como referência, não como avaliação de um imóvel.`],
+    ["O que é o Minha Casa, Minha Vida e quem pode usar?",
+     `É o programa federal de financiamento com juros menores para famílias com renda bruta de até ${fmtR(faixas[faixas.length - 1].ate)}. Pelas regras atuais (${esc(M.fonte)}, página de ${fmtData(M.pagina_atualizada_em)}):
+      <ul>${faixas.map((f) => `<li><strong>${esc(f.faixa)}</strong>: renda até ${fmtR(f.ate)}; imóvel de até ${fmtR(f.teto)}; juros de ${fmtN(f.jmin, 2)}% a ${fmtN(f.jmax, 2)}% ao ano (Sudeste).</li>`).join("")}</ul>
+      Fora dessas condições, a linha comum é o SBPE (no app: ${fmtN(P.sbpe.juros_ano, 2)}% ao ano, média da Caixa no Banco Central em ${esc(P.sbpe.mes)}).`],
+    ["SAC ou Price: qual escolher?",
+     "No SAC, você paga a mesma amortização todo mês, então a parcela começa maior e vai caindo, e o total de juros é menor. Na Price, a parcela é fixa: começa menor, mas o total de juros é maior. O simulador mostra os dois lado a lado. Os bancos costumam aprovar o valor pela 1ª parcela, que no SAC é a maior."],
+    ["Quanto da renda posso comprometer com a parcela?",
+     `O app usa até ${pct(P.comprometimento_renda_max)} da renda bruta. ${esc(P.comprometimento_renda_texto)} Cada banco faz a própria análise.`],
+    ["Posso usar o FGTS?",
+     `Em geral, sim, na entrada ou para amortizar, se cumprir as regras: <ul>${P.fgts_avisos.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>`],
+    ["Quais custos existem além da entrada?",
+     `ITBI de ${pct(P.itbi.aliquota)} sobre o valor do imóvel (Prefeitura do Rio), escritura e registro em cartório e a avaliação do imóvel pelo banco.
+      ${P.custos_sem_valor.map((c) => esc(c.texto)).join(" ")}`],
+    ["A simulação vale como aprovação do banco?",
+     `Não. ${esc(P.aviso_geral)} ${esc(P.simplificacoes)}`],
+    ["O app guarda ou envia meus dados?",
+     "Não. Tudo é calculado no seu aparelho. Renda, entrada e prioridades ficam só na memória da página e somem ao fechar. Os links de compartilhar levam só o bairro (ou o perfil e as prioridades), nunca valores."],
+    ["Por que meu bairro não aparece?",
+     `Esta é a versão inicial, com ${D.bairros.bairros.length} bairros. Os dados já são calculados para a cidade inteira; os próximos bairros entram sem mudar o método.`],
+    ["De quando são os dados?",
+     `<ul><li>Segurança (ISP): ${esc(F.violencia.periodo)}</li><li>Preço do m² (ITBI): ${esc(F.preco.periodo)}</li>
+      <li>Reclamações de barulho (1746): ${esc(F.barulho.fontes[0].periodo)}</li><li>Alagamentos registrados (COR): ${esc(F.alagamento.fontes[1].periodo)}</li>
+      <li>Escolas: Censo Escolar e Ideb 2025 (INEP)</li><li>População: Censo 2022 (IBGE)</li></ul>
+      Detalhes de cada fonte em <a href="#sobre">Sobre os dados</a>.`],
+  ];
+  $("#perguntas").innerHTML = perguntas.map(([q, r]) =>
+    `<details class="pergunta"><summary>${esc(q)}</summary><div class="resposta">${r.includes("<") ? r : `<p>${r}</p>`}</div></details>`).join("");
 }
 
 /* ---------------- sobre os dados ---------------- */

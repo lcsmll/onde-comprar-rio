@@ -193,6 +193,28 @@ def fluxo(page, nome):
     page.click("#tela-renda >> text=Avançar")
     checar(not page.is_visible("#trabalho2"), "solteiro: sem campo de trabalho da 2a pessoa")
 
+    # perguntas frequentes: numeros vindos do JSON
+    page.click(".nav-topo >> text=Dúvidas")
+    page.wait_for_selector("#tela-perguntas:not([hidden]) .pergunta")
+    checar(page.locator(".pergunta").count() == 14, f"14 perguntas frequentes ({page.locator('.pergunta').count()})")
+    page.locator(".pergunta summary", has_text="Minha Casa").click()
+    r = page.locator(".pergunta[open] .resposta").inner_text().replace("\xa0", " ")
+    checar("Faixa 3" in r and "R$ 400.000" in r and "SBPE" in r, "resposta do MCMV com faixas e tetos do JSON")
+
+    # impressao: botoes e cabecalho somem, cabecalho de impressao aparece, detalhes abrem
+    page.goto(URL + "#comparar/033,043")
+    page.wait_for_selector("table.cmp")
+    page.evaluate("window.print = () => {}")          # nao abrir a janela de impressao no teste
+    page.locator("#comparacao [data-imprimir]").click()
+    page.emulate_media(media="print")
+    page.evaluate("window.dispatchEvent(new Event('beforeprint'))")
+    checar(page.is_hidden(".topo") and page.is_visible("#cabecalho-impressao") and "Comparação" in page.inner_text("#cabecalho-impressao"),
+           "impressao: some o cabecalho do site, aparece o cabecalho de impressao")
+    checar(page.locator(".cmp-det[open]").count() == 6, "impressao: secoes fechadas abrem")
+    page.evaluate("window.dispatchEvent(new Event('afterprint'))")
+    page.emulate_media(media="screen")
+    checar(page.locator(".cmp-det[open]").count() == 0, "depois de imprimir, as secoes voltam a fechar")
+
     # pagina do bairro (previa do WhatsApp): etiquetas Open Graph e redirecionamento para o app
     page.goto(URL + "bairro/tijuca/")
     page.wait_for_selector("#tela-bairro:not([hidden])")

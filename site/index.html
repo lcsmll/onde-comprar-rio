@@ -30,10 +30,11 @@
         <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V10l9-7 9 7v11h-6v-6H9v6z"/></svg>
         <span>Onde Comprar no Rio</span>
       </a>
-      <nav><a href="#sobre" class="link-topo">Sobre os dados</a></nav>
+      <nav class="nav-topo"><a href="#perguntas" class="link-topo">Dúvidas</a><a href="#sobre" class="link-topo">Sobre os dados</a></nav>
     </div>
   </header>
 
+  <div class="so-impressao" id="cabecalho-impressao"></div>
   <main id="app">
     <p id="carregando" class="aviso">Carregando dados...</p>
 
@@ -69,7 +70,7 @@
         <li><span class="passo-num">3</span><div><strong>Compare e simule</strong><span>Veja os bairros em ordem, os números de cada um e quanto fica o financiamento.</span></div></li>
       </ol>
       <p class="destaque"><strong>Privacidade:</strong> nada do que você digitar sai do seu aparelho. Não guardamos nem enviamos renda, nome ou qualquer dado.</p>
-      <p class="pequeno">Dados gerados em <span id="data-geracao"></span>. <a href="#sobre">Veja as fontes e os cálculos</a>.</p>
+      <p class="pequeno">Dados gerados em <span id="data-geracao"></span>. <a href="#sobre">Veja as fontes e os cálculos</a> ou as <a href="#perguntas">perguntas frequentes</a>.</p>
     </section>
 
     <!-- 1. Perfil -->
@@ -240,7 +241,15 @@
       <button class="btn" id="voltar-do-simulador">Voltar</button>
       <div class="secao-cab"><p class="sobretitulo">Financiamento</p><h2>Simulador de financiamento</h2></div>
       <p class="aviso" id="aviso-geral"></p>
+      <button class="btn nao-imprimir" type="button" data-imprimir>Imprimir ou salvar em PDF</button>
       <div id="simulador"></div>
+    </section>
+
+    <!-- Perguntas frequentes -->
+    <section id="tela-perguntas" class="tela" hidden>
+      <div class="secao-cab"><p class="sobretitulo">Dúvidas</p><h2>Perguntas frequentes</h2></div>
+      <p class="pequeno">Respostas curtas. Os números vêm dos mesmos dados oficiais usados no app.</p>
+      <div id="perguntas"></div>
     </section>
 
     <!-- 8. Sobre os dados -->

@@ -420,3 +420,8 @@ Motivo: a Tijuca aparecia com segurança pior que a Penha (5,7 x 6,5) e transpor
 - Na prévia, a nota final usa os 6 critérios com o mesmo peso (a prévia não conhece as prioridades de quem abre), e a imagem diz isso.
 - No detalhe do bairro: "Compartilhar no WhatsApp" (link `wa.me` com texto e o endereço da página do bairro), "Compartilhar" (menu nativo do celular, quando existe) e "Copiar link". Nada digitado pela pessoa vai no link.
 - `config.SITE_URL` guarda o endereço público (a prévia exige URL completa da imagem). Se o site mudar de endereço, altere ali e rode o ETL.
+
+## 19. Perguntas frequentes e imprimir/PDF (itens 6 e 7 do plano de melhorias, 25/11/2026)
+
+- **Tela "Dúvidas"** (`#perguntas`, link no cabeçalho e na tela inicial): 14 perguntas em blocos que abrem e fecham (como a nota é calculada, nomes no sentido positivo, o que entra em segurança, delegacias, preço do m², MCMV, SAC x Price, comprometimento da renda, FGTS, custos extras, validade da simulação, privacidade, bairros da versão e datas dos dados). Os números das respostas (faixas, tetos e juros do MCMV, taxa SBPE, ITBI, 30% da renda, períodos de cada fonte) são lidos dos JSON, não ficam fixos no texto.
+- **Imprimir ou salvar em PDF** no detalhe do bairro, no simulador e na comparação, usando a impressão do navegador (sem servidor). Na impressão: somem cabeçalho, rodapé, ilustrações e botões; os blocos fechados abrem; entra um cabeçalho com data, endereço do app, data dos dados e o aviso de simulação estimada; os cartões não são cortados entre páginas.

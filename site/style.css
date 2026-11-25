@@ -570,3 +570,34 @@ h3 { font-weight: 700; letter-spacing: 0; }
 .btn-whats:hover { background: #d8f0e0; border-color: #8fd1a6; }
 .btn-whats .icone { width: 18px; height: 18px; }
 #msg-compartilhar { flex-basis: 100%; margin: 0; }
+
+/* ---------- perguntas frequentes ---------- */
+.nav-topo { display: flex; gap: 6px; }
+.pergunta { background: var(--cartao); border: 1px solid var(--linha); border-radius: var(--raio); margin: 10px 0; box-shadow: var(--sombra); }
+.pergunta summary { cursor: pointer; list-style: none; padding: 16px 48px 16px 18px; font-family: var(--titulo); font-weight: 700;
+  font-size: 1.02rem; position: relative; min-height: 44px; }
+.pergunta summary::-webkit-details-marker { display: none; }
+.pergunta summary::after { content: "+"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+  width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--principal-claro); color: var(--principal); font-weight: 800; }
+.pergunta[open] summary::after { content: "−"; }
+.resposta { padding: 0 18px 14px; color: var(--texto-2); }
+.resposta p { margin: 0 0 8px; }
+.resposta ul { margin: 6px 0 8px; padding-left: 20px; display: grid; gap: 4px; }
+
+/* ---------- impressao / salvar PDF ---------- */
+.so-impressao { display: none; }
+@media print {
+  @page { margin: 14mm; }
+  body { background: #fff; font-size: 11.5pt; }
+  .topo, .rodape, .nesta-pagina, .barra-comparar, .ilustracao, .compartilhar, .acoes-detalhe, .navegacao, .nao-imprimir,
+  .btn-comparar, #bloco-mapa .mapa-rodape, button, .links-portais { display: none !important; }
+  .so-impressao { display: grid !important; gap: 2px; border-bottom: 2px solid #0f6b5c; padding-bottom: 8px; margin-bottom: 12px; font-size: 9.5pt; color: #333; }
+  .so-impressao strong { font-size: 13pt; color: #0f6b5c; }
+  main { max-width: none; padding: 0; }
+  .tela[hidden] { display: none !important; }
+  .criterio, .bloco, .sobre-fonte, .cartao-bairro, .pergunta, .perfil-bairro, .bolso-painel { box-shadow: none !important; break-inside: avoid; page-break-inside: avoid; }
+  .cmp-bloco { break-inside: auto; }
+  a { color: inherit; text-decoration: none; }
+  .anel-cheio, .barra-cheia, .rd-serie, .m-bairro, .regua-faixa, .regua-traco { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
