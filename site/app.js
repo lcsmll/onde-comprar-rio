@@ -352,6 +352,19 @@ function ligarFormulario() {
   $("#mapa-modo").innerHTML = '<option value="final">Nota final</option>' +
     D.bairros.criterios.map((c) => `<option value="${c}">${ROTULOS[c]}</option>`).join("");
   $("#mapa-modo").addEventListener("change", desenharMapaResultado);
+  $$(".nesta-pagina [data-rolar]").forEach((bt) => bt.addEventListener("click", () => {
+    const alvo = document.getElementById(bt.dataset.rolar);
+    const topo = alvo.getBoundingClientRect().top + window.scrollY - 120;   // desconta cabecalho + indice fixos
+    window.scrollTo({ top: topo, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }));
+  window.addEventListener("scroll", () => {
+    if ($("#tela-resultado").hidden) return;
+    let atual = null;
+    $$(".nesta-pagina [data-rolar]").forEach((bt) => {
+      if (document.getElementById(bt.dataset.rolar).getBoundingClientRect().top < 150) atual = bt;
+    });
+    $$(".nesta-pagina [data-rolar]").forEach((bt) => bt.classList.toggle("ativo", bt === atual));
+  }, { passive: true });
   $("#ordenar").addEventListener("change", (e) => { estado.ordem = e.target.value; desenharResultado(); });
   $("#mapa-cidade").addEventListener("click", () => { estado.mapaCidade = !estado.mapaCidade; desenharMapaResultado(); });
   $("#voltar-do-simulador").addEventListener("click", () => ir(estado.telaAnterior || "resultado"));
@@ -441,6 +454,8 @@ function svgMapa(opts) {
   const vmin = Math.min(...vals), vmax = Math.max(...vals);
   const pos = (v) => (vmax > vmin ? (v - vmin) / (vmax - vmin) * 10 : 5);
   svgMapa.faixa = vals.length ? [vmin, vmax] : null;
+  svgMapa.valores = opts.destaque ? [] : [...exibidos.values()].map((b) => ({ nome: b.nome, v: valor(b) })).filter((x) => x.v != null);
+  svgMapa.cor = (v) => corCalor(pos(v));
   // bairros que ganham destaque flutuante (maior e menor valor): o nome ja vai na caixa
   const comValor = opts.destaque ? [] : [...exibidos.values()].map((b) => ({ b, v: valor(b) })).filter((x) => x.v != null);
   const extremos = comValor.length > 1 ? [comValor.reduce((a, x) => (x.v > a.v ? x : a)), comValor.reduce((a, x) => (x.v < a.v ? x : a))] : [];
@@ -499,8 +514,14 @@ function desenharMapaResultado() {
   if (!D.mapa) { $("#bloco-mapa").hidden = true; return; }
   const modo = $("#mapa-modo").value || "final";
   $("#mapa").innerHTML = svgMapa({ modo, cidade: estado.mapaCidade });
-  $("#legenda-barra").style.background = `linear-gradient(90deg, ${ESCALA_CALOR.join(", ")})`;
-  if (svgMapa.faixa) { $("#legenda-min").textContent = fmtN(svgMapa.faixa[0]); $("#legenda-max").textContent = fmtN(svgMapa.faixa[1]); }
+  // regua 0-10: faixa colorida ocupada pelos bairros, um traco por bairro e a mediana do Rio (5)
+  if (svgMapa.faixa) {
+    const [a, b] = svgMapa.faixa;
+    $("#regua-faixa").textContent = `· os bairros mostrados vão de ${fmtN(a)} a ${fmtN(b)}`;
+    $("#regua").innerHTML = `<span class="regua-faixa" style="left:${a * 10}%;width:${(b - a) * 10}%;background:linear-gradient(90deg, ${ESCALA_CALOR.join(", ")})"></span>
+      <span class="regua-mediana" style="left:50%"></span>` +
+      svgMapa.valores.map((x) => `<span class="regua-traco" style="left:${x.v * 10}%;background:${svgMapa.cor(x.v)}" title="${esc(x.nome)}: ${fmtN(x.v)}"></span>`).join("");
+  }
   $("#mapa-cidade").textContent = estado.mapaCidade ? "Aproximar dos bairros" : "Ver cidade inteira";
   ligarMapa($("#mapa"));
 }
@@ -848,6 +869,7 @@ function desenharBairro(cod) {
   const portais = (modo) => D.portais.portais.filter((x) => x[modo]).map((x) =>
     `<a href="${esc(linkPortal(x[modo], x, b))}" target="_blank" rel="noopener noreferrer">${esc(x.nome)}</a>`).join("");
   $("#detalhe-bairro").innerHTML = `
+    <div class="ilustracao ilustracao-fina" aria-hidden="true"></div>
     <div class="detalhe-topo">
       <div><p class="sobretitulo">Bairro · ${esc(localTexto(b).split(" · ")[0])}</p><h2>${esc(b.nome)}</h2>
         <p class="cartao-regiao">${icone("local")}${esc(localTexto(b))} · ${b.populacao_2022.toLocaleString("pt-BR")} moradores (Censo 2022)</p>

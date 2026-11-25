@@ -517,3 +517,48 @@ h3 { font-weight: 700; letter-spacing: 0; }
 .m-chamada-nome { fill: var(--texto); font-weight: 700; }
 .m-chamada-nota { fill: #10202a; font-weight: 700; text-anchor: middle; }
 .m-chamada-nota.claro { fill: #ffffff; }
+
+/* ---------- indice "Nesta pagina" (fixo sob o cabecalho) ---------- */
+.nesta-pagina { position: sticky; top: 56px; z-index: 9; display: flex; align-items: center; gap: 4px; overflow-x: auto;
+  margin: 12px -16px 4px; padding: 6px 16px; background: color-mix(in srgb, var(--fundo) 92%, transparent);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha);
+  scrollbar-width: none; }
+.nesta-pagina::-webkit-scrollbar { display: none; }
+.nesta-rotulo { flex: none; font-size: 11.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--suave); margin-right: 6px; }
+.nesta-pagina button { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 4px 12px;
+  border: 0; border-radius: 99px; background: transparent; color: var(--texto); font-weight: 700; font-size: 14px;
+  text-decoration: underline; text-decoration-color: var(--linha-forte); text-underline-offset: 4px; }
+.nesta-pagina button span { font-size: 11.5px; color: var(--suave); text-decoration: none; }
+.nesta-pagina button.ativo { background: var(--principal-claro); color: var(--principal); text-decoration-color: var(--principal); }
+.nesta-pagina button.ativo span { color: var(--principal); }
+@media (min-width: 720px) { .nesta-pagina { margin: 12px 0 4px; border-radius: 99px; border: 1px solid var(--linha); } }
+@media (max-width: 720px), (pointer: coarse) { .nesta-pagina button { min-height: 44px; } }
+
+/* ---------- regua da legenda do mapa ---------- */
+.regua-bloco { margin-top: 12px; padding: 12px 14px 10px; background: var(--fundo-2); border-radius: var(--raio-p); }
+.regua-titulo { margin: 0 0 12px; font-size: 13.5px; }
+.regua-titulo span { color: var(--suave); }
+.regua { position: relative; height: 26px; }
+.regua::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 8px; border-radius: 99px; background: var(--linha); }
+.regua-faixa { position: absolute; top: 4px; height: 14px; border-radius: 99px; outline: 2px solid var(--texto); outline-offset: 1px; }
+.regua-mediana { position: absolute; top: -2px; height: 30px; border-left: 2px dashed var(--texto); transform: translateX(-1px); }
+.regua-traco { position: absolute; top: 18px; width: 3px; height: 9px; border-radius: 2px; transform: translateX(-1.5px);
+  box-shadow: 0 0 0 1px rgba(16, 32, 42, .35); }
+.regua-escala { display: flex; justify-content: space-between; font-size: 12px; color: var(--suave); margin: 2px 0 6px; font-weight: 700; }
+.regua-bloco .pequeno { margin: 0; }
+.regua-bloco .legenda-fora { margin-left: 0; display: inline-flex; vertical-align: middle; }
+
+/* ---------- ilustracao no rodape e no detalhe ---------- */
+.rodape { padding-top: 0; }
+.ilustracao-rodape { height: 110px; margin: 0 0 18px; border-bottom: 0; border-radius: 0; background-size: auto 110px; background-repeat: repeat-x; }
+.ilustracao-fina { height: 70px; margin: 8px -16px 0; border-radius: 0; background-size: auto 70px; background-repeat: repeat-x; opacity: .9; }
+@media (min-width: 720px) { .ilustracao-fina { margin: 8px 0 0; border-radius: var(--raio); } .ilustracao-rodape { margin: 0 0 18px; } }
+
+/* ajustes: indice cabe no celular; botao Comparar alinhado com "Ver numeros e fontes" */
+@media (max-width: 520px) {
+  .nesta-rotulo { display: none; }
+  .nesta-pagina { justify-content: space-between; gap: 0; padding: 4px 10px; }
+  .nesta-pagina button { padding: 4px 8px; font-size: 13.5px; gap: 4px; }
+}
+.ver-mais { display: flex; align-items: center; min-height: 44px; margin-top: 8px; }
+.btn-comparar { bottom: 16px; }
