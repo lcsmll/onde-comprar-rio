@@ -1,0 +1,9 @@
+data_raw/
+.venv/
+__pycache__/
+*.pyc
+google-cloud-sdk/
+google-cloud-cli-*.tar.gz
+data_proc/
+tests/capturas/
+tests/referencias/

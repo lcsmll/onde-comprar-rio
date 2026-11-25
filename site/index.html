@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Onde Comprar no Rio</title>
+  <meta name="description" content="Compare bairros do Rio de Janeiro com dados oficiais e simule o financiamento. Nada do que você digita sai do seu aparelho.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230b6e4f'/%3E%3Cpath d='M3 13V7l5-4 5 4v6H9V9H7v4z' fill='white'/%3E%3C/svg%3E">
+  <link rel="preload" href="fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo-conteudo">
+      <a href="#inicio" class="marca" aria-label="Onde Comprar no Rio, início">
+        <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V10l9-7 9 7v11h-6v-6H9v6z"/></svg>
+        <span>Onde Comprar no Rio</span>
+      </a>
+      <nav><a href="#sobre" class="link-topo">Sobre os dados</a></nav>
+    </div>
+  </header>
+
+  <main id="app">
+    <p id="carregando" class="aviso">Carregando dados...</p>
+
+    <!-- 0. Início -->
+    <section id="tela-inicio" class="tela" hidden>
+      <div class="heroi">
+        <div class="heroi-texto-bloco">
+          <p class="selo"><span class="ponto"></span>Dados oficiais · grátis · sem cadastro</p>
+          <h1>Qual bairro do Rio <span class="realce">combina com você?</span></h1>
+          <p class="heroi-texto">Compare bairros por violência, alagamento, escolas, transporte, emprego e barulho,
+            com dados do ISP, da Prefeitura, do INEP, do IBGE e do Banco Central. Depois, simule o financiamento.</p>
+          <div class="heroi-acoes">
+            <button class="btn-principal btn-grande" data-ir="perfil">Começar <span aria-hidden="true">→</span></button>
+          </div>
+          <label class="ir-bairro">Ou veja um bairro direto
+            <select id="ir-bairro"><option value="">Escolha um bairro</option></select>
+          </label>
+        </div>
+        <div id="exemplo" class="exemplo" aria-label="Exemplo com dados reais"></div>
+      </div>
+      <dl class="numeros">
+        <div><dt id="n-bairros">15</dt><dd>bairros na versão inicial</dd></div>
+        <div><dt>6</dt><dd>critérios com nota de 0 a 10</dd></div>
+        <div><dt id="n-fontes">9</dt><dd>fontes oficiais e gratuitas</dd></div>
+        <div><dt>0</dt><dd>dados pessoais coletados</dd></div>
+      </dl>
+      <h2 class="titulo-secao">Como funciona</h2>
+      <ol class="passos">
+        <li><span class="passo-num">1</span><div><strong>Conte quem vai morar</strong><span>Perfil, renda (opcional), tamanho do imóvel e onde você trabalha.</span></div></li>
+        <li><span class="passo-num">2</span><div><strong>Diga o que importa mais</strong><span>Arraste cada critério entre pouco e muito importante.</span></div></li>
+        <li><span class="passo-num">3</span><div><strong>Compare e simule</strong><span>Veja os bairros em ordem, os números de cada um e quanto fica o financiamento.</span></div></li>
+      </ol>
+      <p class="destaque"><strong>Privacidade:</strong> nada do que você digitar sai do seu aparelho. Não guardamos nem enviamos renda, nome ou qualquer dado.</p>
+      <p class="pequeno">Dados gerados em <span id="data-geracao"></span>. <a href="#sobre">Veja as fontes e os cálculos</a>.</p>
+    </section>
+
+    <!-- 1. Perfil -->
+    <section id="tela-perfil" class="tela" hidden>
+      <div class="progresso" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Passo 1 de 4"><span class="feito"></span><span></span><span></span><span></span></div>
+      <p class="passo">Passo 1 de 4</p>
+      <h2>Quem vai morar?</h2>
+      <div class="opcoes" id="opcoes-perfil">
+        <button class="opcao" data-perfil="solteiro">Solteiro(a)</button>
+        <button class="opcao" data-perfil="casal">Casal sem filhos</button>
+        <button class="opcao" data-perfil="familia">Família com filhos</button>
+      </div>
+      <div id="bloco-escola" hidden>
+        <h3>Que tipo de escola você procura?</h3>
+        <div class="opcoes" id="opcoes-escola">
+          <button class="opcao" data-escola="publica">Pública</button>
+          <button class="opcao" data-escola="particular">Particular</button>
+          <button class="opcao" data-escola="tanto_faz">Tanto faz</button>
+        </div>
+      </div>
+      <div class="navegacao">
+        <button class="btn" data-ir="inicio">Voltar</button>
+        <button class="btn-principal" data-ir="renda" id="avancar-perfil" disabled>Avançar</button>
+      </div>
+    </section>
+
+    <!-- 2. Renda -->
+    <section id="tela-renda" class="tela" hidden>
+      <div class="progresso" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="2" aria-label="Passo 2 de 4"><span class="feito"></span><span class="feito"></span><span></span><span></span></div>
+      <p class="passo">Passo 2 de 4</p>
+      <h2>Renda e entrada</h2>
+      <p class="pequeno">Usado só no simulador de financiamento. Pode pular.</p>
+      <fieldset>
+        <legend>A compra será com renda</legend>
+        <div class="opcoes compactas">
+          <button class="opcao" data-renda-tipo="unica">Única</button>
+          <button class="opcao" data-renda-tipo="somada">Somada (2 compradores)</button>
+        </div>
+      </fieldset>
+      <label><span id="txt-renda1">Sua renda bruta mensal</span>
+        <input type="text" inputmode="numeric" id="renda1" class="dinheiro" placeholder="R$ 0">
+      </label>
+      <label id="rotulo-renda2" hidden>Renda bruta mensal (comprador 2)
+        <input type="text" inputmode="numeric" id="renda2" class="dinheiro" placeholder="R$ 0">
+      </label>
+      <label><span id="txt-fgts">Saldo de FGTS para usar</span>
+        <input type="text" inputmode="numeric" id="fgts" class="dinheiro" placeholder="R$ 0">
+      </label>
+      <label class="check"><input type="checkbox" id="cotista"> <span id="txt-cotista">Você tem 3 anos ou mais de trabalho com FGTS</span></label>
+      <label>Dinheiro para a entrada (sem contar o FGTS)
+        <input type="text" inputmode="numeric" id="entrada" class="dinheiro" placeholder="R$ 0">
+      </label>
+      <label class="check"><input type="checkbox" id="ja-tem-imovel"> <span id="txt-imovel">Você já tem imóvel no Rio ou financiamento ativo no SFH</span></label>
+      <div class="navegacao">
+        <button class="btn" data-ir="perfil">Voltar</button>
+        <button class="btn-principal" data-ir="imovel">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 3. Imóvel -->
+    <section id="tela-imovel" class="tela" hidden>
+      <div class="progresso" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="3" aria-label="Passo 3 de 4"><span class="feito"></span><span class="feito"></span><span class="feito"></span><span></span></div>
+      <p class="passo">Passo 3 de 4</p>
+      <h2>O imóvel</h2>
+      <fieldset>
+        <legend>Tipo</legend>
+        <div class="opcoes compactas">
+          <button class="opcao" data-tipo="apartamento">Apartamento</button>
+          <button class="opcao" data-tipo="casa">Casa</button>
+          <button class="opcao" data-tipo="">Tanto faz</button>
+        </div>
+        <p class="pequeno">O preço médio oficial do bairro (ITBI) mistura casas e apartamentos.</p>
+      </fieldset>
+      <label>Área mínima (m²)
+        <input type="number" inputmode="numeric" id="area" min="10" max="1000" placeholder="ex.: 60">
+      </label>
+      <label>Preço máximo que você quer pagar
+        <input type="text" inputmode="numeric" id="preco-max" class="dinheiro" placeholder="R$ 0">
+      </label>
+      <h3>Local de trabalho <span class="pequeno">(opcional)</span></h3>
+      <p class="pequeno">Ajusta a nota de emprego pela distância até o trabalho. Se não informar, usamos a distância até o Centro e a Barra.</p>
+      <label>Onde você trabalha
+        <select id="trabalho1"></select>
+      </label>
+      <label id="rotulo-trabalho2" hidden>Onde a 2ª pessoa trabalha
+        <select id="trabalho2"></select>
+      </label>
+      <div class="navegacao">
+        <button class="btn" data-ir="renda">Voltar</button>
+        <button class="btn-principal" data-ir="prioridades">Avançar</button>
+      </div>
+    </section>
+
+    <!-- 4. Prioridades -->
+    <section id="tela-prioridades" class="tela" hidden>
+      <div class="progresso" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="4" aria-label="Passo 4 de 4"><span class="feito"></span><span class="feito"></span><span class="feito"></span><span class="feito"></span></div>
+      <p class="passo">Passo 4 de 4</p>
+      <h2>O que importa mais para você?</h2>
+      <p class="pequeno">Arraste cada linha para o lado que fizer sentido para você. Deixamos um ponto de partida conforme quem vai morar; mude à vontade.</p>
+      <div id="lista-pesos"></div>
+      <button class="btn" id="restaurar-pesos">Voltar ao ponto de partida</button>
+      <div class="navegacao">
+        <button class="btn" data-ir="imovel">Voltar</button>
+        <button class="btn-principal" data-ir="resultado">Ver bairros</button>
+      </div>
+    </section>
+
+    <!-- 5. Resultado -->
+    <section id="tela-resultado" class="tela" hidden>
+      <h2 id="titulo-resultado">Bairros em ordem de nota</h2>
+      <p class="pequeno" id="explica-nota"></p>
+      <div id="painel-orcamento"></div>
+      <div class="barra-ferramentas">
+        <label class="ordenar">Ordenar por
+          <select id="ordenar">
+            <option value="nota">Maior nota</option>
+            <option value="parcela" data-precisa-renda>Menor parcela</option>
+            <option value="area" data-precisa-renda>Maior área que cabe</option>
+            <option value="preco_m2">Menor preço do m²</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" id="esconder-caros"> <span id="rotulo-esconder">Esconder bairros acima do meu orçamento</span></label>
+        <button class="btn" id="copiar-link">Copiar link com minhas prioridades</button>
+        <button class="btn" data-ir="prioridades">Mudar prioridades</button>
+      </div>
+      <p id="msg-link" class="pequeno" role="status"></p>
+      <div class="bloco bloco-mapa" id="bloco-mapa">
+        <div class="mapa-topo">
+          <h3>Mapa</h3>
+          <label class="mapa-seletor">Pintar por <select id="mapa-modo"></select></label>
+        </div>
+        <div id="mapa" class="mapa"></div>
+        <div class="legenda">
+          <span>Nota <span id="legenda-min">0</span></span><span class="legenda-barra" id="legenda-barra" aria-hidden="true"></span><span id="legenda-max">10</span>
+          <span class="legenda-fora"><span class="amostra" aria-hidden="true"></span>fora desta versão</span>
+        </div>
+        <div class="mapa-rodape">
+          <p class="pequeno">Cores relativas aos bairros mostrados: do amarelo (menor nota entre eles) ao azul-escuro (maior). Toque num bairro para ver os detalhes.</p>
+          <button class="btn" id="mapa-cidade" type="button">Ver cidade inteira</button>
+        </div>
+      </div>
+      <ol id="lista-bairros" class="lista-bairros"></ol>
+    </section>
+
+    <!-- 6. Detalhe do bairro -->
+    <section id="tela-bairro" class="tela" hidden>
+      <button class="btn" data-ir="resultado">Voltar à lista</button>
+      <div id="detalhe-bairro"></div>
+    </section>
+
+    <!-- Comparar -->
+    <section id="tela-comparar" class="tela" hidden>
+      <div id="comparacao"></div>
+    </section>
+
+    <!-- 7. Financiamento -->
+    <section id="tela-financiamento" class="tela" hidden>
+      <button class="btn" id="voltar-do-simulador">Voltar</button>
+      <h2>Simulador de financiamento</h2>
+      <p class="aviso" id="aviso-geral"></p>
+      <div id="simulador"></div>
+    </section>
+
+    <!-- 8. Sobre os dados -->
+    <section id="tela-sobre" class="tela" hidden>
+      <button class="btn" id="voltar-do-sobre">Voltar</button>
+      <h2>Sobre os dados</h2>
+      <div id="sobre"></div>
+    </section>
+  </main>
+
+  <div id="barra-comparar" class="barra-comparar" hidden>
+    <div class="barra-comparar-conteudo">
+      <div><span id="barra-comparar-texto"></span><span id="barra-comparar-msg" class="pequeno" role="status"></span></div>
+      <div class="barra-comparar-botoes">
+        <button class="btn" id="barra-comparar-limpar" type="button">Limpar</button>
+        <button class="btn-principal" id="barra-comparar-ir" type="button">Comparar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="rodape">
+    <p>Dados oficiais e gratuitos. Este app não coleta dados pessoais. Simulações são estimativas.</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

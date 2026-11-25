@@ -1,0 +1,55 @@
+{
+  "_leia": "Modelos de link para a busca dos portais. O app só abre o link; não lê nada dos portais. Se um portal mudar o formato, corrija aqui. Variáveis: {bairro} = nome do bairro em minúsculas, sem acento, com hífens; {zona} = zona usada pelo portal; {tipo_*} = tipo do imóvel no formato de cada portal.",
+  "testado_em": {
+    "data": "2026-11-25",
+    "QuintoAndar": "ok (venda e aluguel; o portal redireciona para o próprio formato de bairro quando precisa)",
+    "Viva Real": "não verificado automaticamente: o portal bloqueia acesso automatizado (HTTP 403). Conferir clicando no navegador.",
+    "ZAP Imóveis": "não verificado automaticamente: o portal bloqueia acesso automatizado (HTTP 403). Conferir clicando no navegador."
+  },
+  "zona_por_regiao": {
+    "Centro": "centro",
+    "Zona Sul": "zona-sul",
+    "Tijuca": "zona-norte",
+    "Méier": "zona-norte",
+    "Madureira": "zona-norte",
+    "Inhaúma": "zona-norte",
+    "Penha": "zona-norte",
+    "Pavuna": "zona-norte",
+    "Ramos": "zona-norte",
+    "Ilha do Governador": "zona-norte",
+    "Jacarepaguá": "zona-oeste",
+    "Barra da Tijuca": "zona-oeste",
+    "Bangu": "zona-oeste",
+    "Campo Grande": "zona-oeste",
+    "Santa Cruz": "zona-oeste",
+    "Guaratiba": "zona-oeste"
+  },
+  "portais": [
+    {
+      "nome": "Viva Real",
+      "venda": "https://www.vivareal.com.br/venda/rj/rio-de-janeiro/{zona}/{bairro}/{tipo_vivareal}",
+      "aluguel": "https://www.vivareal.com.br/aluguel/rj/rio-de-janeiro/{zona}/{bairro}/{tipo_vivareal}",
+      "tipos": {
+        "apartamento": "apartamento_residencial/",
+        "casa": "casa_residencial/",
+        "": ""
+      }
+    },
+    {
+      "nome": "ZAP Imóveis",
+      "venda": "https://www.zapimoveis.com.br/venda/{tipo_zap}rj+rio-de-janeiro+{zona}+{bairro}/",
+      "aluguel": "https://www.zapimoveis.com.br/aluguel/{tipo_zap}rj+rio-de-janeiro+{zona}+{bairro}/",
+      "tipos": {
+        "apartamento": "apartamentos/",
+        "casa": "casas/",
+        "": "imoveis/"
+      }
+    },
+    {
+      "nome": "QuintoAndar",
+      "venda": "https://www.quintoandar.com.br/comprar/imovel/{bairro}-rio-de-janeiro-rj-brasil",
+      "aluguel": "https://www.quintoandar.com.br/alugar/imovel/{bairro}-rio-de-janeiro-rj-brasil",
+      "tipos": {}
+    }
+  ]
+}

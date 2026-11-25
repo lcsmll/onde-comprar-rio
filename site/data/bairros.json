@@ -1,0 +1,4762 @@
+{
+ "gerado_em": "2026-11-25",
+ "metodo_nota": "Nota de 0 a 10 = posição do bairro entre os bairros do Rio com pelo menos 1000 moradores (163 bairros). Ex.: 8,0 = melhor que 80% deles.",
+ "criterios": [
+  "violencia",
+  "alagamento",
+  "escolas",
+  "transporte",
+  "emprego",
+  "barulho"
+ ],
+ "referencia_codigos": [
+  "013",
+  "098",
+  "097",
+  "104",
+  "101",
+  "103",
+  "102",
+  "048",
+  "096",
+  "049",
+  "100",
+  "114",
+  "099",
+  "159",
+  "095",
+  "044",
+  "093",
+  "107",
+  "111",
+  "094",
+  "113",
+  "043",
+  "092",
+  "091",
+  "110",
+  "106",
+  "108",
+  "112",
+  "109",
+  "077",
+  "087",
+  "042",
+  "157",
+  "135",
+  "105",
+  "086",
+  "041",
+  "139",
+  "072",
+  "090",
+  "073",
+  "148",
+  "055",
+  "156",
+  "084",
+  "140",
+  "089",
+  "085",
+  "040",
+  "054",
+  "056",
+  "143",
+  "083",
+  "088",
+  "149",
+  "138",
+  "142",
+  "080",
+  "136",
+  "050",
+  "039",
+  "081",
+  "071",
+  "053",
+  "069",
+  "082",
+  "125",
+  "052",
+  "079",
+  "137",
+  "078",
+  "070",
+  "145",
+  "147",
+  "155",
+  "065",
+  "124",
+  "012",
+  "066",
+  "010",
+  "158",
+  "146",
+  "064",
+  "051",
+  "068",
+  "058",
+  "063",
+  "002",
+  "003",
+  "005",
+  "060",
+  "059",
+  "001",
+  "057",
+  "061",
+  "011",
+  "123",
+  "122",
+  "067",
+  "062",
+  "120",
+  "008",
+  "032",
+  "036",
+  "035",
+  "016",
+  "007",
+  "014",
+  "009",
+  "033",
+  "006",
+  "038",
+  "121",
+  "037",
+  "018",
+  "015",
+  "017",
+  "151",
+  "131",
+  "034",
+  "019",
+  "119",
+  "020",
+  "022",
+  "118",
+  "150",
+  "116",
+  "115",
+  "129",
+  "021",
+  "117",
+  "028",
+  "130",
+  "024",
+  "023",
+  "027",
+  "127",
+  "029",
+  "128",
+  "026",
+  "025",
+  "031",
+  "154",
+  "153",
+  "132",
+  "030",
+  "152",
+  "004",
+  "134",
+  "161",
+  "144",
+  "141",
+  "160",
+  "163",
+  "162",
+  "164",
+  "165",
+  "047",
+  "046",
+  "076",
+  "045",
+  "075",
+  "074"
+ ],
+ "preco_mediana_rs_m2": 3009,
+ "todos_bairros": {
+  "013": "Paquetá",
+  "098": "Freguesia (Ilha)",
+  "097": "Bancários",
+  "104": "Galeão",
+  "101": "Tauá",
+  "103": "Portuguesa",
+  "102": "Moneró",
+  "048": "Vigário Geral",
+  "096": "Cocotá",
+  "049": "Jardim América",
+  "100": "Jardim Carioca",
+  "114": "Pavuna",
+  "099": "Jardim Guanabara",
+  "159": "Parque Colúmbia",
+  "095": "Praia da Bandeira",
+  "044": "Penha Circular",
+  "093": "Cacuia",
+  "107": "Anchieta",
+  "111": "Acari",
+  "094": "Pitangueiras",
+  "113": "Costa Barros",
+  "043": "Penha",
+  "092": "Zumbi",
+  "091": "Ribeira",
+  "110": "Coelho Neto",
+  "106": "Guadalupe",
+  "108": "Parque Anchieta",
+  "112": "Barros Filho",
+  "109": "Ricardo de Albuquerque",
+  "077": "Colégio",
+  "087": "Honório Gurgel",
+  "042": "Olaria",
+  "157": "Maré",
+  "135": "Vila Militar",
+  "105": "Cidade Universitária",
+  "086": "Rocha Miranda",
+  "041": "Ramos",
+  "139": "Realengo",
+  "072": "Vila Kosmos",
+  "090": "Marechal Hermes",
+  "073": "Vicente de Carvalho",
+  "148": "Paciência",
+  "055": "Engenho da Rainha",
+  "156": "Complexo do Alemão",
+  "084": "Vaz Lobo",
+  "140": "Padre Miguel",
+  "089": "Bento Ribeiro",
+  "085": "Turiaçú",
+  "040": "Bonsucesso",
+  "054": "Inhaúma",
+  "056": "Tomás Coelho",
+  "143": "Santíssimo",
+  "083": "Madureira",
+  "088": "Osvaldo Cruz",
+  "149": "Santa Cruz",
+  "138": "Magalhães Bastos",
+  "142": "Senador Camará",
+  "080": "Cavalcanti",
+  "136": "Campo dos Afonsos",
+  "050": "Higienópolis",
+  "039": "Manguinhos",
+  "081": "Engenheiro Leal",
+  "071": "Pilares",
+  "053": "Del Castilho",
+  "069": "Piedade",
+  "082": "Cascadura",
+  "125": "Vila Valqueire",
+  "052": "Maria da Graça",
+  "079": "Quintino Bocaiúva",
+  "137": "Jardim Sulacap",
+  "078": "Campinho",
+  "070": "Abolição",
+  "145": "Senador Vasconcelos",
+  "147": "Cosmos",
+  "155": "Jacarezinho",
+  "065": "Cachambi",
+  "124": "Praça Seca",
+  "012": "Benfica",
+  "066": "Engenho de Dentro",
+  "010": "Imperial de São Cristóvão",
+  "158": "Vasco da Gama",
+  "146": "Inhoaíba",
+  "064": "Todos os Santos",
+  "051": "Jacaré",
+  "068": "Encantado",
+  "058": "Rocha",
+  "063": "Méier",
+  "002": "Gamboa",
+  "003": "Santo Cristo",
+  "005": "Centro",
+  "060": "Sampaio",
+  "059": "Riachuelo",
+  "001": "Saúde",
+  "057": "São Francisco Xavier",
+  "061": "Engenho Novo",
+  "011": "Mangueira",
+  "123": "Tanque",
+  "122": "Taquara",
+  "067": "Água Santa",
+  "062": "Lins de Vasconcelos",
+  "120": "Freguesia (Jacarepaguá)",
+  "008": "Cidade Nova",
+  "032": "Praça da Bandeira",
+  "036": "Vila Isabel",
+  "035": "Maracanã",
+  "016": "Glória",
+  "007": "Rio Comprido",
+  "014": "Santa Teresa",
+  "009": "Estácio",
+  "033": "Tijuca",
+  "006": "Catumbi",
+  "038": "Grajaú",
+  "121": "Pechincha",
+  "037": "Andaraí",
+  "018": "Catete",
+  "015": "Flamengo",
+  "017": "Laranjeiras",
+  "151": "Guaratiba",
+  "131": "Vargem Grande",
+  "034": "Alto da Boa Vista",
+  "019": "Cosme Velho",
+  "119": "Curicica",
+  "020": "Botafogo",
+  "022": "Urca",
+  "118": "Cidade de Deus",
+  "150": "Sepetiba",
+  "116": "Anil",
+  "115": "Jacarepaguá",
+  "129": "Camorim",
+  "021": "Humaitá",
+  "117": "Gardênia Azul",
+  "028": "Jardim Botânico",
+  "130": "Vargem Pequena",
+  "024": "Copacabana",
+  "023": "Leme",
+  "027": "Lagoa",
+  "127": "Itanhangá",
+  "029": "Gávea",
+  "128": "Barra da Tijuca",
+  "026": "Leblon",
+  "025": "Ipanema",
+  "031": "São Conrado",
+  "154": "Rocinha",
+  "153": "Pedra de Guaratiba",
+  "132": "Recreio dos Bandeirantes",
+  "030": "Vidigal",
+  "126": "Joá",
+  "152": "Barra de Guaratiba",
+  "133": "Grumari",
+  "004": "Caju",
+  "134": "Deodoro",
+  "161": "Lapa",
+  "144": "Campo Grande",
+  "141": "Bangu",
+  "160": "Gericinó",
+  "163": "Jabour",
+  "162": "Vila Kennedy",
+  "164": "Ilha de Guaratiba",
+  "165": "Barra Olímpica",
+  "047": "Parada de Lucas",
+  "046": "Cordovil",
+  "076": "Irajá",
+  "045": "Brás de Pina",
+  "075": "Vista Alegre",
+  "074": "Vila da Penha",
+  "166": "Argentino",
+  "167": "Ingleses"
+ },
+ "pesos_perfil": {
+  "familia": {
+   "violencia": 5,
+   "alagamento": 4,
+   "escolas": 5,
+   "transporte": 3,
+   "emprego": 3,
+   "barulho": 3
+  },
+  "casal": {
+   "violencia": 4,
+   "alagamento": 4,
+   "escolas": 2,
+   "transporte": 4,
+   "emprego": 4,
+   "barulho": 3
+  },
+  "solteiro": {
+   "violencia": 4,
+   "alagamento": 3,
+   "escolas": 1,
+   "transporte": 5,
+   "emprego": 5,
+   "barulho": 3
+  }
+ },
+ "escolas_pesos_por_tipo": {
+  "tanto_faz": {
+   "oferta_publica": 0.35,
+   "ideb_publica": 0.35,
+   "oferta_privada": 0.3
+  },
+  "publica": {
+   "oferta_publica": 0.5,
+   "ideb_publica": 0.5,
+   "oferta_privada": 0.0
+  },
+  "particular": {
+   "oferta_publica": 0.0,
+   "ideb_publica": 0.0,
+   "oferta_privada": 1.0
+  }
+ },
+ "emprego": {
+  "polos": {
+   "centro": {
+    "rotulo": "Centro (estação Carioca)",
+    "estacao": "Carioca",
+    "lat": -22.907354,
+    "lon": -43.177596
+   },
+   "barra": {
+    "rotulo": "Barra (Terminal Alvorada)",
+    "estacao": "Terminal Alvorada",
+    "lat": -23.000385,
+    "lon": -43.366118
+   },
+   "zona_sul": {
+    "rotulo": "Zona Sul (estação Botafogo)",
+    "estacao": "Botafogo",
+    "lat": -22.951212,
+    "lon": -43.183879
+   }
+  },
+  "peso_padrao": {
+   "centro": 0.822,
+   "barra": 0.178,
+   "vinculos_rais_2016": {
+    "centro_ap1": 839317,
+    "barra_ra24": 181827
+   }
+  },
+  "referencia_km": {
+   "centro": {
+    "001": 1.27,
+    "002": 1.97,
+    "003": 2.54,
+    "004": 5.72,
+    "005": 1.29,
+    "006": 2.46,
+    "007": 3.77,
+    "008": 2.33,
+    "009": 2.83,
+    "010": 5.15,
+    "011": 6.06,
+    "012": 6.71,
+    "013": 17.71,
+    "014": 2.25,
+    "015": 3.08,
+    "016": 1.49,
+    "017": 3.26,
+    "018": 2.14,
+    "019": 4.52,
+    "020": 4.97,
+    "021": 5.92,
+    "022": 4.81,
+    "023": 6.1,
+    "024": 7.22,
+    "025": 8.86,
+    "026": 9.7,
+    "027": 7.39,
+    "028": 7.49,
+    "029": 9.68,
+    "030": 11.63,
+    "031": 13.08,
+    "032": 3.72,
+    "033": 6.22,
+    "034": 11.97,
+    "035": 5.24,
+    "036": 7.24,
+    "037": 7.83,
+    "038": 8.81,
+    "039": 7.84,
+    "040": 9.15,
+    "041": 10.11,
+    "042": 11.6,
+    "043": 12.83,
+    "044": 14.03,
+    "045": 14.72,
+    "046": 15.49,
+    "047": 16.29,
+    "048": 17.49,
+    "049": 18.48,
+    "050": 9.42,
+    "051": 8.39,
+    "052": 9.37,
+    "053": 10.03,
+    "054": 11.38,
+    "055": 12.93,
+    "056": 13.81,
+    "057": 6.79,
+    "058": 7.44,
+    "059": 8.06,
+    "060": 8.62,
+    "061": 9.35,
+    "062": 10.73,
+    "063": 10.85,
+    "064": 11.11,
+    "065": 10.05,
+    "066": 12.15,
+    "067": 13.45,
+    "068": 13.06,
+    "069": 13.74,
+    "070": 12.72,
+    "071": 12.53,
+    "072": 14.4,
+    "073": 15.23,
+    "074": 15.33,
+    "075": 16.42,
+    "076": 16.96,
+    "077": 17.87,
+    "078": 17.64,
+    "079": 14.62,
+    "080": 14.57,
+    "081": 15.68,
+    "082": 15.71,
+    "083": 16.85,
+    "084": 16.44,
+    "085": 17.67,
+    "086": 18.44,
+    "087": 19.6,
+    "088": 18.2,
+    "089": 19.35,
+    "090": 20.5,
+    "091": 9.2,
+    "092": 9.56,
+    "093": 10.08,
+    "094": 10.03,
+    "095": 10.74,
+    "096": 11.46,
+    "097": 12.71,
+    "098": 13.04,
+    "099": 10.77,
+    "100": 11.38,
+    "101": 12.08,
+    "102": 12.41,
+    "103": 12.44,
+    "104": 12.04,
+    "105": 6.06,
+    "106": 21.73,
+    "107": 24.65,
+    "108": 25.03,
+    "109": 23.84,
+    "110": 19.53,
+    "111": 19.14,
+    "112": 20.72,
+    "113": 21.7,
+    "114": 21.73,
+    "115": 20.38,
+    "116": 17.43,
+    "117": 18.75,
+    "118": 19.47,
+    "119": 21.77,
+    "120": 17.08,
+    "121": 18.39,
+    "122": 20.99,
+    "123": 19.08,
+    "124": 17.99,
+    "125": 19.39,
+    "127": 16.97,
+    "128": 21.41,
+    "129": 26.47,
+    "130": 29.5,
+    "131": 34.02,
+    "132": 32.41,
+    "134": 22.03,
+    "135": 23.4,
+    "136": 21.03,
+    "137": 21.83,
+    "138": 24.45,
+    "139": 26.07,
+    "140": 27.98,
+    "141": 30.56,
+    "142": 32.42,
+    "143": 35.38,
+    "144": 39.4,
+    "145": 36.59,
+    "146": 42.83,
+    "147": 44.64,
+    "148": 46.96,
+    "149": 51.34,
+    "150": 53.34,
+    "151": 45.14,
+    "152": 41.68,
+    "153": 48.28,
+    "154": 11.62,
+    "155": 8.58,
+    "156": 11.02,
+    "157": 8.39,
+    "158": 5.51,
+    "159": 19.81,
+    "160": 31.9,
+    "161": 0.91,
+    "162": 32.44,
+    "163": 32.47,
+    "164": 40.1,
+    "165": 22.79
+   },
+   "barra": {
+    "001": 21.81,
+    "002": 20.92,
+    "003": 20.02,
+    "004": 19.71,
+    "005": 20.74,
+    "006": 19.46,
+    "007": 18.2,
+    "008": 19.68,
+    "009": 19.1,
+    "010": 18.15,
+    "011": 17.01,
+    "012": 17.7,
+    "013": 37.44,
+    "014": 19.9,
+    "015": 20.81,
+    "016": 21.24,
+    "017": 19.78,
+    "018": 20.82,
+    "019": 18.09,
+    "020": 19.24,
+    "021": 17.75,
+    "022": 21.43,
+    "023": 20.5,
+    "024": 18.57,
+    "025": 16.84,
+    "026": 14.7,
+    "027": 16.91,
+    "028": 15.66,
+    "029": 13.88,
+    "030": 12.99,
+    "031": 10.68,
+    "032": 18.43,
+    "033": 15.75,
+    "034": 10.21,
+    "035": 17.05,
+    "036": 15.35,
+    "037": 14.35,
+    "038": 13.67,
+    "039": 17.89,
+    "040": 18.86,
+    "041": 19.83,
+    "042": 19.47,
+    "043": 19.49,
+    "044": 19.72,
+    "045": 20.17,
+    "046": 20.94,
+    "047": 21.39,
+    "048": 21.98,
+    "049": 21.65,
+    "050": 17.63,
+    "051": 16.25,
+    "052": 16.63,
+    "053": 16.63,
+    "054": 16.67,
+    "055": 16.48,
+    "056": 15.96,
+    "057": 16.55,
+    "058": 16.62,
+    "059": 15.74,
+    "060": 15.32,
+    "061": 14.3,
+    "062": 13.07,
+    "063": 13.76,
+    "064": 14.37,
+    "065": 15.43,
+    "066": 13.36,
+    "067": 11.98,
+    "068": 13.07,
+    "069": 13.5,
+    "070": 14.4,
+    "071": 15.24,
+    "072": 17.6,
+    "073": 16.67,
+    "074": 18.36,
+    "075": 19.56,
+    "076": 18.53,
+    "077": 18.07,
+    "078": 12.96,
+    "079": 13.34,
+    "080": 15.16,
+    "081": 14.51,
+    "082": 13.43,
+    "083": 14.58,
+    "084": 16.22,
+    "085": 15.53,
+    "086": 16.83,
+    "087": 17.12,
+    "088": 14.34,
+    "089": 14.81,
+    "090": 15.65,
+    "091": 27.96,
+    "092": 27.82,
+    "093": 27.65,
+    "094": 27.76,
+    "095": 28.44,
+    "096": 28.86,
+    "097": 29.83,
+    "098": 30.56,
+    "099": 26.73,
+    "100": 28.0,
+    "101": 28.98,
+    "102": 28.39,
+    "103": 27.62,
+    "104": 25.22,
+    "105": 21.05,
+    "106": 17.87,
+    "107": 19.9,
+    "108": 18.98,
+    "109": 18.39,
+    "110": 18.62,
+    "111": 19.68,
+    "112": 18.21,
+    "113": 19.51,
+    "114": 20.54,
+    "115": 5.75,
+    "116": 5.71,
+    "117": 4.8,
+    "118": 5.77,
+    "119": 5.93,
+    "120": 7.36,
+    "121": 7.81,
+    "122": 8.62,
+    "123": 9.43,
+    "124": 11.36,
+    "125": 12.73,
+    "127": 5.17,
+    "128": 3.79,
+    "129": 6.81,
+    "130": 8.84,
+    "131": 13.6,
+    "132": 10.89,
+    "134": 16.41,
+    "135": 15.01,
+    "136": 13.13,
+    "137": 12.51,
+    "138": 14.72,
+    "139": 14.79,
+    "140": 15.94,
+    "141": 18.33,
+    "142": 18.44,
+    "143": 21.11,
+    "144": 23.21,
+    "145": 20.78,
+    "146": 25.55,
+    "147": 27.41,
+    "148": 29.51,
+    "149": 33.17,
+    "150": 33.73,
+    "151": 25.54,
+    "152": 20.19,
+    "153": 27.87,
+    "154": 12.09,
+    "155": 16.65,
+    "156": 18.05,
+    "157": 20.12,
+    "158": 18.69,
+    "159": 20.51,
+    "160": 21.17,
+    "161": 21.14,
+    "162": 20.27,
+    "163": 18.55,
+    "164": 19.6,
+    "165": 4.33
+   },
+   "zona_sul": {
+    "001": 5.9,
+    "002": 5.91,
+    "003": 5.67,
+    "004": 8.94,
+    "005": 4.43,
+    "006": 3.8,
+    "007": 3.8,
+    "008": 4.67,
+    "009": 4.24,
+    "010": 7.26,
+    "011": 7.48,
+    "012": 8.85,
+    "013": 22.47,
+    "014": 3.37,
+    "015": 1.98,
+    "016": 3.44,
+    "017": 1.85,
+    "018": 2.77,
+    "019": 2.13,
+    "020": 0.75,
+    "021": 1.73,
+    "022": 2.02,
+    "023": 1.83,
+    "024": 2.38,
+    "025": 4.12,
+    "026": 5.46,
+    "027": 2.99,
+    "028": 3.81,
+    "029": 5.85,
+    "030": 7.51,
+    "031": 9.42,
+    "032": 5.2,
+    "033": 5.84,
+    "034": 9.51,
+    "035": 6.07,
+    "036": 7.59,
+    "037": 7.38,
+    "038": 8.51,
+    "039": 10.21,
+    "040": 11.95,
+    "041": 13.21,
+    "042": 14.48,
+    "043": 15.62,
+    "044": 16.78,
+    "045": 17.54,
+    "046": 18.42,
+    "047": 19.25,
+    "048": 20.45,
+    "049": 21.26,
+    "050": 11.72,
+    "051": 9.95,
+    "052": 11.24,
+    "053": 11.95,
+    "054": 13.34,
+    "055": 14.81,
+    "056": 15.5,
+    "057": 8.12,
+    "058": 9.01,
+    "059": 9.2,
+    "060": 9.65,
+    "061": 9.92,
+    "062": 10.99,
+    "063": 11.53,
+    "064": 12.11,
+    "065": 11.42,
+    "066": 12.84,
+    "067": 13.74,
+    "068": 13.74,
+    "069": 14.62,
+    "070": 13.88,
+    "071": 13.99,
+    "072": 16.55,
+    "073": 17.07,
+    "074": 17.63,
+    "075": 18.92,
+    "076": 19.15,
+    "077": 19.88,
+    "078": 18.35,
+    "079": 15.48,
+    "080": 16.0,
+    "081": 16.89,
+    "082": 16.6,
+    "083": 18.04,
+    "084": 18.09,
+    "085": 19.05,
+    "086": 20.09,
+    "087": 21.22,
+    "088": 19.25,
+    "089": 20.44,
+    "090": 21.69,
+    "091": 14.1,
+    "092": 14.43,
+    "093": 14.92,
+    "094": 14.88,
+    "095": 15.6,
+    "096": 16.31,
+    "097": 17.56,
+    "098": 17.92,
+    "099": 15.43,
+    "100": 16.15,
+    "101": 16.9,
+    "102": 17.15,
+    "103": 17.08,
+    "104": 16.31,
+    "105": 9.87,
+    "106": 23.3,
+    "107": 26.31,
+    "108": 26.44,
+    "109": 25.28,
+    "110": 21.51,
+    "111": 21.4,
+    "112": 22.48,
+    "113": 23.64,
+    "114": 23.89,
+    "115": 18.89,
+    "116": 15.96,
+    "117": 17.22,
+    "118": 18.28,
+    "119": 20.61,
+    "120": 16.15,
+    "121": 17.7,
+    "122": 20.46,
+    "123": 18.82,
+    "124": 18.27,
+    "125": 19.97,
+    "127": 14.41,
+    "128": 18.77,
+    "129": 24.92,
+    "130": 27.75,
+    "131": 32.43,
+    "132": 30.29,
+    "134": 23.24,
+    "135": 24.15,
+    "136": 21.59,
+    "137": 22.17,
+    "138": 25.01,
+    "139": 26.43,
+    "140": 28.32,
+    "141": 31.01,
+    "142": 32.56,
+    "143": 35.57,
+    "144": 39.21,
+    "145": 36.44,
+    "146": 42.43,
+    "147": 44.28,
+    "148": 46.57,
+    "149": 50.77,
+    "150": 52.28,
+    "151": 44.01,
+    "152": 39.59,
+    "153": 46.85,
+    "154": 7.87,
+    "155": 10.4,
+    "156": 13.47,
+    "157": 11.66,
+    "158": 8.13,
+    "159": 22.18,
+    "160": 32.75,
+    "161": 4.19,
+    "162": 33.0,
+    "163": 32.63,
+    "164": 38.57,
+    "165": 21.16
+   }
+  },
+  "n_referencia": 163
+ },
+ "fontes": {
+  "violencia": {
+   "criterio": "violencia",
+   "processado_em": "2026-11-25",
+   "fonte": "ISP-RJ - Instituto de Segurança Pública (dados abertos por CISP)",
+   "url": "https://www.ispdados.rj.gov.br/",
+   "arquivo": "https://www.ispdados.rj.gov.br/Arquivos/BaseDPEvolucaoMensalCisp.csv",
+   "periodo": "2025-11 a 2026-10",
+   "meses_provisorios": [
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10"
+   ],
+   "populacao": "Censo 2022 (IBGE), somada por setor censitário dentro de cada CISP",
+   "pop_fora_de_cisp": 0,
+   "indicadores": {
+    "letalidade_100k": {
+     "rotulo": "Letalidade violenta",
+     "peso": 0.5,
+     "colunas_isp": [
+      "letalidade_violenta"
+     ],
+     "unidade": "por 100 mil hab.",
+     "maior_e_pior": true
+    },
+    "roubo_veiculo_100k": {
+     "rotulo": "Roubo de veículo",
+     "peso": 0.2,
+     "colunas_isp": [
+      "roubo_veiculo"
+     ],
+     "unidade": "por 100 mil hab.",
+     "maior_e_pior": true
+    },
+    "roubo_rua_100k": {
+     "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+     "peso": 0.2,
+     "colunas_isp": [
+      "roubo_rua"
+     ],
+     "unidade": "por 100 mil hab.",
+     "maior_e_pior": true
+    },
+    "roubo_residencia_100k": {
+     "rotulo": "Roubo a residência",
+     "peso": 0.1,
+     "colunas_isp": [
+      "roubo_residencia"
+     ],
+     "unidade": "por 100 mil hab.",
+     "maior_e_pior": true
+    }
+   },
+   "aviso": "O ISP publica por área de delegacia (CISP), não por bairro. Bairros na mesma área de delegacia têm números iguais ou parecidos."
+  },
+  "alagamento": {
+   "criterio": "alagamento",
+   "processado_em": "2026-11-25",
+   "fontes": [
+    {
+     "nome": "ISMFI - Índice de Suscetibilidade do Meio Físico a Inundações (COPPE/UFRJ, 2016)",
+     "url": "https://pgeo3.rio.rj.gov.br/arcgis/rest/services/Estudos/ISMFI_Indice_de_Suscetibilidade_do_Meio_Fisico_a_Inundacoes/MapServer/0",
+     "periodo": "estudo de 2016 (setores do Censo 2010)"
+    },
+    {
+     "nome": "COR - Centro de Operações Rio, ocorrências (BigQuery datario.adm_cor_comando.ocorrencias)",
+     "url": "https://www.data.rio/",
+     "periodo": "2015-04 a 2024-03"
+    }
+   ],
+   "indicadores": {
+    "ismfi": {
+     "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+     "peso": 0.7,
+     "unidade": "índice",
+     "maior_e_pior": true
+    },
+    "cor_km2": {
+     "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+     "peso": 0.3,
+     "unidade": "por km²",
+     "maior_e_pior": true
+    }
+   },
+   "cor_coord_invalida_recuperada": 51,
+   "cor_descartadas": 293,
+   "cor_tipos": "Bolsão d'água em via, Alagamento, Lâmina d'água, Enchente, Alagamentos e enchentes",
+   "avisos": [
+    "O ISMFI é um estudo de 2016 e não considera obras de drenagem posteriores.",
+    "Os registros do COR vão só até 03/2024 e se concentram em vias de trânsito."
+   ]
+  },
+  "escolas": {
+   "criterio": "escolas",
+   "processado_em": "2026-11-25",
+   "fontes": [
+    {
+     "nome": "INEP - Catálogo de Escolas (Censo Escolar)",
+     "arquivo": "catalogo_escolas_rio_2026-11-25.csv",
+     "url": "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/catalogo-de-escolas"
+    },
+    {
+     "nome": "INEP - Ideb 2025 por escola",
+     "periodo": "2025 (divulgado em 05/08/2026)",
+     "url": "https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb/resultados"
+    }
+   ],
+   "escolas_consideradas": 3707,
+   "linhas_no_arquivo": 3999,
+   "localizadas_por_coordenada": 2947,
+   "localizadas_pelo_endereco": 760,
+   "nao_localizadas": 0,
+   "indicadores": {
+    "oferta_publica": {
+     "rotulo": "Escolas públicas a até 1.5 km",
+     "unidade": "escolas",
+     "maior_e_pior": false
+    },
+    "ideb_publica": {
+     "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+     "unidade": "Ideb (0 a 10)",
+     "maior_e_pior": false
+    },
+    "oferta_privada": {
+     "rotulo": "Escolas particulares a até 1.5 km",
+     "unidade": "escolas",
+     "maior_e_pior": false
+    }
+   },
+   "pesos_por_tipo": {
+    "tanto_faz": {
+     "oferta_publica": 0.35,
+     "ideb_publica": 0.35,
+     "oferta_privada": 0.3
+    },
+    "publica": {
+     "oferta_publica": 0.5,
+     "ideb_publica": 0.5,
+     "oferta_privada": 0.0
+    },
+    "particular": {
+     "oferta_publica": 0.0,
+     "ideb_publica": 0.0,
+     "oferta_privada": 1.0
+    }
+   },
+   "avisos": [
+    "Não existe indicador oficial de qualidade para escolas particulares: elas entram só pela quantidade.",
+    "Escolas sem coordenada no catálogo foram localizadas pelo bairro escrito no endereço."
+   ]
+  },
+  "transporte": {
+   "criterio": "transporte",
+   "processado_em": "2026-11-25",
+   "fonte": "Data.Rio / Prefeitura do Rio - camadas de transporte público",
+   "url": "https://www.data.rio/",
+   "camadas": {
+    "metro": {
+     "servico": "Transporte_Trafego/Transporte_publico/MapServer/19",
+     "editado_em": null
+    },
+    "trem": {
+     "servico": "Transporte_Trafego/Transporte_publico/MapServer/16",
+     "editado_em": null
+    },
+    "vlt": {
+     "servico": "Transporte_Trafego/Transporte_publico/MapServer/9",
+     "editado_em": null
+    },
+    "brt": {
+     "servico": "Hosted/Estações_BRT/FeatureServer/0",
+     "editado_em": "2026-09-11"
+    }
+   },
+   "estacoes_por_modo": {
+    "BRT": 156,
+    "Trem": 60,
+    "Metrô": 41,
+    "VLT": 31
+   },
+   "indicadores": {
+    "dist_estacao_m": {
+     "rotulo": "Distância média até a estação mais próxima (linha reta)",
+     "peso": 0.7,
+     "unidade": "metros",
+     "maior_e_pior": true
+    },
+    "estacoes_1km": {
+     "rotulo": "Estações a até 1 km",
+     "peso": 0.3,
+     "unidade": "estações",
+     "maior_e_pior": false
+    }
+   },
+   "avisos": [
+    "Distância em linha reta; o caminho a pé real costuma ser maior.",
+    "Considera metrô, trem, BRT e VLT. Ônibus comum não entra."
+   ]
+  },
+  "emprego": {
+   "criterio": "emprego",
+   "processado_em": "2026-11-25",
+   "fontes": [
+    {
+     "nome": "Distâncias calculadas a partir da malha de bairros, setores do Censo 2022 e estações (Data.Rio)"
+    },
+    {
+     "nome": "RAIS 2016 por bairro (Data.Rio) - só para o peso padrão Centro x Barra",
+     "url": "https://www.data.rio/datasets/cc9673bd14694b8f9330756f387b899b"
+    }
+   ],
+   "polos": {
+    "centro": {
+     "rotulo": "Centro (estação Carioca)",
+     "estacao": "Carioca",
+     "lat": -22.907354,
+     "lon": -43.177596
+    },
+    "barra": {
+     "rotulo": "Barra (Terminal Alvorada)",
+     "estacao": "Terminal Alvorada",
+     "lat": -23.000385,
+     "lon": -43.366118
+    },
+    "zona_sul": {
+     "rotulo": "Zona Sul (estação Botafogo)",
+     "estacao": "Botafogo",
+     "lat": -22.951212,
+     "lon": -43.183879
+    }
+   },
+   "peso_padrao": {
+    "centro": 0.822,
+    "barra": 0.178,
+    "vinculos_rais_2016": {
+     "centro_ap1": 839317,
+     "barra_ra24": 181827
+    }
+   },
+   "indicadores": {
+    "dist_padrao_m": {
+     "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+     "unidade": "metros",
+     "maior_e_pior": true,
+     "peso": 1.0
+    }
+   },
+   "avisos": [
+    "Distância em linha reta, não tempo de viagem.",
+    "Sem informar onde trabalha, a distância é 82% Centro e 18% Barra, conforme a participação de cada polo nos empregos formais (RAIS 2016)."
+   ]
+  },
+  "barulho": {
+   "criterio": "barulho",
+   "processado_em": "2026-11-25",
+   "fontes": [
+    {
+     "nome": "Central 1746 - chamados (BigQuery datario.adm_central_atendimento_1746.chamado)",
+     "url": "https://www.data.rio/",
+     "periodo": "2024-11 a 2026-10"
+    },
+    {
+     "nome": "Logradouros com hierarquia viária (Data.Rio)",
+     "servico": "CadLog/Trechos_Logradouros/MapServer/0"
+    },
+    {
+     "nome": "Linhas de trem e metrô, trajetos do BRT (Data.Rio)",
+     "servico": [
+      "Transporte_Trafego/Transporte_publico/MapServer/15",
+      "Transporte_Trafego/Transporte_publico/MapServer/18",
+      "Hosted/Trajetos_BRT/FeatureServer/1"
+     ]
+    },
+    {
+     "nome": "Planos Específicos de Zoneamento de Ruído dos aeroportos (PEZR, Prefeitura)",
+     "servico": "Urbanismo/IU_PEZRs/MapServer/301",
+     "editado_em": null
+    }
+   ],
+   "chamados_total": 66034,
+   "chamados_sem_local": 910,
+   "filtro_1746": {
+    "tipos": [
+     "Perturbação do sossego",
+     "Poluição"
+    ],
+    "subtipos": [
+     "Fiscalização de perturbação do sossego",
+     "Fiscalização de carros de som",
+     "Fiscalização de poluição sonora"
+    ],
+    "categorias": [
+     "Serviço",
+     "Reclamação"
+    ]
+   },
+   "indicadores": {
+    "chamados_1746_1000hab": {
+     "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+     "peso": 0.4,
+     "unidade": "por mil hab.",
+     "maior_e_pior": true
+    },
+    "pct_via_pesada": {
+     "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+     "peso": 0.25,
+     "unidade": "%",
+     "maior_e_pior": true
+    },
+    "pct_trilho_brt": {
+     "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+     "peso": 0.2,
+     "unidade": "%",
+     "maior_e_pior": true
+    },
+    "pct_aeroporto": {
+     "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+     "peso": 0.15,
+     "unidade": "%",
+     "maior_e_pior": true
+    }
+   },
+   "ruido_db_oficial": null,
+   "avisos": [
+    "Índice composto, não é medição de decibéis. O Rio ainda não publicou o mapa de ruído da Lei 7.479/2022.",
+    "O número de chamados mede reclamações, que também dependem do hábito de reclamar no bairro.",
+    "Metrô de superfície: considerada a Linha 2 inteira (as Linhas 1 e 4 são subterrâneas)."
+   ]
+  },
+  "preco": {
+   "criterio": "preco",
+   "processado_em": "2026-11-25",
+   "fonte": "Prefeitura do Rio - Secretaria Municipal de Fazenda, ITBI (transações imobiliárias por bairro e mês)",
+   "url": "https://www.data.rio/datasets/0965968f12424f8792b240568616e6aa",
+   "servico": "Fazenda/ITBI/MapServer/5",
+   "periodo": "2025-10 a 2026-09",
+   "naturezas": "compra e venda; promessa de compra e venda (imóveis residenciais)",
+   "avisos": [
+    "Mistura casas e apartamentos, novos e usados.",
+    "R$/m² calculado como valor médio dividido pela área média (a Prefeitura não publica a mediana).",
+    "Valor declarado para o ITBI. O último mês não é publicado pela Prefeitura."
+   ]
+  },
+  "base": {
+   "nome": "Malha de bairros (IPP) e setores do Censo 2022 (IBGE, via Data.Rio)",
+   "editado_em": {
+    "bairros": null,
+    "setores": "2026-08-20"
+   }
+  }
+ },
+ "bairros": [
+  {
+   "codbairro": "063",
+   "nome": "Méier",
+   "regiao": "Méier",
+   "populacao_2022": 39700,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 5.3,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 14.2,
+       "mediana_cidade": 22.6,
+       "nota": 7.5,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 300.7,
+       "mediana_cidade": 199.5,
+       "nota": 3.0,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 791.0,
+       "mediana_cidade": 557.9,
+       "nota": 2.5,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 4.7,
+       "mediana_cidade": 4.3,
+       "nota": 4.3,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 23,
+       "pct_pop": 0.317
+      },
+      {
+       "cisp": 25,
+       "pct_pop": 0.011
+      },
+      {
+       "cisp": 26,
+       "pct_pop": 0.672
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 3.7,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 37.0,
+       "mediana_cidade": 31.3,
+       "nota": 4.0,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 10.1,
+       "mediana_cidade": 4.5,
+       "nota": 3.0,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 24
+    },
+    "escolas": {
+     "nota": 5.6,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 28.2,
+       "mediana_cidade": 22.2,
+       "nota": 6.8,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.2,
+       "mediana_cidade": 5.5,
+       "nota": 0.9,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 49.8,
+       "mediana_cidade": 16.4,
+       "nota": 9.7,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 5.6,
+      "publica": 3.9,
+      "particular": 9.7
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 11,
+      "n_privadas_no_bairro": 40,
+      "n_com_ideb_no_bairro": 9
+     }
+    },
+    "transporte": {
+     "nota": 5.8,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 745.0,
+       "mediana_cidade": 827.3,
+       "nota": 5.7,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 1.6,
+       "mediana_cidade": 1.2,
+       "nota": 6.0,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Méier (Trem)"
+    },
+    "emprego": {
+     "nota": 6.8,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 11370.1,
+       "mediana_cidade": 14676.1,
+       "nota": 6.8,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 10.9,
+      "barra": 13.8,
+      "zona_sul": 11.5
+     }
+    },
+    "barulho": {
+     "nota": 2.7,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 52.0,
+       "mediana_cidade": 8.2,
+       "nota": 0.2,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 10.7,
+       "mediana_cidade": 7.9,
+       "nota": 3.8,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 5.8,
+       "mediana_cidade": 3.4,
+       "nota": 4.0,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 2066
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 4095,
+    "transacoes": 525,
+    "valor_medio": 344133,
+    "area_media_m2": 84.0
+   }
+  },
+  {
+   "codbairro": "065",
+   "nome": "Cachambi",
+   "regiao": "Méier",
+   "populacao_2022": 38673,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 4.7,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 19.2,
+       "mediana_cidade": 22.6,
+       "nota": 6.2,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 241.8,
+       "mediana_cidade": 199.5,
+       "nota": 3.8,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 878.0,
+       "mediana_cidade": 557.9,
+       "nota": 1.6,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 4.1,
+       "mediana_cidade": 4.3,
+       "nota": 5.1,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 23,
+       "pct_pop": 0.989
+      },
+      {
+       "cisp": 44,
+       "pct_pop": 0.011
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 5.9,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 29.9,
+       "mediana_cidade": 31.3,
+       "nota": 5.5,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 2.1,
+       "mediana_cidade": 4.5,
+       "nota": 6.9,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 4
+    },
+    "escolas": {
+     "nota": 6.4,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 30.6,
+       "mediana_cidade": 22.2,
+       "nota": 8.1,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.3,
+       "mediana_cidade": 5.5,
+       "nota": 2.5,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 32.2,
+       "mediana_cidade": 16.4,
+       "nota": 9.0,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 6.4,
+      "publica": 5.3,
+      "particular": 9.0
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 10,
+      "n_privadas_no_bairro": 13,
+      "n_com_ideb_no_bairro": 6
+     }
+    },
+    "transporte": {
+     "nota": 4.0,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 1055.0,
+       "mediana_cidade": 827.3,
+       "nota": 4.1,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 0.6,
+       "mediana_cidade": 1.2,
+       "nota": 3.8,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Del Castilho (Trem)"
+    },
+    "emprego": {
+     "nota": 7.0,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 11008.9,
+       "mediana_cidade": 14676.1,
+       "nota": 7.0,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 10.1,
+      "barra": 15.4,
+      "zona_sul": 11.4
+     }
+    },
+    "barulho": {
+     "nota": 5.1,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 23.2,
+       "mediana_cidade": 8.2,
+       "nota": 1.6,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 2.6,
+       "mediana_cidade": 7.9,
+       "nota": 7.8,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 3.4,
+       "nota": 8.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 898
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 4561,
+    "transacoes": 450,
+    "valor_medio": 333378,
+    "area_media_m2": 73.1
+   }
+  },
+  {
+   "codbairro": "033",
+   "nome": "Tijuca",
+   "regiao": "Tijuca",
+   "populacao_2022": 142326,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 5.7,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 8.6,
+       "mediana_cidade": 22.6,
+       "nota": 9.3,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 235.3,
+       "mediana_cidade": 199.5,
+       "nota": 3.9,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 1155.6,
+       "mediana_cidade": 557.9,
+       "nota": 0.9,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 9.3,
+       "mediana_cidade": 4.3,
+       "nota": 0.9,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 18,
+       "pct_pop": 0.205
+      },
+      {
+       "cisp": 19,
+       "pct_pop": 0.795
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 2.7,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 40.8,
+       "mediana_cidade": 31.3,
+       "nota": 3.3,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 19.3,
+       "mediana_cidade": 4.5,
+       "nota": 1.5,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 131
+    },
+    "escolas": {
+     "nota": 8.2,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 28.4,
+       "mediana_cidade": 22.2,
+       "nota": 7.0,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.8,
+       "mediana_cidade": 5.5,
+       "nota": 8.1,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 58.7,
+       "mediana_cidade": 16.4,
+       "nota": 9.8,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 8.2,
+      "publica": 7.5,
+      "particular": 9.8
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 32,
+      "n_privadas_no_bairro": 73,
+      "n_com_ideb_no_bairro": 18
+     }
+    },
+    "transporte": {
+     "nota": 6.6,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 632.7,
+       "mediana_cidade": 827.3,
+       "nota": 6.7,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 1.6,
+       "mediana_cidade": 1.2,
+       "nota": 6.2,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Uruguai (Metrô)"
+    },
+    "emprego": {
+     "nota": 8.7,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 7920.6,
+       "mediana_cidade": 14676.1,
+       "nota": 8.7,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 6.2,
+      "barra": 15.8,
+      "zona_sul": 5.8
+     }
+    },
+    "barulho": {
+     "nota": 3.8,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 16.9,
+       "mediana_cidade": 8.2,
+       "nota": 2.4,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 21.3,
+       "mediana_cidade": 7.9,
+       "nota": 1.2,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 3.4,
+       "nota": 8.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 2410
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 6270,
+    "transacoes": 2090,
+    "valor_medio": 573989,
+    "area_media_m2": 91.6
+   }
+  },
+  {
+   "codbairro": "036",
+   "nome": "Vila Isabel",
+   "regiao": "Tijuca",
+   "populacao_2022": 65790,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 5.6,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 15.0,
+       "mediana_cidade": 22.6,
+       "nota": 7.3,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 188.8,
+       "mediana_cidade": 199.5,
+       "nota": 5.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 634.2,
+       "mediana_cidade": 557.9,
+       "nota": 3.8,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 7.5,
+       "mediana_cidade": 4.3,
+       "nota": 1.2,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 20,
+       "pct_pop": 1.0
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 2.2,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 44.3,
+       "mediana_cidade": 31.3,
+       "nota": 2.5,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 22.6,
+       "mediana_cidade": 4.5,
+       "nota": 1.3,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 75
+    },
+    "escolas": {
+     "nota": 7.8,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 30.2,
+       "mediana_cidade": 22.2,
+       "nota": 7.8,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.6,
+       "mediana_cidade": 5.5,
+       "nota": 6.4,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 47.2,
+       "mediana_cidade": 16.4,
+       "nota": 9.6,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 7.8,
+      "publica": 7.1,
+      "particular": 9.6
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 14,
+      "n_privadas_no_bairro": 31,
+      "n_com_ideb_no_bairro": 10
+     }
+    },
+    "transporte": {
+     "nota": 3.7,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 1178.3,
+       "mediana_cidade": 827.3,
+       "nota": 3.6,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 0.7,
+       "mediana_cidade": 1.2,
+       "nota": 4.0,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Mangueira (Trem)"
+    },
+    "emprego": {
+     "nota": 8.3,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 8683.6,
+       "mediana_cidade": 14676.1,
+       "nota": 8.3,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 7.2,
+      "barra": 15.3,
+      "zona_sul": 7.6
+     }
+    },
+    "barulho": {
+     "nota": 3.9,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 14.0,
+       "mediana_cidade": 8.2,
+       "nota": 2.8,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 22.2,
+       "mediana_cidade": 7.9,
+       "nota": 1.1,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 3.4,
+       "nota": 8.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 918
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 4764,
+    "transacoes": 735,
+    "valor_medio": 388759,
+    "area_media_m2": 81.6
+   }
+  },
+  {
+   "codbairro": "038",
+   "nome": "Grajaú",
+   "regiao": "Tijuca",
+   "populacao_2022": 32816,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 5.7,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 15.0,
+       "mediana_cidade": 22.6,
+       "nota": 7.4,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 189.0,
+       "mediana_cidade": 199.5,
+       "nota": 5.3,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 634.2,
+       "mediana_cidade": 557.9,
+       "nota": 3.9,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 7.5,
+       "mediana_cidade": 4.3,
+       "nota": 1.2,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 20,
+       "pct_pop": 0.995
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 3.4,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 40.4,
+       "mediana_cidade": 31.3,
+       "nota": 3.4,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 8.9,
+       "mediana_cidade": 4.5,
+       "nota": 3.4,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 17
+    },
+    "escolas": {
+     "nota": 6.1,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 26.0,
+       "mediana_cidade": 22.2,
+       "nota": 6.0,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.5,
+       "mediana_cidade": 5.5,
+       "nota": 4.3,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 27.5,
+       "mediana_cidade": 16.4,
+       "nota": 8.1,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 6.1,
+      "publica": 5.2,
+      "particular": 8.1
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 9,
+      "n_privadas_no_bairro": 17,
+      "n_com_ideb_no_bairro": 5
+     }
+    },
+    "transporte": {
+     "nota": 1.5,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 2108.1,
+       "mediana_cidade": 827.3,
+       "nota": 1.8,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 0.0,
+       "mediana_cidade": 1.2,
+       "nota": 0.9,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Uruguai (Metrô)"
+    },
+    "emprego": {
+     "nota": 7.7,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 9672.7,
+       "mediana_cidade": 14676.1,
+       "nota": 7.7,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 8.8,
+      "barra": 13.7,
+      "zona_sul": 8.5
+     }
+    },
+    "barulho": {
+     "nota": 4.4,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 19.3,
+       "mediana_cidade": 8.2,
+       "nota": 1.9,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 8.5,
+       "mediana_cidade": 7.9,
+       "nota": 4.7,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 3.4,
+       "nota": 8.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 634
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 4807,
+    "transacoes": 404,
+    "valor_medio": 460532,
+    "area_media_m2": 95.8
+   }
+  },
+  {
+   "codbairro": "083",
+   "nome": "Madureira",
+   "regiao": "Madureira",
+   "populacao_2022": 39712,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 1.2,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 43.3,
+       "mediana_cidade": 22.6,
+       "nota": 0.9,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 916.4,
+       "mediana_cidade": 199.5,
+       "nota": 0.3,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 1225.5,
+       "mediana_cidade": 557.9,
+       "nota": 0.8,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 3.5,
+       "mediana_cidade": 4.3,
+       "nota": 5.9,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 29,
+       "pct_pop": 0.99
+      },
+      {
+       "cisp": 30,
+       "pct_pop": 0.01
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 4.0,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 34.1,
+       "mediana_cidade": 31.3,
+       "nota": 4.8,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 14.7,
+       "mediana_cidade": 4.5,
+       "nota": 2.1,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 52
+    },
+    "escolas": {
+     "nota": 4.7,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 23.7,
+       "mediana_cidade": 22.2,
+       "nota": 5.5,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.3,
+       "mediana_cidade": 5.5,
+       "nota": 1.9,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 23.3,
+       "mediana_cidade": 16.4,
+       "nota": 7.1,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 4.7,
+      "publica": 3.7,
+      "particular": 7.1
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 18,
+      "n_privadas_no_bairro": 18,
+      "n_com_ideb_no_bairro": 9
+     }
+    },
+    "transporte": {
+     "nota": 9.3,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 403.1,
+       "mediana_cidade": 827.3,
+       "nota": 9.2,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 4.5,
+       "mediana_cidade": 1.2,
+       "nota": 9.7,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Otaviano (BRT)"
+    },
+    "emprego": {
+     "nota": 3.9,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 16446.6,
+       "mediana_cidade": 14676.1,
+       "nota": 3.9,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 16.9,
+      "barra": 14.6,
+      "zona_sul": 18.0
+     }
+    },
+    "barulho": {
+     "nota": 3.2,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 9.4,
+       "mediana_cidade": 8.2,
+       "nota": 4.4,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 16.3,
+       "mediana_cidade": 7.9,
+       "nota": 2.0,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 26.7,
+       "mediana_cidade": 3.4,
+       "nota": 0.6,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 374
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 2849,
+    "transacoes": 151,
+    "valor_medio": 196549,
+    "area_media_m2": 69.0
+   }
+  },
+  {
+   "codbairro": "076",
+   "nome": "Irajá",
+   "regiao": "Madureira",
+   "populacao_2022": 85906,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 2.4,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 33.6,
+       "mediana_cidade": 22.6,
+       "nota": 2.3,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 573.1,
+       "mediana_cidade": 199.5,
+       "nota": 1.6,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 908.0,
+       "mediana_cidade": 557.9,
+       "nota": 1.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 3.0,
+       "mediana_cidade": 4.3,
+       "nota": 6.6,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 27,
+       "pct_pop": 1.0
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 4.2,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 34.3,
+       "mediana_cidade": 31.3,
+       "nota": 4.6,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 9.5,
+       "mediana_cidade": 4.5,
+       "nota": 3.3,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 68
+    },
+    "escolas": {
+     "nota": 6.1,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 28.5,
+       "mediana_cidade": 22.2,
+       "nota": 7.0,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.4,
+       "mediana_cidade": 5.5,
+       "nota": 3.2,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 27.8,
+       "mediana_cidade": 16.4,
+       "nota": 8.3,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 6.1,
+      "publica": 5.1,
+      "particular": 8.3
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 33,
+      "n_privadas_no_bairro": 22,
+      "n_com_ideb_no_bairro": 25
+     }
+    },
+    "transporte": {
+     "nota": 6.5,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 667.6,
+       "mediana_cidade": 827.3,
+       "nota": 6.4,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 1.8,
+       "mediana_cidade": 1.2,
+       "nota": 6.7,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Irajá (Metrô)"
+    },
+    "emprego": {
+     "nota": 3.4,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 17237.9,
+       "mediana_cidade": 14676.1,
+       "nota": 3.4,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 17.0,
+      "barra": 18.5,
+      "zona_sul": 19.2
+     }
+    },
+    "barulho": {
+     "nota": 3.5,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 10.2,
+       "mediana_cidade": 8.2,
+       "nota": 4.1,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 15.1,
+       "mediana_cidade": 7.9,
+       "nota": 2.2,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 11.3,
+       "mediana_cidade": 3.4,
+       "nota": 2.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 872
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 3577,
+    "transacoes": 423,
+    "valor_medio": 248739,
+    "area_media_m2": 69.5
+   }
+  },
+  {
+   "codbairro": "043",
+   "nome": "Penha",
+   "regiao": "Penha",
+   "populacao_2022": 58516,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 6.5,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 18.9,
+       "mediana_cidade": 22.6,
+       "nota": 6.3,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 158.2,
+       "mediana_cidade": 199.5,
+       "nota": 5.8,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 366.8,
+       "mediana_cidade": 557.9,
+       "nota": 7.1,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 2.6,
+       "mediana_cidade": 4.3,
+       "nota": 7.1,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 22,
+       "pct_pop": 1.0
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 4.6,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 31.9,
+       "mediana_cidade": 31.3,
+       "nota": 4.9,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 7.5,
+       "mediana_cidade": 4.5,
+       "nota": 3.7,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 31
+    },
+    "escolas": {
+     "nota": 6.2,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 32.7,
+       "mediana_cidade": 22.2,
+       "nota": 8.4,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.4,
+       "mediana_cidade": 5.5,
+       "nota": 3.5,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 20.9,
+       "mediana_cidade": 16.4,
+       "nota": 6.7,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 6.2,
+      "publica": 5.9,
+      "particular": 6.7
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 22,
+      "n_privadas_no_bairro": 15,
+      "n_com_ideb_no_bairro": 14
+     }
+    },
+    "transporte": {
+     "nota": 7.4,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 653.3,
+       "mediana_cidade": 827.3,
+       "nota": 6.6,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 3.6,
+       "mediana_cidade": 1.2,
+       "nota": 9.2,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Pastor José Santos (BRT)"
+    },
+    "emprego": {
+     "nota": 5.4,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 14014.4,
+       "mediana_cidade": 14676.1,
+       "nota": 5.4,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 12.8,
+      "barra": 19.5,
+      "zona_sul": 15.6
+     }
+    },
+    "barulho": {
+     "nota": 3.6,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 12.1,
+       "mediana_cidade": 8.2,
+       "nota": 3.5,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 12.8,
+       "mediana_cidade": 7.9,
+       "nota": 2.9,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 8.1,
+       "mediana_cidade": 3.4,
+       "nota": 3.3,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 708
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 3346,
+    "transacoes": 259,
+    "valor_medio": 240378,
+    "area_media_m2": 71.8
+   }
+  },
+  {
+   "codbairro": "074",
+   "nome": "Vila da Penha",
+   "regiao": "Madureira",
+   "populacao_2022": 23336,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 2.4,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 34.2,
+       "mediana_cidade": 22.6,
+       "nota": 2.2,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 563.8,
+       "mediana_cidade": 199.5,
+       "nota": 1.7,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 879.1,
+       "mediana_cidade": 557.9,
+       "nota": 1.5,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 2.9,
+       "mediana_cidade": 4.3,
+       "nota": 6.7,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 27,
+       "pct_pop": 0.941
+      },
+      {
+       "cisp": 38,
+       "pct_pop": 0.059
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 4.7,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 44.0,
+       "mediana_cidade": 31.3,
+       "nota": 2.6,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 0.0,
+       "mediana_cidade": 4.5,
+       "nota": 9.6,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 0
+    },
+    "escolas": {
+     "nota": 7.9,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 27.1,
+       "mediana_cidade": 22.2,
+       "nota": 6.5,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.7,
+       "mediana_cidade": 5.5,
+       "nota": 7.7,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 47.3,
+       "mediana_cidade": 16.4,
+       "nota": 9.6,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 7.9,
+      "publica": 7.1,
+      "particular": 9.6
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 2,
+      "n_privadas_no_bairro": 31,
+      "n_com_ideb_no_bairro": 2
+     }
+    },
+    "transporte": {
+     "nota": 5.8,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 750.6,
+       "mediana_cidade": 827.3,
+       "nota": 5.6,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 1.7,
+       "mediana_cidade": 1.2,
+       "nota": 6.4,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Vila Kosmos (BRT)"
+    },
+    "emprego": {
+     "nota": 4.1,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 15870.3,
+       "mediana_cidade": 14676.1,
+       "nota": 4.1,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 15.3,
+      "barra": 18.4,
+      "zona_sul": 17.6
+     }
+    },
+    "barulho": {
+     "nota": 3.4,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 20.8,
+       "mediana_cidade": 8.2,
+       "nota": 1.7,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 11.4,
+       "mediana_cidade": 7.9,
+       "nota": 3.5,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 3.2,
+       "mediana_cidade": 3.4,
+       "nota": 5.2,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 485
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 4175,
+    "transacoes": 211,
+    "valor_medio": 361342,
+    "area_media_m2": 86.6
+   }
+  },
+  {
+   "codbairro": "124",
+   "nome": "Praça Seca",
+   "regiao": "Jacarepaguá",
+   "populacao_2022": 63284,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 5.6,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 18.3,
+       "mediana_cidade": 22.6,
+       "nota": 6.8,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 227.9,
+       "mediana_cidade": 199.5,
+       "nota": 4.0,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 408.3,
+       "mediana_cidade": 557.9,
+       "nota": 6.5,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 9.1,
+       "mediana_cidade": 4.3,
+       "nota": 1.0,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 28,
+       "pct_pop": 0.995
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 7.1,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 15.0,
+       "mediana_cidade": 31.3,
+       "nota": 8.6,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 8.3,
+       "mediana_cidade": 4.5,
+       "nota": 3.5,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 43
+    },
+    "escolas": {
+     "nota": 3.9,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 15.6,
+       "mediana_cidade": 22.2,
+       "nota": 3.1,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.3,
+       "mediana_cidade": 5.5,
+       "nota": 2.5,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 18.8,
+       "mediana_cidade": 16.4,
+       "nota": 6.2,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 3.9,
+      "publica": 2.8,
+      "particular": 6.2
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 16,
+      "n_privadas_no_bairro": 21,
+      "n_com_ideb_no_bairro": 9
+     }
+    },
+    "transporte": {
+     "nota": 7.1,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 589.0,
+       "mediana_cidade": 827.3,
+       "nota": 7.3,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 1.8,
+       "mediana_cidade": 1.2,
+       "nota": 6.6,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Praça Seca (BRT)"
+    },
+    "emprego": {
+     "nota": 3.6,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 16812.7,
+       "mediana_cidade": 14676.1,
+       "nota": 3.6,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 18.0,
+      "barra": 11.4,
+      "zona_sul": 18.3
+     }
+    },
+    "barulho": {
+     "nota": 5.5,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 7.6,
+       "mediana_cidade": 8.2,
+       "nota": 5.4,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 3.1,
+       "mediana_cidade": 7.9,
+       "nota": 7.4,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 9.3,
+       "mediana_cidade": 3.4,
+       "nota": 3.1,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 478
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 2429,
+    "transacoes": 301,
+    "valor_medio": 201955,
+    "area_media_m2": 83.1
+   }
+  },
+  {
+   "codbairro": "123",
+   "nome": "Tanque",
+   "regiao": "Jacarepaguá",
+   "populacao_2022": 36839,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 6.1,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 17.4,
+       "mediana_cidade": 22.6,
+       "nota": 6.9,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 157.4,
+       "mediana_cidade": 199.5,
+       "nota": 5.9,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 352.1,
+       "mediana_cidade": 557.9,
+       "nota": 7.2,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 7.8,
+       "mediana_cidade": 4.3,
+       "nota": 1.0,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 28,
+       "pct_pop": 0.322
+      },
+      {
+       "cisp": 32,
+       "pct_pop": 0.013
+      },
+      {
+       "cisp": 41,
+       "pct_pop": 0.665
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 7.7,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 17.2,
+       "mediana_cidade": 31.3,
+       "nota": 8.1,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 2.3,
+       "mediana_cidade": 4.5,
+       "nota": 6.7,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 9
+    },
+    "escolas": {
+     "nota": 3.4,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 13.2,
+       "mediana_cidade": 22.2,
+       "nota": 2.5,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.3,
+       "mediana_cidade": 5.5,
+       "nota": 2.3,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 18.1,
+       "mediana_cidade": 16.4,
+       "nota": 5.8,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 3.4,
+      "publica": 2.4,
+      "particular": 5.8
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 8,
+      "n_privadas_no_bairro": 9,
+      "n_com_ideb_no_bairro": 6
+     }
+    },
+    "transporte": {
+     "nota": 4.7,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 863.0,
+       "mediana_cidade": 827.3,
+       "nota": 4.7,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 1.1,
+       "mediana_cidade": 1.2,
+       "nota": 4.8,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Tanque (BRT)"
+    },
+    "emprego": {
+     "nota": 3.3,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 17363.2,
+       "mediana_cidade": 14676.1,
+       "nota": 3.3,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 19.1,
+      "barra": 9.4,
+      "zona_sul": 18.8
+     }
+    },
+    "barulho": {
+     "nota": 6.0,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 3.6,
+       "mediana_cidade": 8.2,
+       "nota": 7.6,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 7.8,
+       "mediana_cidade": 7.9,
+       "nota": 5.1,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 4.6,
+       "mediana_cidade": 3.4,
+       "nota": 4.6,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 134
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 3040,
+    "transacoes": 120,
+    "valor_medio": 276147,
+    "area_media_m2": 90.8
+   }
+  },
+  {
+   "codbairro": "122",
+   "nome": "Taquara",
+   "regiao": "Jacarepaguá",
+   "populacao_2022": 107427,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 3.8,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 40.0,
+       "mediana_cidade": 22.6,
+       "nota": 1.5,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 152.3,
+       "mediana_cidade": 199.5,
+       "nota": 6.2,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 408.1,
+       "mediana_cidade": 557.9,
+       "nota": 6.5,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 4.3,
+       "mediana_cidade": 4.3,
+       "nota": 4.7,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 32,
+       "pct_pop": 0.986
+      },
+      {
+       "cisp": 41,
+       "pct_pop": 0.014
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 4.4,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 37.9,
+       "mediana_cidade": 31.3,
+       "nota": 3.8,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 3.3,
+       "mediana_cidade": 4.5,
+       "nota": 5.9,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 38
+    },
+    "escolas": {
+     "nota": 5.8,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 16.0,
+       "mediana_cidade": 22.2,
+       "nota": 3.5,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.5,
+       "mediana_cidade": 5.5,
+       "nota": 5.1,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 38.8,
+       "mediana_cidade": 16.4,
+       "nota": 9.3,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 5.8,
+      "publica": 4.3,
+      "particular": 9.3
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 26,
+      "n_privadas_no_bairro": 49,
+      "n_com_ideb_no_bairro": 20
+     }
+    },
+    "transporte": {
+     "nota": 6.3,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 715.4,
+       "mediana_cidade": 827.3,
+       "nota": 6.0,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 1.8,
+       "mediana_cidade": 1.2,
+       "nota": 6.8,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Boiúna (BRT)"
+    },
+    "emprego": {
+     "nota": 2.7,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 18787.9,
+       "mediana_cidade": 14676.1,
+       "nota": 2.7,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 21.0,
+      "barra": 8.6,
+      "zona_sul": 20.5
+     }
+    },
+    "barulho": {
+     "nota": 5.6,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 8.6,
+       "mediana_cidade": 8.2,
+       "nota": 4.8,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 2.6,
+       "mediana_cidade": 7.9,
+       "nota": 7.7,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 4.5,
+       "mediana_cidade": 3.4,
+       "nota": 4.6,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 928
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 4046,
+    "transacoes": 662,
+    "valor_medio": 362585,
+    "area_media_m2": 89.6
+   }
+  },
+  {
+   "codbairro": "120",
+   "nome": "Freguesia (Jacarepaguá)",
+   "regiao": "Jacarepaguá",
+   "populacao_2022": 74803,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 6.5,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 16.7,
+       "mediana_cidade": 22.6,
+       "nota": 7.0,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 124.0,
+       "mediana_cidade": 199.5,
+       "nota": 6.8,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 325.3,
+       "mediana_cidade": 557.9,
+       "nota": 7.6,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 7.2,
+       "mediana_cidade": 4.3,
+       "nota": 1.3,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 41,
+       "pct_pop": 0.994
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 6.3,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 25.4,
+       "mediana_cidade": 31.3,
+       "nota": 6.4,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 3.1,
+       "mediana_cidade": 4.5,
+       "nota": 6.0,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 22
+    },
+    "escolas": {
+     "nota": 3.7,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 12.1,
+       "mediana_cidade": 22.2,
+       "nota": 2.1,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.2,
+       "mediana_cidade": 5.5,
+       "nota": 1.3,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 28.3,
+       "mediana_cidade": 16.4,
+       "nota": 8.5,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 3.7,
+      "publica": 1.7,
+      "particular": 8.5
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 11,
+      "n_privadas_no_bairro": 32,
+      "n_com_ideb_no_bairro": 9
+     }
+    },
+    "transporte": {
+     "nota": 1.2,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 3049.9,
+       "mediana_cidade": 827.3,
+       "nota": 1.3,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 0.0,
+       "mediana_cidade": 1.2,
+       "nota": 0.9,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Tanque (BRT)"
+    },
+    "emprego": {
+     "nota": 4.4,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 15351.4,
+       "mediana_cidade": 14676.1,
+       "nota": 4.4,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 17.1,
+      "barra": 7.4,
+      "zona_sul": 16.1
+     }
+    },
+    "barulho": {
+     "nota": 4.9,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 9.2,
+       "mediana_cidade": 8.2,
+       "nota": 4.4,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 14.2,
+       "mediana_cidade": 7.9,
+       "nota": 2.3,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 3.4,
+       "nota": 8.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 687
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 5094,
+    "transacoes": 841,
+    "valor_medio": 543136,
+    "area_media_m2": 106.6
+   }
+  },
+  {
+   "codbairro": "121",
+   "nome": "Pechincha",
+   "regiao": "Jacarepaguá",
+   "populacao_2022": 39070,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 6.4,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 16.9,
+       "mediana_cidade": 22.6,
+       "nota": 6.9,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 124.3,
+       "mediana_cidade": 199.5,
+       "nota": 6.7,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 326.0,
+       "mediana_cidade": 557.9,
+       "nota": 7.5,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 7.2,
+       "mediana_cidade": 4.3,
+       "nota": 1.4,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 32,
+       "pct_pop": 0.014
+      },
+      {
+       "cisp": 41,
+       "pct_pop": 0.986
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 7.5,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 17.7,
+       "mediana_cidade": 31.3,
+       "nota": 8.0,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 2.9,
+       "mediana_cidade": 4.5,
+       "nota": 6.4,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 9
+    },
+    "escolas": {
+     "nota": 4.3,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 16.2,
+       "mediana_cidade": 22.2,
+       "nota": 3.6,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.2,
+       "mediana_cidade": 5.5,
+       "nota": 1.2,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 30.2,
+       "mediana_cidade": 16.4,
+       "nota": 8.9,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 4.3,
+      "publica": 2.4,
+      "particular": 8.9
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 4,
+      "n_privadas_no_bairro": 16,
+      "n_com_ideb_no_bairro": 4
+     }
+    },
+    "transporte": {
+     "nota": 2.6,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 1533.0,
+       "mediana_cidade": 827.3,
+       "nota": 2.7,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 0.2,
+       "mediana_cidade": 1.2,
+       "nota": 2.3,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Tanque (BRT)"
+    },
+    "emprego": {
+     "nota": 3.8,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 16503.4,
+       "mediana_cidade": 14676.1,
+       "nota": 3.8,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 18.4,
+      "barra": 7.8,
+      "zona_sul": 17.7
+     }
+    },
+    "barulho": {
+     "nota": 5.5,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 8.2,
+       "mediana_cidade": 8.2,
+       "nota": 5.0,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 9.7,
+       "mediana_cidade": 7.9,
+       "nota": 4.2,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 3.4,
+       "nota": 8.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 321
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 3967,
+    "transacoes": 501,
+    "valor_medio": 342087,
+    "area_media_m2": 86.2
+   }
+  },
+  {
+   "codbairro": "125",
+   "nome": "Vila Valqueire",
+   "regiao": "Jacarepaguá",
+   "populacao_2022": 34024,
+   "tem_nota": true,
+   "criterios": {
+    "violencia": {
+     "nota": 5.6,
+     "indicadores": [
+      {
+       "id": "letalidade_100k",
+       "rotulo": "Letalidade violenta",
+       "unidade": "por 100 mil hab.",
+       "valor": 18.3,
+       "mediana_cidade": 22.6,
+       "nota": 6.7,
+       "peso": 0.5,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_veiculo_100k",
+       "rotulo": "Roubo de veículo",
+       "unidade": "por 100 mil hab.",
+       "valor": 226.8,
+       "mediana_cidade": 199.5,
+       "nota": 4.0,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_rua_100k",
+       "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
+       "unidade": "por 100 mil hab.",
+       "valor": 406.1,
+       "mediana_cidade": 557.9,
+       "nota": 6.7,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "roubo_residencia_100k",
+       "rotulo": "Roubo a residência",
+       "unidade": "por 100 mil hab.",
+       "valor": 9.1,
+       "mediana_cidade": 4.3,
+       "nota": 0.9,
+       "peso": 0.1,
+       "maior_e_pior": true
+      }
+     ],
+     "cisps": [
+      {
+       "cisp": 28,
+       "pct_pop": 1.0
+      }
+     ]
+    },
+    "alagamento": {
+     "nota": 5.6,
+     "indicadores": [
+      {
+       "id": "ismfi",
+       "rotulo": "Suscetibilidade a inundação (ISMFI, 0 a 100)",
+       "unidade": "índice",
+       "valor": 26.4,
+       "mediana_cidade": 31.3,
+       "nota": 6.3,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "cor_km2",
+       "rotulo": "Ocorrências de alagamento no COR por km² ocupado",
+       "unidade": "por km²",
+       "valor": 7.3,
+       "mediana_cidade": 4.5,
+       "nota": 3.8,
+       "peso": 0.3,
+       "maior_e_pior": true
+      }
+     ],
+     "cor_n": 24
+    },
+    "escolas": {
+     "nota": 5.6,
+     "indicadores": [
+      {
+       "id": "oferta_publica",
+       "rotulo": "Escolas públicas a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 14.0,
+       "mediana_cidade": 22.2,
+       "nota": 2.7,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "ideb_publica",
+       "rotulo": "Ideb 2025 médio das escolas públicas a até 2 km",
+       "unidade": "Ideb (0 a 10)",
+       "valor": 5.6,
+       "mediana_cidade": 5.5,
+       "nota": 7.0,
+       "peso": null,
+       "maior_e_pior": false
+      },
+      {
+       "id": "oferta_privada",
+       "rotulo": "Escolas particulares a até 1.5 km",
+       "unidade": "escolas",
+       "valor": 24.6,
+       "mediana_cidade": 16.4,
+       "nota": 7.5,
+       "peso": null,
+       "maior_e_pior": false
+      }
+     ],
+     "nota_por_tipo": {
+      "tanto_faz": 5.6,
+      "publica": 4.8,
+      "particular": 7.5
+     },
+     "contagem_no_bairro": {
+      "n_publicas_no_bairro": 8,
+      "n_privadas_no_bairro": 16,
+      "n_com_ideb_no_bairro": 6
+     }
+    },
+    "transporte": {
+     "nota": 2.3,
+     "indicadores": [
+      {
+       "id": "dist_estacao_m",
+       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "unidade": "metros",
+       "valor": 1704.0,
+       "mediana_cidade": 827.3,
+       "nota": 2.5,
+       "peso": 0.7,
+       "maior_e_pior": true
+      },
+      {
+       "id": "estacoes_1km",
+       "rotulo": "Estações a até 1 km",
+       "unidade": "estações",
+       "valor": 0.0,
+       "mediana_cidade": 1.2,
+       "nota": 1.9,
+       "peso": 0.3,
+       "maior_e_pior": false
+      }
+     ],
+     "estacao_mais_comum": "Praça Seca (BRT)"
+    },
+    "emprego": {
+     "nota": 3.0,
+     "indicadores": [
+      {
+       "id": "dist_padrao_m",
+       "rotulo": "Distância média até os polos de emprego (Centro e Barra)",
+       "unidade": "metros",
+       "valor": 18205.8,
+       "mediana_cidade": 14676.1,
+       "nota": 3.0,
+       "peso": 1.0,
+       "maior_e_pior": true
+      }
+     ],
+     "dist_km": {
+      "centro": 19.4,
+      "barra": 12.7,
+      "zona_sul": 20.0
+     }
+    },
+    "barulho": {
+     "nota": 6.0,
+     "indicadores": [
+      {
+       "id": "chamados_1746_1000hab",
+       "rotulo": "Chamados ao 1746 por barulho, por mil habitantes",
+       "unidade": "por mil hab.",
+       "valor": 12.1,
+       "mediana_cidade": 8.2,
+       "nota": 3.6,
+       "peso": 0.4,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_via_pesada",
+       "rotulo": "Moradores a até 50 m de via estrutural ou arterial (primária ou secundária)",
+       "unidade": "%",
+       "valor": 0.9,
+       "mediana_cidade": 7.9,
+       "nota": 8.4,
+       "peso": 0.25,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_trilho_brt",
+       "rotulo": "Moradores a até 100 m de trem, metrô de superfície ou BRT",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 3.4,
+       "nota": 8.4,
+       "peso": 0.2,
+       "maior_e_pior": true
+      },
+      {
+       "id": "pct_aeroporto",
+       "rotulo": "Moradores em zona de ruído de aeroporto (65 dB ou mais)",
+       "unidade": "%",
+       "valor": 0.0,
+       "mediana_cidade": 0.0,
+       "nota": 5.4,
+       "peso": 0.15,
+       "maior_e_pior": true
+      }
+     ],
+     "chamados_1746_n": 410
+    }
+   },
+   "ruido_db_oficial": null,
+   "preco_itbi": {
+    "rs_m2": 3814,
+    "transacoes": 238,
+    "valor_medio": 443967,
+    "area_media_m2": 116.4
+   }
+  }
+ ]
+}
