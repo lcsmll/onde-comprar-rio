@@ -3,7 +3,7 @@
 
 Entradas:
   data_raw/inep/catalogo/catalogo_escolas_rio_*.csv  (exportado do Catalogo de Escolas - ver README)
-  data_raw/inep/ext/divulgacao_*_escolas_2025.xlsx   (IDEB 2025 por escola)
+  data_raw/inep/divulgacao_*_escolas_<IDEB_ANO>.zip    (Ideb por escola; ver etl/ferramentas/baixar_dados.sh)
 
 Escolas consideradas: "em funcionamento e sem restricao de atendimento" que oferecem
 Educacao Infantil, Ensino Fundamental ou Ensino Medio.
@@ -11,7 +11,7 @@ Educacao Infantil, Ensino Fundamental ou Ensino Medio.
 Indicadores por setor (ponto interno), depois media do bairro ponderada pela populacao:
   oferta_publica  n. de escolas publicas a ate ESCOLA_RAIO_OFERTA_M
   oferta_privada  n. de escolas particulares a ate ESCOLA_RAIO_OFERTA_M
-  ideb_publica    media do IDEB 2025 das escolas publicas a ate ESCOLA_RAIO_IDEB_M
+  ideb_publica    media do Ideb (config.IDEB_ANO) das escolas publicas a ate ESCOLA_RAIO_IDEB_M
 Escolas sem coordenada: localizadas pelo bairro escrito no endereco; contam para
 todos os moradores daquele bairro (entram na oferta, nao no IDEB).
 """
@@ -27,19 +27,20 @@ from comum import PROC, RAW, carregar_bairros, carregar_setores, casador_bairros
 
 PASTA = RAW / "inep"
 ETAPAS = ("Educação Infantil", "Ensino Fundamental", "Ensino Médio")
+A = config.IDEB_ANO  # edicao do Ideb usada (config.py)
 
 
 def ler_ideb() -> pd.DataFrame:
-    """IDEB 2025 das escolas do municipio do Rio (cache em data_proc, a leitura do xlsx demora)."""
-    cache = PROC / "ideb_rio_2025.csv"
+    """IDEB das escolas do municipio do Rio (cache em data_proc, a leitura do xlsx demora)."""
+    cache = PROC / f"ideb_rio_{A}.csv"
     if cache.exists():
         return pd.read_csv(cache)
     linhas = []
     for etapa in ["anos_iniciais", "anos_finais", "ensino_medio"]:
-        nome = f"divulgacao_{etapa}_escolas_2025.xlsx"
+        nome = f"divulgacao_{etapa}_escolas_{A}.xlsx"
         arq = PASTA / "ext" / nome
         if not arq.exists():
-            with zipfile.ZipFile(PASTA / f"divulgacao_{etapa}_escolas_2025.zip") as z:
+            with zipfile.ZipFile(PASTA / f"divulgacao_{etapa}_escolas_{A}.zip") as z:
                 membro = next(m for m in z.namelist() if m.endswith(".xlsx"))
                 arq.parent.mkdir(parents=True, exist_ok=True)
                 arq.write_bytes(z.read(membro))
@@ -50,7 +51,7 @@ def ler_ideb() -> pd.DataFrame:
                 if row and row[0] == "SG_UF":
                     cab = list(row)
                     i_mun, i_id, i_rede, i_ideb = (cab.index(c) for c in
-                                                   ("CO_MUNICIPIO", "ID_ESCOLA", "REDE", "VL_OBSERVADO_2025"))
+                                                   ("CO_MUNICIPIO", "ID_ESCOLA", "REDE", f"VL_OBSERVADO_{A}"))
                 continue
             if str(row[i_mun]) == "3304557":
                 linhas.append({"cod": int(row[i_id]), "rede": row[i_rede], "etapa": etapa,
@@ -125,7 +126,7 @@ def main():
         "fontes": [
             {"nome": "INEP - Catálogo de Escolas (Censo Escolar)", "arquivo": arq.name,
              "url": "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/catalogo-de-escolas"},
-            {"nome": "INEP - Ideb 2025 por escola", "periodo": "2025 (divulgado em 05/08/2026)",
+            {"nome": f"INEP - Ideb {A} por escola", "periodo": f"Ideb {A}",
              "url": "https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb/resultados"},
         ],
         "escolas_consideradas": int(len(c)), "linhas_no_arquivo": total,
@@ -134,7 +135,7 @@ def main():
         "indicadores": {
             "oferta_publica": {"rotulo": f"Escolas públicas a até {config.ESCOLA_RAIO_OFERTA_M/1000:g} km",
                                "unidade": "escolas", "maior_e_pior": False},
-            "ideb_publica": {"rotulo": f"Ideb 2025 médio das escolas públicas a até {config.ESCOLA_RAIO_IDEB_M/1000:g} km",
+            "ideb_publica": {"rotulo": f"Ideb {A} médio das escolas públicas a até {config.ESCOLA_RAIO_IDEB_M/1000:g} km",
                              "unidade": "Ideb (0 a 10)", "maior_e_pior": False},
             "oferta_privada": {"rotulo": f"Escolas particulares a até {config.ESCOLA_RAIO_OFERTA_M/1000:g} km",
                                "unidade": "escolas", "maior_e_pior": False},
@@ -149,7 +150,7 @@ def main():
     if len(nao_loc):
         print("Enderecos nao localizados (acrescentar apelido?):")
         print(nao_loc["Endereço"].head(15).to_string())
-    print(f"Escolas publicas com Ideb 2025: {g['ideb'].notna().sum()}")
+    print(f"Escolas publicas com Ideb {A}: {g['ideb'].notna().sum()}")
     resumo("Escolas", out)
 
 

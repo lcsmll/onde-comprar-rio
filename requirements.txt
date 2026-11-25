@@ -1,0 +1,18 @@
+# Bibliotecas do ETL e dos testes (Python 3.12). Instalar com:
+#   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+pandas==3.1.1
+geopandas==1.2.0
+shapely==2.2.0
+pyogrio==0.13.0
+pyproj==3.8.0
+numpy==2.5.5
+scipy==1.18.1
+pyarrow==26.0.1
+openpyxl==3.1.5
+requests==2.34.2
+google-auth==2.63.1
+google-cloud-bigquery==3.47.0
+db-dtypes==1.9.0
+playwright==1.65.2
+fonttools==4.69.1
+brotli==1.2.1

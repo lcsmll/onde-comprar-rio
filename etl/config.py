@@ -47,6 +47,9 @@ COR_POPS_ALAGAMENTO = [5, 6, 31, 32, 33]  # bolsao, alagamentos e enchentes, ala
 # ---------------------------------------------------------------------------
 # Escolas
 # ---------------------------------------------------------------------------
+# Edicao do Ideb por escola (o INEP divulga a cada 2 anos; a de 2027 deve sair em 2028).
+# Para atualizar: troque o ano, baixe os arquivos (etl/ferramentas/baixar_dados.sh) e rode o ETL.
+IDEB_ANO = 2025
 ESCOLA_RAIO_OFERTA_M = 1500
 ESCOLA_RAIO_IDEB_M = 2000
 ESCOLAS_PESOS = {  # por tipo de escola procurada (pergunta extra da familia)

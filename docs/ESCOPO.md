@@ -425,3 +425,11 @@ Motivo: a Tijuca aparecia com segurança pior que a Penha (5,7 x 6,5) e transpor
 
 - **Tela "Dúvidas"** (`#perguntas`, link no cabeçalho e na tela inicial): 14 perguntas em blocos que abrem e fecham (como a nota é calculada, nomes no sentido positivo, o que entra em segurança, delegacias, preço do m², MCMV, SAC x Price, comprometimento da renda, FGTS, custos extras, validade da simulação, privacidade, bairros da versão e datas dos dados). Os números das respostas (faixas, tetos e juros do MCMV, taxa SBPE, ITBI, 30% da renda, períodos de cada fonte) são lidos dos JSON, não ficam fixos no texto.
 - **Imprimir ou salvar em PDF** no detalhe do bairro, no simulador e na comparação, usando a impressão do navegador (sem servidor). Na impressão: somem cabeçalho, rodapé, ilustrações e botões; os blocos fechados abrem; entra um cabeçalho com data, endereço do app, data dos dados e o aviso de simulação estimada; os cartões não são cortados entre páginas.
+
+## 20. Etapa 5: documentação e rotina de atualização (25/11/2026)
+
+- `README.md` completo: como funciona, estrutura, preparar o computador (Python, Chrome, unrar, gh, gcloud/BigQuery), frequência de atualização de cada fonte, downloads manuais (Catálogo de Escolas e Caixa), conferência das regras do MCMV, rodar o ETL, testar (fluxo e contraste), publicar no GitHub Pages, mudar regras no `config.py`, problemas comuns e licenças.
+- `requirements.txt` com as versões das bibliotecas.
+- `etl/ferramentas/baixar_dados.sh`: baixa os limites das delegacias (ISP) e o Ideb (INEP); tenta de novo em caso de falha e nunca substitui um arquivo bom por um download incompleto.
+- Ano do Ideb passou para `config.IDEB_ANO` (antes estava no código do script de escolas).
+- Validação: ETL completo rodado do zero conforme o README (4 min 35 s, sem erros), teste do site e auditoria de contraste sem falhas.
