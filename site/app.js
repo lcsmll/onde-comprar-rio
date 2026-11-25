@@ -54,7 +54,7 @@ function anel(nota, tam = 64) {
   const r = 26, c = 2 * Math.PI * r, f = nota == null ? 0 : Math.max(0, Math.min(10, nota)) / 10;
   return `<div class="anel" style="width:${tam}px;height:${tam}px">
     <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="anel-fundo" cx="32" cy="32" r="${r}"/>
-      <circle class="anel-cheio" cx="32" cy="32" r="${r}" stroke-dasharray="${c * f} ${c}" transform="rotate(-90 32 32)"/></svg>
+      ${nota == null ? "" : `<circle class="anel-cheio" cx="32" cy="32" r="${r}" stroke-dasharray="${c * f} ${c}" transform="rotate(-90 32 32)"/>`}</svg>
     <span class="anel-valor">${nota == null ? "-" : fmtN(nota)}</span></div>`;
 }
 
@@ -83,7 +83,7 @@ const estado = {
   trabalho: ["", ""],
   pesos: null, esconderCaros: false,
   bairroAtual: null, telaAnterior: "resultado",
-  aluguel: 0, extras: 0, mapaCidade: false, ordem: "nota", comparar: [],
+  aluguel: 0, extras: 0, mapaCidade: false, ordem: "nota", comparar: [], limite: 20, filtro: "",
 };
 
 /* ---------------- utilidades ---------------- */
@@ -99,6 +99,8 @@ const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julh
 const mesAno = (iso) => { const [a, m] = iso.split("-"); return `${MESES[Number(m) - 1]} de ${a}`; };
 const fmtData = (iso) => iso ? iso.split("-").reverse().join("/") : "-";
 const lerDinheiro = (s) => Number(String(s).replace(/\D/g, "")) || 0;
+// texto para busca: minusculo e sem acento
+const norm = (s) => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
   .replace(/[()]/g, "").trim().replace(/\s+/g, "-");
 
@@ -170,7 +172,7 @@ function notasDoBairro(b) {
     if (n[c] == null) continue;
     soma += n[c] * P[c]; pesos += P[c];
   }
-  n.final = pesos ? soma / pesos : null;
+  n.final = pesos && !b.sem_nota_final ? soma / pesos : null;
   return n;
 }
 
@@ -384,6 +386,8 @@ function ligarFormulario() {
     });
     $$(".nesta-pagina [data-rolar]").forEach((bt) => bt.classList.toggle("ativo", bt === atual));
   }, { passive: true });
+  $("#filtro-bairro").addEventListener("input", (e) => { estado.filtro = e.target.value; estado.limite = 20; desenharResultado(); });
+  $("#ver-mais").addEventListener("click", () => { estado.limite += 20; desenharResultado(); });
   $("#ordenar").addEventListener("change", (e) => { estado.ordem = e.target.value; desenharResultado(); });
   $("#mapa-cidade").addEventListener("click", () => { estado.mapaCidade = !estado.mapaCidade; desenharMapaResultado(); });
   $("#voltar-do-simulador").addEventListener("click", () => ir(estado.telaAnterior || "resultado"));
@@ -466,7 +470,9 @@ function svgMapa(opts) {
   if (!M) return "";
   const exibidos = new Map(D.bairros.bairros.filter((b) => b.tem_nota).map((b) => [b.codbairro, b]));
   const vb = (opts.cidade ? M.viewbox_cidade : M.viewbox_inicial).join(" ");
-  const fonte = opts.cidade ? 34 : 24;
+  const vbArr = opts.cidade ? M.viewbox_cidade : M.viewbox_inicial;
+  const fonte = Math.max(14, Math.round(vbArr[2] / 50));         // letra proporcional a area mostrada
+  const poucos = exibidos.size <= 30;                            // com a cidade inteira, sem nomes (sobrepoem)
   // escala relativa: do menor ao maior valor entre os bairros mostrados (como num mapa de calor)
   const valor = (b) => { const n = notasDoBairro(b); return opts.modo === "final" ? n.final : n[opts.modo]; };
   const vals = opts.destaque ? [] : [...exibidos.values()].map(valor).filter((v) => v != null);
@@ -490,12 +496,14 @@ function svgMapa(opts) {
     } else {
       const v = valor(b), cor = corCalor(v == null ? null : pos(v));
       estilo = cor ? `fill:${cor}` : "";
+      if (!cor) classe += " m-sem";
       g.claro = cor ? !corClara(cor) : false;
       titulo = `${b.nome}: ${v == null ? "sem nota" : fmtN(v)}`;
     }
     formas += `<path class="${classe}" d="${g.d}" style="${estilo}" data-bairro="${cod}" tabindex="0" role="link"
       aria-label="${esc(titulo)}"><title>${esc(titulo)}</title></path>`;
     if (codsExtremos.includes(cod)) continue;
+    if (!poucos && !(opts.destaque && [].concat(opts.destaque).includes(cod))) continue;
     rotulos += `<text x="${g.rotulo[0]}" y="${g.rotulo[1]}" font-size="${fonte}"${g.claro && !opts.destaque ? ' class="claro"' : ""}>${esc(b.nome.replace(" (Jacarepaguá)", ""))}</text>`;
   }
   // destaques flutuantes: bairro com maior e com menor valor (so no mapa do resultado)
@@ -519,7 +527,9 @@ function svgMapa(opts) {
         <text x="${bx + larg - f * 1.7}" y="${by + f * 1.82}" class="m-chamada-nota${corClara(cor) ? "" : " claro"}" font-size="${f * 0.85}">${fmtN(x.v)}</text></g>`;
     }).join("");
   }
-  return `<svg class="mapa-svg" viewBox="${vb}" role="group" aria-label="Mapa dos bairros">${formas}<g class="m-rotulos" aria-hidden="true">${rotulos}</g><g aria-hidden="true">${chamadas}</g></svg>`;
+  const defs = `<defs><pattern id="hachura" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <rect width="8" height="8" fill="#ece5d6"/><line x1="0" y1="0" x2="0" y2="8" stroke="#b9ae97" stroke-width="3"/></pattern></defs>`;
+  return `<svg class="mapa-svg" viewBox="${vb}" role="group" aria-label="Mapa dos bairros">${defs}${formas}<g class="m-rotulos" aria-hidden="true">${rotulos}</g><g aria-hidden="true">${chamadas}</g></svg>`;
 }
 
 function ligarMapa(el) {
@@ -542,6 +552,8 @@ function desenharMapaResultado() {
       svgMapa.valores.map((x) => `<span class="regua-traco" style="left:${x.v * 10}%;background:${svgMapa.cor(x.v)}" title="${esc(x.nome)}: ${fmtN(x.v)}"></span>`).join("");
   }
   $("#mapa-cidade").textContent = estado.mapaCidade ? "Aproximar dos bairros" : "Ver cidade inteira";
+  // com a cidade inteira exibida, o enquadramento inicial ja e a cidade: o botao nao faz sentido
+  $("#mapa-cidade").hidden = D.mapa.viewbox_inicial.join() === D.mapa.viewbox_cidade.join();
   ligarMapa($("#mapa"));
 }
 
@@ -557,10 +569,11 @@ function barras(n) {
 
 function desenharResultado() {
   const orc = orcamento();
-  const lista = D.bairros.bairros.filter((b) => b.tem_nota)
-    .map((b) => ({ b, n: notasDoBairro(b), c: custoNoBairro(b, orc) }))
-    .sort((x, y) => (y.n.final ?? -1) - (x.n.final ?? -1));
+  const todos = D.bairros.bairros.filter((b) => b.tem_nota)
+    .map((b) => ({ b, n: notasDoBairro(b), c: custoNoBairro(b, orc) }));
+  const lista = todos.filter((x) => x.n.final != null).sort((x, y) => y.n.final - x.n.final);
   lista.forEach((x, i) => (x.pos = i + 1));          // posicao sempre pela nota
+  const semFinal = todos.filter((x) => x.n.final == null).sort((x, y) => x.b.nome.localeCompare(y.b.nome, "pt-BR"));
   const ordens = {
     nota: () => 0,
     parcela: (x, y) => (x.c?.parcela ?? 1e12) - (y.c?.parcela ?? 1e12),
@@ -568,6 +581,12 @@ function desenharResultado() {
     preco_m2: (x, y) => (x.c?.rs ?? 1e12) - (y.c?.rs ?? 1e12),
   };
   if (estado.ordem !== "nota") lista.sort(ordens[estado.ordem] || ordens.nota);
+  // bairros sem nota final vao para o fim (sem posicao), com um titulo explicando
+  const busca = norm(estado.filtro);
+  const visiveis = [...lista, ...semFinal]
+    .filter((x) => !busca || norm(x.b.nome).includes(busca))
+    .filter((x) => !(estado.esconderCaros && acimaOrcamento(x.b)));
+  const mostrados = visiveis.slice(0, estado.limite);
 
   $("#sobretitulo-resultado").textContent = "Ranking · " + mesAno(D.bairros.gerado_em);
   $("#explica-nota").textContent = D.bairros.metodo_nota + " A nota final é a média das 6 notas, pesada pelas suas prioridades.";
@@ -580,27 +599,38 @@ function desenharResultado() {
   $("#titulo-resultado").textContent = { nota: "Bairros em ordem de nota", parcela: "Bairros pela menor parcela",
     area: "Bairros pela maior área que cabe", preco_m2: "Bairros pelo menor preço do m²" }[estado.ordem];
 
-  $("#lista-bairros").innerHTML = lista.map(({ b, n, c, pos }) => {
+  let jaTitulo = false;
+  $("#lista-bairros").innerHTML = mostrados.map(({ b, n, c, pos }) => {
     const caro = acimaOrcamento(b);
-    if (caro && estado.esconderCaros) return "";
+    let titulo = "";
+    if (!pos && !jaTitulo) {
+      jaTitulo = true;
+      titulo = `<li class="titulo-sem-nota"><strong>Bairros sem nota final</strong>
+        <span>Mais da metade dos moradores vive em área de favela (IPP), onde ocorrências e chamados ao 1746 são pouco registrados.
+        Segurança e Menos barulho ficam sem nota; os outros critérios, o preço e o simulador continuam valendo.</span></li>`;
+    }
     const tag = !c ? "" : caro ? `<span class="etiqueta">${orc ? "Acima do que cabe" : "Acima do seu preço máximo"}</span>`
       : orc ? '<span class="etiqueta etiqueta-ok">Cabe no seu bolso</span>' : "";
     const marcado = estado.comparar.includes(b.codbairro);
-    return `<li class="item-bairro"><button class="btn-comparar" data-comparar="${b.codbairro}" aria-pressed="${marcado}"
+    return `${titulo}<li class="item-bairro"><button class="btn-comparar" data-comparar="${b.codbairro}" aria-pressed="${marcado}"
         aria-label="${marcado ? "Tirar da comparação" : "Comparar"}: ${esc(b.nome)}">${marcado ? "✓ Comparando" : "+ Comparar"}</button>
       <button class="cartao-bairro" data-bairro="${b.codbairro}" aria-label="Ver detalhes de ${esc(b.nome)}">
       <div class="cartao-topo">
-        <div class="cartao-id"><span class="posicao">#${pos}</span>
+        <div class="cartao-id"><span class="posicao">${pos ? "#" + pos : "–"}</span>
           <div><span class="cartao-nome">${esc(b.nome)}</span><span class="cartao-regiao">${icone("local")}${esc(localTexto(b))}</span></div></div>
         <div class="cartao-nota">${anel(n.final, 58)}</div>
       </div>
       ${blocoBolso(b, c)}
-      ${tag}
+      ${tag}${pos ? "" : '<span class="etiqueta etiqueta-neutra">Sem nota final</span>'}
       ${destaques(n)}
       ${barras(n)}
       <span class="ver-mais">Ver números e fontes →</span>
     </button></li>`;
-  }).join("") || '<li class="vazio-lista">Nenhum bairro cabe no orçamento com esses números. Desmarque o filtro ou ajuste a renda, a entrada ou a área.</li>';
+  }).join("") || `<li class="vazio-lista">${busca ? "Nenhum bairro com esse nome." : "Nenhum bairro cabe no orçamento com esses números. Desmarque o filtro ou ajuste a renda, a entrada ou a área."}</li>`;
+  const resto = visiveis.length - mostrados.length;
+  $("#ver-mais").hidden = resto <= 0;
+  $("#ver-mais").textContent = `Ver mais ${Math.min(20, resto)} bairros (de ${resto} restantes)`;
+  $("#contagem-lista").textContent = `${mostrados.length} de ${visiveis.length} bairros${busca ? " encontrados" : ""}`;
   $$("#lista-bairros [data-bairro]").forEach((el) => el.addEventListener("click", () => ir("bairro/" + el.dataset.bairro)));
   $$("#lista-bairros [data-comparar]").forEach((el) => el.addEventListener("click", () => { alternarComparar(el.dataset.comparar); desenharResultado(); atualizarBarraComparar("resultado"); }));
   desenharMapaResultado();
@@ -629,6 +659,7 @@ function resumoTexto(b, n) {
   } else {
     frases.push("Não fica entre os 35% de resultado mais baixo da cidade em nenhum critério.");
   }
+  if (b.sem_nota_final) frases.push("Segurança e Menos barulho não têm nota neste bairro, porque os registros oficiais (ISP e 1746) tendem a ser incompletos em áreas de favela.");
   const med = D.bairros.preco_mediana_rs_m2;
   if (b.preco_itbi && med) {
     const dif = (b.preco_itbi.rs_m2 / med - 1) * 100;
@@ -654,17 +685,18 @@ function radar(series, tam = 300) {
   const rotulos = cs.map((c, i) => {
     const [x, y] = pt(i, 12.2), anc = Math.abs(x - cx) < 5 ? "middle" : x > cx ? "start" : "end";
     // rotulos longos ("Menos alagamento") em duas linhas, para caber em celular estreito
-    const partes = ROTULOS[c].length > 10 && ROTULOS[c].includes(" ") ? ROTULOS[c].split(" ") : [ROTULOS[c]];
+    const semDado = series.every((s) => s.notas[c] == null);
+    const partes = (ROTULOS[c].length > 10 && ROTULOS[c].includes(" ") ? ROTULOS[c].split(" ") : [ROTULOS[c]]).concat(semDado ? ["(sem dado)"] : []);
     const y0 = y - (partes.length - 1) * 6.5;
     return `<text class="rd-rotulo" x="${x.toFixed(1)}" y="${y0.toFixed(1)}" text-anchor="${anc}">${partes.map((t, k) =>
       `<tspan x="${x.toFixed(1)}" dy="${k ? 13 : 0}">${t}</tspan>`).join("")}</text>`;
   }).join("");
   const formas = series.map((s, k) => {
-    const pts = cs.map((c, i) => pt(i, s.notas[c] ?? 0));
+    const pts = cs.map((c, i) => (s.notas[c] == null ? null : pt(i, s.notas[c]))).filter(Boolean);   // sem dado: fora do desenho
     return `<polygon class="rd-serie" style="fill:${s.cor};stroke:${s.cor}" points="${pts.map((p) => p.map((x) => x.toFixed(1)).join(",")).join(" ")}"/>` +
       pts.map((p) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.2" style="fill:${s.cor}"/>`).join("");
   }).join("");
-  const desc = series.map((s) => `${s.nome}: ` + cs.map((c) => `${ROTULOS[c]} ${fmtN(s.notas[c])}`).join(", ")).join(". ");
+  const desc = series.map((s) => `${s.nome}: ` + cs.map((c) => `${ROTULOS[c]} ${s.notas[c] == null ? "sem dado" : fmtN(s.notas[c])}`).join(", ")).join(". ");
   return `<figure class="radar"><svg viewBox="0 0 300 290" style="max-width:${tam}px" role="img" aria-label="Gráfico de radar. ${esc(desc)}">
       ${grade}${eixos}${formas}${rotulos}<text class="rd-legenda5" x="${cx + 4}" y="${cy - R / 2 - 4}">5</text></svg>
     <figcaption class="pequeno">${series.length > 1 ? series.map((s) => `<span class="rd-item"><span class="rd-cor" style="background:${s.cor}"></span>${esc(s.nome)}</span>`).join("") : ""}
@@ -847,7 +879,8 @@ function blocoCriterio(b, c, n) {
   const linhas = cr.indicadores.map((i) => `<tr><td>${esc(i.rotulo)}${i.peso != null ? ` <span class="pequeno">(peso ${fmtN(i.peso * 100, 0)}%)</span>` : ""}</td>
     <td class="num">${fmtValor(i)}<br><span class="pequeno">cidade: ${fmtMediana(i)}</span></td>
     <td class="num">${i.nota == null ? "-" : fmtN(i.nota)}</td></tr>`).join("");
-  const pct = n[c] == null ? "" : `Melhor que ${fmtN(n[c] * 10, 0)}% dos bairros do Rio neste critério.`;
+  const pct = cr.dados_insuficientes ? "Sem nota: dados insuficientes." : n[c] == null ? "" : `Melhor que ${fmtN(n[c] * 10, 0)}% dos bairros do Rio neste critério.`;
+  if (cr.dados_insuficientes) extra = `<p class="aviso">${esc(cr.dados_insuficientes)}</p>` + extra;
   return `<div class="criterio"><div class="criterio-topo"><span class="criterio-icone">${icone(c)}</span>
       <div><h3>${ROTULOS[c]}</h3><p class="pequeno">${pct}</p></div>${anel(n[c], 52)}</div>
     <div class="rolagem"><table class="indicadores"><tbody><tr class="pequeno"><td>Indicador</td><td class="num">Valor<br>(mediana da cidade)</td><td class="num">Nota</td></tr>${linhas}</tbody></table></div>
@@ -907,7 +940,8 @@ function desenharBairro(cod) {
         <p class="pequeno">Texto gerado a partir das notas e do ITBI; cada número tem a fonte nos blocos abaixo.</p></div>
       ${radar([{ nome: b.nome, notas: n, cor: CORES_SERIE[0] }], 300)}
     </div>
-    ${!estado.perfil ? '<p class="destaque">Nota final com todos os critérios com o mesmo peso. <a href="#perfil">Responda as perguntas</a> para ajustar às suas prioridades.</p>' : ""}
+    ${b.sem_nota_final ? `<p class="aviso">Este bairro não tem nota final nem posição no ranking: ${fmtN(b.pct_favela, 0)}% dos moradores vivem em área de favela (Limite de Favelas 2022, IPP), onde ocorrências e chamados ao 1746 são pouco registrados. Os outros critérios, o preço e o simulador continuam valendo.</p>` : ""}
+    ${!estado.perfil && !b.sem_nota_final ? '<p class="destaque">Nota final com todos os critérios com o mesmo peso. <a href="#perfil">Responda as perguntas</a> para ajustar às suas prioridades.</p>' : ""}
     <div class="compartilhar">
       <a class="btn btn-whats" id="whats" target="_blank" rel="noopener noreferrer"
          href="https://wa.me/?text=${encodeURIComponent(textoCompartilhar(b))}">${icone("whats", "icone")}Compartilhar no WhatsApp</a>
@@ -1147,8 +1181,13 @@ function desenharPerguntas() {
      `Não. ${esc(P.aviso_geral)} ${esc(P.simplificacoes)}`],
     ["O app guarda ou envia meus dados?",
      "Não. Tudo é calculado no seu aparelho. Renda, entrada e prioridades ficam só na memória da página e somem ao fechar. Os links de compartilhar levam só o bairro (ou o perfil e as prioridades), nunca valores."],
+    ["Por que alguns bairros não têm nota final?",
+     `Em ${D.bairros.subnotificacao.bairros.length} bairros, ${D.bairros.subnotificacao.corte_pct}% ou mais dos moradores vivem em área de favela (${esc(D.bairros.subnotificacao.fonte)}).
+      Nessas áreas, boletins de ocorrência e chamados ao 1746 costumam ser pouco registrados, e o app leria "pouco registro" como "pouco problema".
+      Por isso esses bairros ficam sem nota de Segurança e de Menos barulho e sem nota final; os outros critérios, o preço e o simulador continuam.
+      São eles: ${esc(D.bairros.subnotificacao.bairros.join(", "))}.`],
     ["Por que meu bairro não aparece?",
-     `Esta é a versão inicial, com ${D.bairros.bairros.length} bairros. Os dados já são calculados para a cidade inteira; os próximos bairros entram sem mudar o método.`],
+     `O app tem ${D.bairros.bairros.filter((b) => b.tem_nota).length} bairros. Ficam de fora os bairros com menos de mil moradores no Censo 2022 (${esc(D.bairros.bairros.filter((b) => !b.tem_nota).map((b) => b.nome).join(", "))}), porque as taxas por habitante ficariam instáveis.`],
     ["De quando são os dados?",
      `<ul><li>Segurança (ISP): ${esc(F.violencia.periodo)}</li><li>Preço do m² (ITBI): ${esc(F.preco.periodo)}</li>
       <li>Reclamações de barulho (1746): ${esc(F.barulho.fontes[0].periodo)}</li><li>Alagamentos registrados (COR): ${esc(F.alagamento.fontes[1].periodo)}</li>
@@ -1205,7 +1244,7 @@ function desenharInicio() {
       .map((b) => `<option value="${b.codbairro}">${esc(b.nome)}</option>`).join("");
   $("#ir-bairro").addEventListener("change", (e) => { if (e.target.value) ir("bairro/" + e.target.value); });
   // exemplo: o bairro com maior nota usando pesos iguais (dados reais do app)
-  const com = lista.map((b) => ({ b, n: notasDoBairro(b) })).sort((x, y) => y.n.final - x.n.final);
+  const com = lista.map((b) => ({ b, n: notasDoBairro(b) })).filter((x) => x.n.final != null).sort((x, y) => y.n.final - x.n.final);
   const { b, n } = com[0];
   $("#exemplo").innerHTML = `<div class="exemplo-cartao">
       <div class="exemplo-topo"><div><span class="cartao-regiao">${icone("local")}${esc(localTexto(b))}</span>
@@ -1225,7 +1264,7 @@ async function iniciar() {
     return;
   }
   $("#carregando").hidden = true;
-  $("#n-bairros").textContent = D.bairros.bairros.length;
+  $("#n-bairros").textContent = D.bairros.bairros.filter((b) => b.tem_nota).length;
   $("#n-fontes").textContent = 9;
   desenharInicio();
   $("#data-geracao").textContent = fmtData(D.bairros.gerado_em);

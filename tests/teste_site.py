@@ -69,16 +69,26 @@ def fluxo(page, nome):
 
     # resultado
     page.wait_for_selector("#lista-bairros li")
-    n = page.locator("#lista-bairros li").count()
-    checar(n == 15, f"lista com 15 bairros ({n})")
+    total_bairros = page.evaluate("D.bairros.bairros.filter(b => b.tem_nota).length")
+    n = page.locator(".cartao-bairro").count()
+    checar(n == min(20, total_bairros), f"lista mostra os primeiros 20 de {total_bairros} ({n})")
+    if total_bairros > 20:
+        page.click("#ver-mais")
+        checar(page.locator(".cartao-bairro").count() == min(40, total_bairros), "Ver mais acrescenta 20 bairros")
+        page.fill("#filtro-bairro", "tijuca")
+        nomes = page.locator(".cartao-nome").all_inner_texts()
+        checar(nomes and all("tijuca" in x.lower() for x in nomes), f"busca por nome ({nomes})")
+        page.fill("#filtro-bairro", "")
+    n = page.locator(".cartao-bairro").count()
     notas = [float(t.replace(",", ".")) for t in page.locator("#lista-bairros .cartao-nota .anel-valor").all_inner_texts()]
     checar(notas == sorted(notas, reverse=True), "lista em ordem decrescente de nota")
-    caros = page.locator(".cartao-bairro .etiqueta:not(.etiqueta-ok)").count()
+    caros = page.locator(".cartao-bairro .etiqueta:not(.etiqueta-ok):not(.etiqueta-neutra)").count()
     checar(caros > 0, f"bairros acima do orcamento marcados ({caros})")
     page.screenshot(path=CAP / f"{nome}_5_resultado.png", full_page=True)
     page.check("#esconder-caros")
-    n2 = page.locator("#lista-bairros li").count()
-    checar(n2 == 15 - caros, f"esconder caros reduz a lista ({n2})")
+    n2 = page.locator(".cartao-bairro").count()
+    checar(page.locator(".cartao-bairro .etiqueta:not(.etiqueta-ok):not(.etiqueta-neutra)").count() == 0,
+           f"esconder caros: nenhum bairro acima do orcamento na lista ({n2} mostrados)")
     so_cabem = page.locator(".cartao-bairro .etiqueta-ok").count()
     checar(so_cabem == n2, f"filtro mostra so bairros que cabem ({so_cabem} de {n2})")
     page.uncheck("#esconder-caros")
@@ -86,7 +96,7 @@ def fluxo(page, nome):
     # quanto cabe no bolso
     painel = page.inner_text("#painel-orcamento")
     checar("Seu orçamento" in painel and "Imóvel de até" in painel, "painel de orcamento aparece com renda informada")
-    checar(page.locator(".bolso-linha").count() == 15, "cada bairro mostra o bloco do bolso")
+    checar(page.locator(".bolso-linha").count() == page.locator(".cartao-bairro").count(), "cada bairro mostra o bloco do bolso")
     page.select_option("#ordenar", "parcela")
     parcelas = [float(t.split("R$")[1].replace(".", "").replace(",", ".").strip())
                 for t in page.locator(".bolso-linha > div:nth-child(3) strong").all_inner_texts()]
@@ -193,10 +203,18 @@ def fluxo(page, nome):
     page.click("#tela-renda >> text=Avançar")
     checar(not page.is_visible("#trabalho2"), "solteiro: sem campo de trabalho da 2a pessoa")
 
+    # bairro sem nota final (subnotificacao em area de favela)
+    sem = page.evaluate("(D.bairros.bairros.find(b => b.sem_nota_final) || {}).codbairro")
+    if sem:
+        page.goto(URL + "#bairro/" + sem)
+        page.wait_for_selector(".perfil-bairro")
+        checar(page.locator(".detalhe-nota .anel-valor").inner_text() == "-" and page.locator("#tela-bairro .aviso").count() >= 2,
+               "bairro sem nota final: sem nota e com explicacao")
+
     # perguntas frequentes: numeros vindos do JSON
     page.click(".nav-topo >> text=Dúvidas")
     page.wait_for_selector("#tela-perguntas:not([hidden]) .pergunta")
-    checar(page.locator(".pergunta").count() == 14, f"14 perguntas frequentes ({page.locator('.pergunta').count()})")
+    checar(page.locator(".pergunta").count() == 15, f"15 perguntas frequentes ({page.locator('.pergunta').count()})")
     page.locator(".pergunta summary", has_text="Minha Casa").click()
     r = page.locator(".pergunta[open] .resposta").inner_text().replace("\xa0", " ")
     checar("Faixa 3" in r and "R$ 400.000" in r and "SBPE" in r, "resposta do MCMV com faixas e tetos do JSON")
@@ -228,7 +246,7 @@ def fluxo(page, nome):
     # link compartilhado: abre com perfil e pesos
     page.goto(URL + "?p=solteiro&w=111155&e=tanto_faz#resultado")
     page.wait_for_selector("#lista-bairros li")
-    checar(page.locator("#lista-bairros li").count() == 15, "link compartilhado abre o resultado direto")
+    checar(page.locator(".cartao-bairro").count() > 0, "link compartilhado abre o resultado direto")
     url_tem_renda = "6000" in page.url or "renda" in page.url
     checar(not url_tem_renda, "link nao contem renda")
 

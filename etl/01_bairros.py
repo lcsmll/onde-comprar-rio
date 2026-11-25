@@ -2,7 +2,7 @@
 01 - Base territorial: bairros (IPP) e setores censitarios com populacao (Censo 2022).
 
 Saidas (data_proc/):
-  bairros.parquet   malha oficial + populacao 2022 + area ocupada
+  bairros.parquet   malha oficial + populacao 2022 + area ocupada + % de moradores em favela
   setores.parquet   setores com populacao, codigo do bairro e ponto interno
   bairros_mvp.json  codigos dos bairros exibidos no site
 """
@@ -16,6 +16,7 @@ from comum import PROC, RAW, cod3, config
 
 CAMADA_BAIRROS = "Cartografia/Limites_administrativos/MapServer/4"
 CAMADA_SETORES = "Hosted/Mapa_Rio_Camada_Censo_Demográfico_Setores/FeatureServer/0"
+CAMADA_FAVELAS = "SABREN/Limites_de_Favelas/FeatureServer/13"   # Limite de Favelas 2022 (IPP)
 
 
 def baixar_se_preciso(caminho, camada, **kw):
@@ -57,6 +58,13 @@ def main():
     csv = next((RAW / "datario/censo").rglob("População_Residente_2022.csv"))
     of = pd.read_csv(csv, sep=";", encoding="latin1")
     b["pop2022_oficial"] = b["codbairro"].map(dict(zip(of["codbairro"].map(cod3), of["Total de pessoas"])))
+    # % dos moradores em area de favela (fracao da area de cada setor dentro dos limites de favela)
+    fav = baixar_se_preciso(RAW / "datario/favelas_2022.geojson", CAMADA_FAVELAS).to_crs(config.CRS_METROS)
+    uniao = fav.geometry.union_all()
+    sp = s[s["pop"] > 0]
+    frac = sp.geometry.intersection(uniao).area / sp.geometry.area
+    pct = 100 * (sp["pop"] * frac).groupby(sp["codbairro"]).sum() / sp.groupby("codbairro")["pop"].sum()
+    b["pct_favela"] = b["codbairro"].map(pct).round(1)
     b.to_parquet(PROC / "bairros.parquet")
 
     # --- bairros do MVP: nome -> codigo (para se algum nao existir)
@@ -80,6 +88,10 @@ def main():
     print(f"Sem populacao no Censo 2022: {sem_pop}")
     print(f"Com menos de {config.POP_MINIMA} moradores (sem nota): {pequenos}")
     print(f"Bairros na comparacao: {(b['pop2022'] >= config.POP_MINIMA).sum()}")
+    afet = b[b["pct_favela"] >= config.FAVELA_CORTE_PCT].sort_values("pct_favela", ascending=False)
+    print(f"Bairros com >= {config.FAVELA_CORTE_PCT}% dos moradores em favela (sem nota de "
+          f"{', '.join(config.CRITERIOS_SUBNOTIFICADOS)} e sem nota final): {len(afet)}")
+    print("  " + ", ".join(f"{n} {p:.0f}%" for n, p in zip(afet["nome"], afet["pct_favela"])))
     t = b.set_index("codbairro").loc[mvp, ["nome", "pop2022", "pop2022_oficial", "area_km2", "area_ocupada_km2"]]
     print("\nBairros do MVP:")
     print(t.round(2).to_string())

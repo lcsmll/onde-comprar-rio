@@ -601,3 +601,25 @@ h3 { font-weight: 700; letter-spacing: 0; }
   .anel-cheio, .barra-cheia, .rd-serie, .m-bairro, .regua-faixa, .regua-traco { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* ---------- cidade inteira: busca, ver mais, bairros sem nota final ---------- */
+.busca-bairro { margin: 20px 0 4px; }
+input[type=search] { display: block; width: 100%; margin-top: 6px; min-height: 44px; padding: 8px 14px; font: inherit;
+  border: 1px solid var(--linha-forte); border-radius: 99px; background: var(--cartao); color: var(--texto); }
+input[type=search]:focus { outline: none; border-color: var(--principal); box-shadow: 0 0 0 3px color-mix(in srgb, var(--principal) 12%, transparent); }
+.ver-mais-lista { width: 100%; margin: 8px 0 16px; }
+.titulo-sem-nota { margin: 28px 0 6px; padding: 14px 16px; border-radius: var(--raio); background: var(--fundo-2); display: grid; gap: 4px; }
+.titulo-sem-nota span { color: var(--texto-2); font-size: 14px; }
+.etiqueta-neutra { background: var(--fundo-2); color: var(--texto-2); border-color: var(--linha-forte); }
+.mapa-svg .m-sem { fill: url(#hachura); }
+.amostra-hachura { background: repeating-linear-gradient(45deg, #ece5d6 0 3px, #b9ae97 3px 5px); }
+
+/* cabecalho no celular: tudo numa linha */
+.marca span, .link-topo { white-space: nowrap; }
+@media (max-width: 480px) {
+  .so-largo { display: none; }
+  .marca { font-size: 15px; gap: 6px; }
+  .marca-icone { width: 22px; height: 22px; }
+  .nav-topo { gap: 0; }
+  .link-topo { font-size: 13.5px; padding: 0 6px; }
+}

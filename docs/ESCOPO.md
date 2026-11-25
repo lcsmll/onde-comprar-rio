@@ -433,3 +433,11 @@ Motivo: a Tijuca aparecia com segurança pior que a Penha (5,7 x 6,5) e transpor
 - `etl/ferramentas/baixar_dados.sh`: baixa os limites das delegacias (ISP) e o Ideb (INEP); tenta de novo em caso de falha e nunca substitui um arquivo bom por um download incompleto.
 - Ano do Ideb passou para `config.IDEB_ANO` (antes estava no código do script de escolas).
 - Validação: ETL completo rodado do zero conforme o README (4 min 35 s, sem erros), teste do site e auditoria de contraste sem falhas.
+
+## 21. Cidade inteira e subnotificação (25/11/2026)
+
+- O site passa a exibir **todos os bairros** (`EXIBIR_TODOS = True`): 163 com dados (Joá, Grumari, Argentino e Ingleses ficam de fora por terem menos de mil moradores ou nenhum setor no Censo 2022).
+- **Problema encontrado ao abrir a cidade:** bairros que são majoritariamente favela apareciam no topo (Rocinha em 1º, segurança 9,7; Mangueira 2º; Complexo do Alemão 5º). Causa: nessas áreas, boletins de ocorrência e chamados ao 1746 são pouco registrados (Rocinha: 10 roubos de rua por 100 mil e 0,6 chamado de barulho por mil moradores, contra 405 e 24 em Copacabana), e o método lia "pouco registro" como "pouco problema".
+- **Decisão (usuário):** nos bairros com **50% ou mais dos moradores em área de favela** (camada oficial Limite de Favelas 2022, IPP; 15 bairros: Rocinha, Jacarezinho, Acari, Vidigal, Complexo do Alemão, Mangueira, Caju, Costa Barros, Galeão, Pitangueiras, Itanhangá, Maré, Vasco da Gama, Tauá, Manguinhos), Segurança e Menos barulho ficam como "dados insuficientes", com texto neutro e a fonte; o bairro não recebe nota final nem posição no ranking, mas continua com os outros 4 critérios, preço, mapa (listrado), comparação e simulador; e esses bairros saem da base de comparação dessas duas notas.
+- **Interface para 163 bairros:** lista com 20 por vez ("Ver mais"), busca por nome, bairros sem nota final no fim com explicação; mapa sem nomes na cidade inteira (destaques de maior e menor nota continuam; tocar mostra o nome); prévias em JPG para as 163 páginas; textos e perguntas frequentes calculados.
+- Topo do ranking (perfil família): Cosme Velho, Glória, Catete, Copacabana, Laranjeiras; fim: Barra Olímpica, Vargem Grande, Gardênia Azul, Paquetá, Jardim América.

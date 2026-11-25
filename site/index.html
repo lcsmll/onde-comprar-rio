@@ -30,7 +30,7 @@
         <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V10l9-7 9 7v11h-6v-6H9v6z"/></svg>
         <span>Onde Comprar no Rio</span>
       </a>
-      <nav class="nav-topo"><a href="#perguntas" class="link-topo">Dúvidas</a><a href="#sobre" class="link-topo">Sobre os dados</a></nav>
+      <nav class="nav-topo"><a href="#perguntas" class="link-topo">Dúvidas</a><a href="#sobre" class="link-topo">Sobre<span class="so-largo"> os dados</span></a></nav>
     </div>
   </header>
 
@@ -57,7 +57,7 @@
       </div>
       <div class="ilustracao" aria-hidden="true"></div>
       <dl class="numeros">
-        <div><dt id="n-bairros">15</dt><dd>bairros na versão inicial</dd></div>
+        <div><dt id="n-bairros">163</dt><dd>bairros do Rio no app</dd></div>
         <div><dt>6</dt><dd>critérios com nota de 0 a 10</dd></div>
         <div><dt id="n-fontes">9</dt><dd>fontes oficiais e gratuitas</dd></div>
         <div><dt>0</dt><dd>dados pessoais coletados</dd></div>
@@ -215,14 +215,19 @@
           <div class="regua" id="regua" aria-hidden="true"></div>
           <div class="regua-escala" aria-hidden="true"><span>0</span><span>5</span><span>10</span></div>
           <p class="pequeno">Cada traço é um bairro desta versão; a linha tracejada é a mediana do Rio (nota 5).
-            <span class="legenda-fora"><span class="amostra" aria-hidden="true"></span>cinza: fora desta versão</span></p>
+            <span class="legenda-fora"><span class="amostra amostra-hachura" aria-hidden="true"></span>listrado: sem nota final</span></p>
         </div>
         <div class="mapa-rodape">
           <p class="pequeno">Cores relativas aos bairros mostrados: do amarelo (menor nota entre eles) ao azul-escuro (maior). Toque num bairro para ver os detalhes.</p>
           <button class="btn" id="mapa-cidade" type="button">Ver cidade inteira</button>
         </div>
       </div>
+      <label class="busca-bairro">Buscar bairro na lista
+        <input type="search" id="filtro-bairro" placeholder="ex.: Tijuca" autocomplete="off">
+      </label>
+      <p class="pequeno" id="contagem-lista" role="status"></p>
       <ol id="lista-bairros" class="lista-bairros"></ol>
+      <button class="btn btn-grande ver-mais-lista" id="ver-mais" type="button" hidden>Ver mais</button>
     </section>
 
     <!-- 6. Detalhe do bairro -->

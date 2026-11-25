@@ -47,6 +47,9 @@ def main():
     vb = [round((ex[0] - MARGEM_M - minx) / ESCALA), round((maxy - ex[3] - MARGEM_M) / ESCALA),
           round((ex[2] - ex[0] + 2 * MARGEM_M) / ESCALA), round((ex[3] - ex[1] + 2 * MARGEM_M) / ESCALA)]
 
+    if config.EXIBIR_TODOS:   # cidade inteira exibida: o enquadramento inicial e a propria cidade
+        vb = [0, 0, round((maxx - minx) / ESCALA), round((maxy - miny) / ESCALA)]
+
     bairros = {}
     for _, r in b.iterrows():
         # rotulo no ponto mais "interno" do maior pedaco do bairro (longe das divisas)

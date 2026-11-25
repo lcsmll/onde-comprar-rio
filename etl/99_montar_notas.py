@@ -46,6 +46,18 @@ def media_ponderada(notas: pd.DataFrame, pesos: dict) -> pd.Series:
     return (n.mul(w).sum(axis=1) / soma_w).where(soma_w > 0)
 
 
+def pega(df, cod, col):
+    """Valor da tabela para o bairro, ou None se o bairro nao tiver dados (ex.: Ingleses, sem setor no Censo)."""
+    if cod not in df.index or col not in df.columns:
+        return None
+    v = df.at[cod, col]
+    return None if (not isinstance(v, str) and pd.isna(v)) else v
+
+
+def inteiro(x):
+    return None if x is None else int(x)
+
+
 def r1(x):
     return None if x is None or pd.isna(x) else round(float(x), 1)
 
@@ -53,6 +65,9 @@ def r1(x):
 def main():
     b = carregar_bairros().set_index("codbairro")
     ref = referencia()
+    # bairros com muitos moradores em favela: registros (ISP, 1746) subnotificados -> sem nota nesses criterios
+    sub = b.loc[b["pct_favela"] >= config.FAVELA_CORTE_PCT].index.tolist()
+    ref_sub = [c for c in ref if c not in sub]
     exibidos = list(b.index) if config.EXIBIR_TODOS else codigos_mvp()
 
     criterios, metas = {}, {}
@@ -60,7 +75,9 @@ def main():
         df, meta = ler(crit)
         metas[crit] = meta
         ind_meta = meta["indicadores"]
-        notas = pd.DataFrame({k: nota_percentil(df[k], v["maior_e_pior"], ref) for k, v in ind_meta.items()})
+        r_crit = ref_sub if crit in config.CRITERIOS_SUBNOTIFICADOS else ref
+        valores = {k: (df[k].where(~df.index.isin(sub)) if crit in config.CRITERIOS_SUBNOTIFICADOS else df[k]) for k in ind_meta}
+        notas = pd.DataFrame({k: nota_percentil(valores[k], v["maior_e_pior"], r_crit) for k, v in ind_meta.items()})
         if crit == "escolas":
             por_tipo = {t: media_ponderada(notas, p) for t, p in config.ESCOLAS_PESOS.items()}
             nota = por_tipo["tanto_faz"]
@@ -70,7 +87,11 @@ def main():
         criterios[crit] = {"df": df, "notas": notas, "nota": nota, "por_tipo": por_tipo}
 
     preco, meta_preco = ler("preco")
-    medianas = {c: criterios[c]["df"].reindex(ref).median(numeric_only=True) for c in criterios}
+    medianas = {c: criterios[c]["df"].reindex(ref_sub if c in config.CRITERIOS_SUBNOTIFICADOS else ref).median(numeric_only=True)
+                for c in criterios}
+    aviso_sub = ("Dados insuficientes: {pct}% dos moradores vivem em área de favela (Limite de Favelas 2022, IPP), "
+                 "onde boletins de ocorrência e chamados ao 1746 costumam ser pouco registrados. Por isso não calculamos "
+                 "esta nota nem a nota final do bairro.")
 
     # distribuicao de referencia do emprego (o site recalcula a nota se o usuario escolher o polo)
     emp = criterios["emprego"]["df"]
@@ -83,7 +104,9 @@ def main():
         linha = b.loc[cod]
         item = {"codbairro": cod, "nome": linha["nome"], "slug": slug(linha["nome"]), "regiao": linha["rp"],
                 "populacao_2022": int(linha["pop2022_oficial"]) if pd.notna(linha["pop2022_oficial"]) else int(linha["pop2022"]),
-                "tem_nota": cod in ref, "criterios": {}, "ruido_db_oficial": None}
+                "tem_nota": cod in ref, "criterios": {}, "ruido_db_oficial": None,
+                "pct_favela": r1(linha["pct_favela"]),
+                "sem_nota_final": cod in sub}
         for crit, c in criterios.items():
             df, notas = c["df"], c["notas"]
             inds = []
@@ -94,22 +117,25 @@ def main():
                              "nota": r1(notas.at[cod, k]) if cod in notas.index else None,
                              "peso": v.get("peso"), "maior_e_pior": v["maior_e_pior"]})
             bloco = {"nota": r1(c["nota"].get(cod)), "indicadores": inds}
+            if cod in sub and crit in config.CRITERIOS_SUBNOTIFICADOS:
+                bloco["nota"] = None
+                bloco["dados_insuficientes"] = aviso_sub.format(pct=f"{linha['pct_favela']:.0f}")
             if c["por_tipo"]:
                 bloco["nota_por_tipo"] = {t: r1(s.get(cod)) for t, s in c["por_tipo"].items()}
             if crit == "violencia":
                 cisps = df.at[cod, "cisps"] if cod in df.index else "[]"
                 bloco["cisps"] = json.loads(cisps.replace("'", '"')) if isinstance(cisps, str) else []
             if crit == "escolas":
-                bloco["contagem_no_bairro"] = {k: int(df.at[cod, k]) for k in
+                bloco["contagem_no_bairro"] = {k: inteiro(pega(df, cod, k)) for k in
                                                ("n_publicas_no_bairro", "n_privadas_no_bairro", "n_com_ideb_no_bairro")}
             if crit == "transporte":
-                bloco["estacao_mais_comum"] = df.at[cod, "estacao_mais_comum"]
+                bloco["estacao_mais_comum"] = pega(df, cod, "estacao_mais_comum")
             if crit == "emprego":
-                bloco["dist_km"] = {k: r1(df.at[cod, f"dist_{k}_m"] / 1000) for k in config.POLOS}
+                bloco["dist_km"] = {k: (None if pega(df, cod, f"dist_{k}_m") is None else r1(pega(df, cod, f"dist_{k}_m") / 1000)) for k in config.POLOS}
             if crit == "barulho":
-                bloco["chamados_1746_n"] = int(df.at[cod, "chamados_1746_n"])
+                bloco["chamados_1746_n"] = inteiro(pega(df, cod, "chamados_1746_n"))
             if crit == "alagamento":
-                bloco["cor_n"] = int(df.at[cod, "cor_n"])
+                bloco["cor_n"] = inteiro(pega(df, cod, "cor_n"))
             item["criterios"][crit] = bloco
         p = preco.loc[cod] if cod in preco.index else None
         item["preco_itbi"] = None if p is None or pd.isna(p["rs_m2"]) else {
@@ -124,6 +150,9 @@ def main():
                        f"{config.POP_MINIMA} moradores ({len(ref)} bairros). Ex.: 8,0 = melhor que 80% deles.",
         "criterios": config.CRITERIOS,
         "site_url": config.SITE_URL,
+        "subnotificacao": {"corte_pct": config.FAVELA_CORTE_PCT, "criterios": config.CRITERIOS_SUBNOTIFICADOS,
+                           "bairros": [b.at[c, "nome"] for c in sub],
+                           "fonte": "Limite de Favelas 2022 (Instituto Pereira Passos / Data.Rio)"},
         "referencia_codigos": ref,
         # mediana do R$/m2 (ITBI) dos bairros de referencia: usada no resumo em texto do site
         "preco_mediana_rs_m2": int(round(preco.reindex(ref)["rs_m2"].median())),
@@ -144,10 +173,16 @@ def main():
     t.insert(0, "bairro", b.loc[exibidos, "nome"])
     for perfil, pesos in config.PESOS_PERFIL.items():
         t[f"FINAL_{perfil}"] = sum(t[c] * w for c, w in pesos.items()) / sum(pesos.values())
+    t.loc[t.index.isin(sub), [f"FINAL_{p}" for p in config.PESOS_PERFIL]] = None
+    print(f"Sem nota final por subnotificacao ({config.FAVELA_CORTE_PCT}% ou mais em favela): {len(sub)} bairros")
     t["R$/m2"] = preco.reindex(exibidos)["rs_m2"].round(0)
     pd.set_option("display.width", 250)
     print(f"Bairros de referencia: {len(ref)} | exibidos: {len(exibidos)}")
-    print(t.sort_values("FINAL_familia", ascending=False).round(1).to_string())
+    t = t.sort_values("FINAL_familia", ascending=False)
+    if len(t) > 30:
+        print("(cidade inteira: 10 primeiros e 5 ultimos no perfil familia; bairros sem nota ficam de fora)")
+        t = pd.concat([t.dropna(subset=["FINAL_familia"]).head(10), t.dropna(subset=["FINAL_familia"]).tail(5)])
+    print(t.round(1).to_string())
     print(f"\nGravado site/data/bairros.json ({(SITE_DATA / 'bairros.json').stat().st_size / 1024:.0f} KB)")
 
 

@@ -273,6 +273,12 @@ Valores de 2026 (até out) para os 15 bairros, com R$/m² calculado como valor m
 | Madureira | 124 | 199.769 | 70 | 2.866 |
 | Praça Seca | 226 | 202.201 | 83 | 2.435 |
 
+## 9. Limite de Favelas 2022 (usado para a subnotificação)
+
+| Item | Link | Formato | Atualização | Uso |
+|---|---|---|---|---|
+| Limite de Favelas 2022 (IPP) | `pgeo3.rio.rj.gov.br/arcgis/rest/services/SABREN/Limites_de_Favelas/FeatureServer/13` (Data.Rio item `211856b90ba64e3fb6fc0941f5dbda47`) | Feature Service (1.072 polígonos) | 2022 | % dos moradores de cada bairro em área de favela (fração da área de cada setor do Censo dentro dos limites). Bairros com 50% ou mais ficam sem nota de Segurança e Menos barulho (ver ESCOPO, seção 21). |
+
 ## Decisões tomadas (25/11/2026)
 
 | Decisão | Escolha | Consequência |

@@ -39,11 +39,12 @@ def juntar(xs):
     return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " e " + xs[-1]
 
 
-def cartao_html(titulo, sobretitulo, nota, criterios, rodape):
+def cartao_html(titulo, sobretitulo, nota, criterios, rodape,
+                legenda_sem_nota="Compare bairros com dados oficiais e simule o financiamento."):
     """HTML 1200x630 da imagem de previa (usa as fontes e a ilustracao do site)."""
     barras = "".join(
-        f'<div class="b"><span class="r">{ROTULOS[c]}</span><span class="f"><span style="width:{v * 10:.0f}%"></span></span>'
-        f'<span class="v">{fmt(v)}</span></div>' for c, v in criterios)
+        f'<div class="b"><span class="r">{ROTULOS[c]}</span><span class="f"><span style="width:{0 if v is None else v * 10:.0f}%"></span></span>'
+        f'<span class="v">{"–" if v is None else fmt(v)}</span></div>' for c, v in criterios)
     anel = ""
     if nota is not None:
         r = 70
@@ -84,7 +85,7 @@ h1.longo {{ font-size: 60px; }}
 </style></head><body>
 <div class="marca"><svg viewBox="0 0 24 24"><path d="M3 21V10l9-7 9 7v11h-6v-6H9v6z"/></svg>Onde Comprar no Rio</div>
 <div class="esq{' longo' if nota is not None and len(titulo) > 16 else ''}"><p class="sob">{html.escape(sobretitulo)}</p><h1 class="{'longo' if len(titulo) > 24 else ''}">{html.escape(titulo)}</h1>
-  {f'<div class="linha">{anel}<p class="leg">Nota de 0 a 10 com os 6 critérios com o mesmo peso</p></div>' if nota is not None else '<p class="leg leg-inicio">Compare bairros com dados oficiais e simule o financiamento.</p>'}<p class="rod">{html.escape(rodape)}</p></div>
+  {f'<div class="linha">{anel}<p class="leg">Nota de 0 a 10 com os 6 critérios com o mesmo peso</p></div>' if nota is not None else f'<p class="leg leg-inicio">{html.escape(legenda_sem_nota)}</p>'}<p class="rod">{html.escape(rodape)}</p></div>
 <div class="dir">{barras}</div>
 <div class="ilu"></div>
 </body></html>"""
@@ -108,7 +109,7 @@ def pagina_html(titulo, descricao, url, imagem, destino, nome):
   <meta property="og:description" content="{e(descricao)}">
   <meta property="og:url" content="{e(url)}">
   <meta property="og:image" content="{e(imagem)}">
-  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="{e(titulo)}">
@@ -141,32 +142,38 @@ def main():
             pg.goto(tmp.as_uri(), wait_until="load")
             pg.evaluate("document.fonts.ready")
             pg.wait_for_timeout(150)
-            pg.screenshot(path=str(destino), type="png")
+            if destino.suffix == ".jpg":
+                pg.screenshot(path=str(destino), type="jpeg", quality=86)
+            else:
+                pg.screenshot(path=str(destino), type="png")
 
         feitas = []
         for b in d["bairros"]:
             if not b["tem_nota"]:
                 continue
             notas = {c: b["criterios"][c]["nota"] for c in d["criterios"]}
-            final = sum(notas.values()) / len(notas)
+            final = None if b.get("sem_nota_final") else sum(notas.values()) / len(notas)
             zona = ZONAS.get(zonas.get(b["regiao"], ""), "Rio de Janeiro")
-            fortes = [c for c, v in sorted(notas.items(), key=lambda x: -x[1]) if v >= 6.5][:3]
+            fortes = [c for c, v in sorted(((c, v) for c, v in notas.items() if v is not None), key=lambda x: -x[1]) if v >= 6.5][:3]
             desc = (f"{zona}. " + (f"Entre os {N} bairros do Rio, se destaca em {juntar([TXT_FORTE[c] for c in fortes])}. " if fortes else "")
                     + (f"m² médio vendido {reais(b['preco_itbi']['rs_m2'])} (ITBI). " if b.get("preco_itbi") else "")
                     + "Veja os números com fonte oficial, compare e simule o financiamento.")
-            titulo = f"{b['nome']}: nota {fmt(final)} de 10"
+            titulo = f"{b['nome']}: nota {fmt(final)} de 10" if final is not None else f"{b['nome']}: notas, preço e simulação"
             pasta = SITE / "bairro" / b["slug"]
             url = f"{base}bairro/{b['slug']}/"
             rodape = (f"m² médio vendido {reais(b['preco_itbi']['rs_m2'])} (ITBI) · dados oficiais" if b.get("preco_itbi")
                       else "Dados oficiais")
-            foto(cartao_html(b["nome"], f"Bairro · {zona}", final, list(notas.items()), rodape), pasta / "previa.png")
+            img = pasta / "previa.jpg"
+            (pasta / "previa.png").unlink(missing_ok=True)          # versao antiga (PNG)
+            foto(cartao_html(b["nome"], f"Bairro · {zona}", final, list(notas.items()), rodape,
+                             "Sem nota final: Segurança e Menos barulho com dados insuficientes (registros oficiais incompletos)."), img)
             (pasta / "index.html").write_text(
-                pagina_html(titulo, desc, url, url + "previa.png", f"../../#bairro/{b['codbairro']}", b["nome"]), encoding="utf-8")
-            feitas.append((b["nome"], fmt(final), (pasta / "previa.png").stat().st_size // 1024))
+                pagina_html(titulo, desc, url, url + "previa.jpg", f"../../#bairro/{b['codbairro']}", b["nome"]), encoding="utf-8")
+            feitas.append((b["nome"], "-" if final is None else fmt(final), img.stat().st_size // 1024))
 
         # previa da pagina inicial: media das notas dos bairros por criterio nao faz sentido;
         # mostra os criterios com a barra cheia so como ilustracao? Nao: usa o bairro de maior nota como exemplo real.
-        topo = max((b for b in d["bairros"] if b["tem_nota"]),
+        topo = max((b for b in d["bairros"] if b["tem_nota"] and not b.get("sem_nota_final")),
                    key=lambda b: sum(b["criterios"][c]["nota"] for c in d["criterios"]))
         foto(cartao_html("Qual bairro do Rio combina com você?", "Dados oficiais · grátis · sem cadastro", None,
                          [(c, topo["criterios"][c]["nota"]) for c in d["criterios"]],
@@ -175,8 +182,10 @@ def main():
         nav.close()
     tmp.unlink(missing_ok=True)
 
-    for nome, nota, kb in feitas:
+    for nome, nota, kb in (feitas if len(feitas) <= 20 else feitas[:5]):
         print(f"  {nome:26} nota {nota}  previa {kb} KB")
+    if len(feitas) > 20:
+        print(f"  ... ({len(feitas)} no total; tamanho medio {sum(k for *_, k in feitas) / len(feitas):.0f} KB)")
     print(f"Paginas geradas: {len(feitas)} em site/bairro/ | previa da inicial: site/img/previa.png")
 
 

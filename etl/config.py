@@ -9,7 +9,7 @@ escondido dentro do codigo dos criterios.
 # O ETL calcula TODOS os bairros da cidade; esta lista so controla o que o site mostra.
 # Para abrir a cidade inteira: EXIBIR_TODOS = True
 # ---------------------------------------------------------------------------
-EXIBIR_TODOS = False
+EXIBIR_TODOS = True   # 25/11/2026: cidade inteira (era so a lista abaixo)
 # Nomes exatos (como na malha oficial); 01_bairros.py converte em codigos e para se algum nao existir.
 BAIRROS_MVP_NOMES = [
     "Méier", "Cachambi", "Tijuca", "Vila Isabel", "Grajaú", "Madureira", "Irajá",
@@ -119,3 +119,14 @@ PESOS_PERFIL = {
 
 # Endereco publico do site (usado nas previas de link do WhatsApp, que exigem URL completa)
 SITE_URL = "https://lcsmll.github.io/onde-comprar-rio/"
+
+# ---------------------------------------------------------------------------
+# Subnotificacao (decisao de 25/11/2026, ao abrir a cidade inteira)
+# Em areas de favela, boletins de ocorrencia e chamados ao 1746 sao pouco registrados, o que
+# infla as notas de Seguranca e Menos barulho (ex.: Rocinha teria seguranca 9,7). Nos bairros
+# com FAVELA_CORTE_PCT % ou mais dos moradores em favela (Limite de Favelas 2022, IPP), essas
+# notas ficam como "dados insuficientes", o bairro nao recebe nota final nem posicao no ranking,
+# e ele sai da base de comparacao desses criterios.
+# ---------------------------------------------------------------------------
+FAVELA_CORTE_PCT = 50
+CRITERIOS_SUBNOTIFICADOS = ["violencia", "barulho"]
