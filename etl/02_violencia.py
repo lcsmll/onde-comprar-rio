@@ -80,8 +80,10 @@ def main():
         "indicadores": {k: {"rotulo": r, "peso": p, "colunas_isp": c, "unidade": "por 100 mil hab.",
                             "maior_e_pior": True}
                         for k, (c, p, r) in config.VIOLENCIA_INDICADORES.items()},
-        "aviso": "O ISP publica por área de delegacia (CISP), não por bairro. Bairros na mesma "
-                 "área de delegacia têm números iguais ou parecidos.",
+        "avisos": ["O ISP publica por área de delegacia (CISP), não por bairro. Bairros na mesma "
+                   "área de delegacia têm números iguais ou parecidos.",
+                   "A letalidade violenta pesa 70% por ser o dado mais confiável. Roubos por morador são "
+                   "maiores em áreas de comércio e passagem e costumam ser menos registrados onde se denuncia menos."],
     }
     salvar_indicadores("violencia", out, meta)
 

@@ -30,7 +30,7 @@ const EXPLICA = {
   violencia: "Mortes violentas e roubos por 100 mil habitantes (ISP). Nota alta = menos ocorrências.",
   alagamento: "Suscetibilidade a inundação e alagamentos registrados. Nota alta = alaga menos.",
   escolas: "Quantidade de escolas perto de casa e Ideb das públicas.",
-  transporte: "Distância até metrô, trem, BRT ou VLT.",
+  transporte: "Distância até a estação mais próxima (metrô, trem, BRT ou VLT); metrô e trem contam mais.",
   emprego: "Distância até os polos de emprego (ou até onde você trabalha).",
   barulho: "Reclamações de barulho, vias movimentadas, trilhos e aeroportos. Nota alta = menos barulho.",
 };

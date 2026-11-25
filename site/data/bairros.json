@@ -934,7 +934,7 @@
    "indicadores": {
     "letalidade_100k": {
      "rotulo": "Letalidade violenta",
-     "peso": 0.5,
+     "peso": 0.7,
      "colunas_isp": [
       "letalidade_violenta"
      ],
@@ -943,7 +943,7 @@
     },
     "roubo_veiculo_100k": {
      "rotulo": "Roubo de veículo",
-     "peso": 0.2,
+     "peso": 0.1,
      "colunas_isp": [
       "roubo_veiculo"
      ],
@@ -952,7 +952,7 @@
     },
     "roubo_rua_100k": {
      "rotulo": "Roubo de rua (transeunte, celular e coletivo)",
-     "peso": 0.2,
+     "peso": 0.1,
      "colunas_isp": [
       "roubo_rua"
      ],
@@ -969,7 +969,10 @@
      "maior_e_pior": true
     }
    },
-   "aviso": "O ISP publica por área de delegacia (CISP), não por bairro. Bairros na mesma área de delegacia têm números iguais ou parecidos."
+   "avisos": [
+    "O ISP publica por área de delegacia (CISP), não por bairro. Bairros na mesma área de delegacia têm números iguais ou parecidos.",
+    "A letalidade violenta pesa 70% por ser o dado mais confiável. Roubos por morador são maiores em áreas de comércio e passagem e costumam ser menos registrados onde se denuncia menos."
+   ]
   },
   "alagamento": {
    "criterio": "alagamento",
@@ -1098,20 +1101,21 @@
    },
    "indicadores": {
     "dist_estacao_m": {
-     "rotulo": "Distância média até a estação mais próxima (linha reta)",
-     "peso": 0.7,
+     "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
+     "peso": 0.5,
      "unidade": "metros",
      "maior_e_pior": true
     },
-    "estacoes_1km": {
-     "rotulo": "Estações a até 1 km",
-     "peso": 0.3,
-     "unidade": "estações",
-     "maior_e_pior": false
+    "dist_trilho_m": {
+     "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+     "peso": 0.5,
+     "unidade": "metros",
+     "maior_e_pior": true
     }
    },
    "avisos": [
     "Distância em linha reta; o caminho a pé real costuma ser maior.",
+    "Metrô e trem contam em dobro (entram nos dois indicadores) por terem mais capacidade; BRT e VLT contam no primeiro.",
     "Considera metrô, trem, BRT e VLT. Ônibus comum não entra."
    ]
   },
@@ -1276,7 +1280,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 5.3,
+     "nota": 6.3,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -1285,7 +1289,7 @@
        "valor": 14.2,
        "mediana_cidade": 22.6,
        "nota": 7.5,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -1295,7 +1299,7 @@
        "valor": 300.7,
        "mediana_cidade": 199.5,
        "nota": 3.0,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -1305,7 +1309,7 @@
        "valor": 791.0,
        "mediana_cidade": 557.9,
        "nota": 2.5,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -1406,27 +1410,27 @@
      }
     },
     "transporte": {
-     "nota": 5.8,
+     "nota": 6.5,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 745.0,
        "mediana_cidade": 827.3,
        "nota": 5.7,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 1.6,
-       "mediana_cidade": 1.2,
-       "nota": 6.0,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 745.0,
+       "mediana_cidade": 1086.8,
+       "nota": 7.3,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Méier (Trem)"
@@ -1514,7 +1518,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 4.7,
+     "nota": 5.4,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -1523,7 +1527,7 @@
        "valor": 19.2,
        "mediana_cidade": 22.6,
        "nota": 6.2,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -1533,7 +1537,7 @@
        "valor": 241.8,
        "mediana_cidade": 199.5,
        "nota": 3.8,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -1543,7 +1547,7 @@
        "valor": 878.0,
        "mediana_cidade": 557.9,
        "nota": 1.6,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -1640,27 +1644,27 @@
      }
     },
     "transporte": {
-     "nota": 4.0,
+     "nota": 4.7,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 1055.0,
        "mediana_cidade": 827.3,
        "nota": 4.1,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 0.6,
-       "mediana_cidade": 1.2,
-       "nota": 3.8,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 1055.0,
+       "mediana_cidade": 1086.8,
+       "nota": 5.2,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Del Castilho (Trem)"
@@ -1748,7 +1752,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 5.7,
+     "nota": 7.0,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -1757,7 +1761,7 @@
        "valor": 8.6,
        "mediana_cidade": 22.6,
        "nota": 9.3,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -1767,7 +1771,7 @@
        "valor": 235.3,
        "mediana_cidade": 199.5,
        "nota": 3.9,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -1777,7 +1781,7 @@
        "valor": 1155.6,
        "mediana_cidade": 557.9,
        "nota": 0.9,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -1874,27 +1878,27 @@
      }
     },
     "transporte": {
-     "nota": 6.6,
+     "nota": 7.4,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 632.7,
        "mediana_cidade": 827.3,
        "nota": 6.7,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 1.6,
-       "mediana_cidade": 1.2,
-       "nota": 6.2,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 632.7,
+       "mediana_cidade": 1086.8,
+       "nota": 8.1,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Uruguai (Metrô)"
@@ -1982,7 +1986,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 5.6,
+     "nota": 6.2,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -1991,7 +1995,7 @@
        "valor": 15.0,
        "mediana_cidade": 22.6,
        "nota": 7.3,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -2001,7 +2005,7 @@
        "valor": 188.8,
        "mediana_cidade": 199.5,
        "nota": 5.4,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2011,7 +2015,7 @@
        "valor": 634.2,
        "mediana_cidade": 557.9,
        "nota": 3.8,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2104,27 +2108,27 @@
      }
     },
     "transporte": {
-     "nota": 3.7,
+     "nota": 4.2,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 1178.3,
        "mediana_cidade": 827.3,
        "nota": 3.6,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 0.7,
-       "mediana_cidade": 1.2,
-       "nota": 4.0,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 1178.3,
+       "mediana_cidade": 1086.8,
+       "nota": 4.7,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Mangueira (Trem)"
@@ -2212,7 +2216,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 5.7,
+     "nota": 6.2,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -2221,7 +2225,7 @@
        "valor": 15.0,
        "mediana_cidade": 22.6,
        "nota": 7.4,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -2231,7 +2235,7 @@
        "valor": 189.0,
        "mediana_cidade": 199.5,
        "nota": 5.3,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2241,7 +2245,7 @@
        "valor": 634.2,
        "mediana_cidade": 557.9,
        "nota": 3.9,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2334,27 +2338,27 @@
      }
     },
     "transporte": {
-     "nota": 1.5,
+     "nota": 2.4,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 2108.1,
        "mediana_cidade": 827.3,
        "nota": 1.8,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 0.0,
-       "mediana_cidade": 1.2,
-       "nota": 0.9,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 2108.1,
+       "mediana_cidade": 1086.8,
+       "nota": 3.0,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Uruguai (Metrô)"
@@ -2442,7 +2446,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 1.2,
+     "nota": 1.3,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -2451,7 +2455,7 @@
        "valor": 43.3,
        "mediana_cidade": 22.6,
        "nota": 0.9,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -2461,7 +2465,7 @@
        "valor": 916.4,
        "mediana_cidade": 199.5,
        "nota": 0.3,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2471,7 +2475,7 @@
        "valor": 1225.5,
        "mediana_cidade": 557.9,
        "nota": 0.8,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2568,27 +2572,27 @@
      }
     },
     "transporte": {
-     "nota": 9.3,
+     "nota": 8.0,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 403.1,
        "mediana_cidade": 827.3,
        "nota": 9.2,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 4.5,
-       "mediana_cidade": 1.2,
-       "nota": 9.7,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 801.7,
+       "mediana_cidade": 1086.8,
+       "nota": 6.8,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Otaviano (BRT)"
@@ -2676,7 +2680,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 2.4,
+     "nota": 2.6,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -2685,7 +2689,7 @@
        "valor": 33.6,
        "mediana_cidade": 22.6,
        "nota": 2.3,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -2695,7 +2699,7 @@
        "valor": 573.1,
        "mediana_cidade": 199.5,
        "nota": 1.6,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2705,7 +2709,7 @@
        "valor": 908.0,
        "mediana_cidade": 557.9,
        "nota": 1.4,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2798,27 +2802,27 @@
      }
     },
     "transporte": {
-     "nota": 6.5,
+     "nota": 5.6,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 667.6,
        "mediana_cidade": 827.3,
        "nota": 6.4,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 1.8,
-       "mediana_cidade": 1.2,
-       "nota": 6.7,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 1151.5,
+       "mediana_cidade": 1086.8,
+       "nota": 4.8,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Irajá (Metrô)"
@@ -2906,7 +2910,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 6.5,
+     "nota": 6.4,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -2915,7 +2919,7 @@
        "valor": 18.9,
        "mediana_cidade": 22.6,
        "nota": 6.3,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -2925,7 +2929,7 @@
        "valor": 158.2,
        "mediana_cidade": 199.5,
        "nota": 5.8,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -2935,7 +2939,7 @@
        "valor": 366.8,
        "mediana_cidade": 557.9,
        "nota": 7.1,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3028,27 +3032,27 @@
      }
     },
     "transporte": {
-     "nota": 7.4,
+     "nota": 6.4,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 653.3,
        "mediana_cidade": 827.3,
        "nota": 6.6,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 3.6,
-       "mediana_cidade": 1.2,
-       "nota": 9.2,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 849.0,
+       "mediana_cidade": 1086.8,
+       "nota": 6.1,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Pastor José Santos (BRT)"
@@ -3136,7 +3140,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 2.4,
+     "nota": 2.5,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -3145,7 +3149,7 @@
        "valor": 34.2,
        "mediana_cidade": 22.6,
        "nota": 2.2,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -3155,7 +3159,7 @@
        "valor": 563.8,
        "mediana_cidade": 199.5,
        "nota": 1.7,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3165,7 +3169,7 @@
        "valor": 879.1,
        "mediana_cidade": 557.9,
        "nota": 1.5,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3262,27 +3266,27 @@
      }
     },
     "transporte": {
-     "nota": 5.8,
+     "nota": 5.1,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 750.6,
        "mediana_cidade": 827.3,
        "nota": 5.6,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 1.7,
-       "mediana_cidade": 1.2,
-       "nota": 6.4,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 1247.8,
+       "mediana_cidade": 1086.8,
+       "nota": 4.5,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Vila Kosmos (BRT)"
@@ -3370,7 +3374,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 5.6,
+     "nota": 5.9,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -3379,7 +3383,7 @@
        "valor": 18.3,
        "mediana_cidade": 22.6,
        "nota": 6.8,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -3389,7 +3393,7 @@
        "valor": 227.9,
        "mediana_cidade": 199.5,
        "nota": 4.0,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3399,7 +3403,7 @@
        "valor": 408.3,
        "mediana_cidade": 557.9,
        "nota": 6.5,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3492,27 +3496,27 @@
      }
     },
     "transporte": {
-     "nota": 7.1,
+     "nota": 4.8,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 589.0,
        "mediana_cidade": 827.3,
        "nota": 7.3,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 1.8,
-       "mediana_cidade": 1.2,
-       "nota": 6.6,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 2917.1,
+       "mediana_cidade": 1086.8,
+       "nota": 2.4,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Praça Seca (BRT)"
@@ -3600,7 +3604,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 6.1,
+     "nota": 6.2,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -3609,7 +3613,7 @@
        "valor": 17.4,
        "mediana_cidade": 22.6,
        "nota": 6.9,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -3619,7 +3623,7 @@
        "valor": 157.4,
        "mediana_cidade": 199.5,
        "nota": 5.9,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3629,7 +3633,7 @@
        "valor": 352.1,
        "mediana_cidade": 557.9,
        "nota": 7.2,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3730,27 +3734,27 @@
      }
     },
     "transporte": {
-     "nota": 4.7,
+     "nota": 3.4,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 863.0,
        "mediana_cidade": 827.3,
        "nota": 4.7,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 1.1,
-       "mediana_cidade": 1.2,
-       "nota": 4.8,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 5050.5,
+       "mediana_cidade": 1086.8,
+       "nota": 2.0,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Tanque (BRT)"
@@ -3838,7 +3842,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 3.8,
+     "nota": 2.8,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -3847,7 +3851,7 @@
        "valor": 40.0,
        "mediana_cidade": 22.6,
        "nota": 1.5,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -3857,7 +3861,7 @@
        "valor": 152.3,
        "mediana_cidade": 199.5,
        "nota": 6.2,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3867,7 +3871,7 @@
        "valor": 408.1,
        "mediana_cidade": 557.9,
        "nota": 6.5,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -3964,27 +3968,27 @@
      }
     },
     "transporte": {
-     "nota": 6.3,
+     "nota": 3.8,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 715.4,
        "mediana_cidade": 827.3,
        "nota": 6.0,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 1.8,
-       "mediana_cidade": 1.2,
-       "nota": 6.8,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 6405.8,
+       "mediana_cidade": 1086.8,
+       "nota": 1.6,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Boiúna (BRT)"
@@ -4081,7 +4085,7 @@
        "valor": 16.7,
        "mediana_cidade": 22.6,
        "nota": 7.0,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -4091,7 +4095,7 @@
        "valor": 124.0,
        "mediana_cidade": 199.5,
        "nota": 6.8,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -4101,7 +4105,7 @@
        "valor": 325.3,
        "mediana_cidade": 557.9,
        "nota": 7.6,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -4194,27 +4198,27 @@
      }
     },
     "transporte": {
-     "nota": 1.2,
+     "nota": 1.6,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 3049.9,
        "mediana_cidade": 827.3,
        "nota": 1.3,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 0.0,
-       "mediana_cidade": 1.2,
-       "nota": 0.9,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 5940.1,
+       "mediana_cidade": 1086.8,
+       "nota": 1.9,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Tanque (BRT)"
@@ -4311,7 +4315,7 @@
        "valor": 16.9,
        "mediana_cidade": 22.6,
        "nota": 6.9,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -4321,7 +4325,7 @@
        "valor": 124.3,
        "mediana_cidade": 199.5,
        "nota": 6.7,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -4331,7 +4335,7 @@
        "valor": 326.0,
        "mediana_cidade": 557.9,
        "nota": 7.5,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -4428,27 +4432,27 @@
      }
     },
     "transporte": {
-     "nota": 2.6,
+     "nota": 2.3,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 1533.0,
        "mediana_cidade": 827.3,
        "nota": 2.7,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 0.2,
-       "mediana_cidade": 1.2,
-       "nota": 2.3,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 5855.1,
+       "mediana_cidade": 1086.8,
+       "nota": 1.9,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Tanque (BRT)"
@@ -4536,7 +4540,7 @@
    "tem_nota": true,
    "criterios": {
     "violencia": {
-     "nota": 5.6,
+     "nota": 5.9,
      "indicadores": [
       {
        "id": "letalidade_100k",
@@ -4545,7 +4549,7 @@
        "valor": 18.3,
        "mediana_cidade": 22.6,
        "nota": 6.7,
-       "peso": 0.5,
+       "peso": 0.7,
        "maior_e_pior": true
       },
       {
@@ -4555,7 +4559,7 @@
        "valor": 226.8,
        "mediana_cidade": 199.5,
        "nota": 4.0,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -4565,7 +4569,7 @@
        "valor": 406.1,
        "mediana_cidade": 557.9,
        "nota": 6.7,
-       "peso": 0.2,
+       "peso": 0.1,
        "maior_e_pior": true
       },
       {
@@ -4658,27 +4662,27 @@
      }
     },
     "transporte": {
-     "nota": 2.3,
+     "nota": 2.6,
      "indicadores": [
       {
        "id": "dist_estacao_m",
-       "rotulo": "Distância média até a estação mais próxima (linha reta)",
+       "rotulo": "Distância média até a estação mais próxima (metrô, trem, BRT ou VLT)",
        "unidade": "metros",
        "valor": 1704.0,
        "mediana_cidade": 827.3,
        "nota": 2.5,
-       "peso": 0.7,
+       "peso": 0.5,
        "maior_e_pior": true
       },
       {
-       "id": "estacoes_1km",
-       "rotulo": "Estações a até 1 km",
-       "unidade": "estações",
-       "valor": 0.0,
-       "mediana_cidade": 1.2,
-       "nota": 1.9,
-       "peso": 0.3,
-       "maior_e_pior": false
+       "id": "dist_trilho_m",
+       "rotulo": "Distância média até a estação de metrô ou trem mais próxima",
+       "unidade": "metros",
+       "valor": 2313.2,
+       "mediana_cidade": 1086.8,
+       "nota": 2.7,
+       "peso": 0.5,
+       "maior_e_pior": true
       }
      ],
      "estacao_mais_comum": "Praça Seca (BRT)"

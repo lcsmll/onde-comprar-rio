@@ -406,3 +406,10 @@ Aluguel: não existe fonte oficial e aberta de anúncios de aluguel. Também nã
 
 - Problema apontado: "Destaque: Alagamento 7,1" (Praça Seca) parecia dizer que o bairro alaga muito, quando a nota 7,1 significa que alaga **menos** que 71% dos bairros do Rio (ISMFI 15 contra mediana 31).
 - Na tela, os critérios passam a se chamar **Segurança, Menos alagamento, Escolas, Transporte, Emprego, Menos barulho** (nota alta = melhor em todos). Nos destaques e no resumo usa-se o sentido positivo ("pouco alagamento", "pouco barulho", "segurança", "acesso ao emprego"); nos pontos de atenção, o nome do problema ("Alagamento", "Violência", "Barulho", "Distância do emprego", "Poucas escolas"). Os dados e os códigos internos (`violencia`, `alagamento`...) não mudaram.
+
+## 17. Revisão dos pesos de segurança e transporte (25/11/2026)
+
+Motivo: a Tijuca aparecia com segurança pior que a Penha (5,7 x 6,5) e transporte pior (6,6 x 7,4), o que não batia com a realidade percebida.
+
+- **Segurança:** letalidade violenta passa de 50% para **70%**; roubo de veículo, de rua e a residência ficam com **10% cada** (eram 20/20/10). Diagnóstico: roubo por morador infla em áreas de passagem (20% da Tijuca está na 18ª DP, entorno do Maracanã e Praça da Bandeira) e é subnotificado onde se denuncia menos (a 22ª DP, da Penha, cobre 190 mil pessoas, incluindo o Complexo do Alemão). A letalidade é o dado mais confiável. Resultado: Tijuca 7,0, Penha 6,4.
+- **Transporte:** sai a contagem de "estações a até 1 km" (contava cada parada de BRT, a cada ~600 m, como uma estação de metrô). Agora: **50% distância até qualquer estação** (metrô, trem, BRT, VLT) **+ 50% distância até metrô ou trem**. Resultado: Tijuca 7,4, Penha 6,4. Efeito colateral aceito: bairros servidos só por BRT (Jacarepaguá) caem (Praça Seca 7,1 → 4,8).

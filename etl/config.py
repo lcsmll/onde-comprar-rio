@@ -27,11 +27,14 @@ CRS_METROS = 31983
 # Violencia (ISP)
 # ---------------------------------------------------------------------------
 VIOLENCIA_MESES = 12  # ultimos N meses publicados
+# Pesos revistos em 25/11/2026 (eram 50/20/20/10): roubo por morador infla em areas de
+# passagem (ex.: entorno do Maracana) e e subnotificado onde se denuncia menos; a letalidade
+# (morte quase sempre e registrada) e o indicador mais confiavel e passa a dominar.
 VIOLENCIA_INDICADORES = {
     # id: (colunas do ISP somadas, peso no criterio, rotulo)
-    "letalidade_100k": (["letalidade_violenta"], 0.50, "Letalidade violenta"),
-    "roubo_veiculo_100k": (["roubo_veiculo"], 0.20, "Roubo de veículo"),
-    "roubo_rua_100k": (["roubo_rua"], 0.20, "Roubo de rua (transeunte, celular e coletivo)"),
+    "letalidade_100k": (["letalidade_violenta"], 0.70, "Letalidade violenta"),
+    "roubo_veiculo_100k": (["roubo_veiculo"], 0.10, "Roubo de veículo"),
+    "roubo_rua_100k": (["roubo_rua"], 0.10, "Roubo de rua (transeunte, celular e coletivo)"),
     "roubo_residencia_100k": (["roubo_residencia"], 0.10, "Roubo a residência"),
 }
 
@@ -56,7 +59,11 @@ ESCOLAS_PESOS = {  # por tipo de escola procurada (pergunta extra da familia)
 # Transporte
 # ---------------------------------------------------------------------------
 TRANSPORTE_RAIO_M = 1000
-TRANSPORTE_PESOS = {"dist_estacao_m": 0.70, "estacoes_1km": 0.30}
+# Revisto em 25/11/2026 (era distancia 70% + estacoes a 1 km 30%): a contagem de estacoes
+# tratava cada parada de BRT (a cada ~600 m) como uma estacao de metro. Agora: distancia ate
+# qualquer estacao + distancia ate metro ou trem (alta capacidade). A contagem fica so como informacao.
+TRANSPORTE_PESOS = {"dist_estacao_m": 0.50, "dist_trilho_m": 0.50}
+TRANSPORTE_MODOS_TRILHO = ["Metrô", "Trem"]
 
 # ---------------------------------------------------------------------------
 # Emprego: polos (nome da estacao na camada oficial) -- conferidos em 06_emprego.py
