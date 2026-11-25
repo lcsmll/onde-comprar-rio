@@ -94,6 +94,8 @@ const fmtR = (v) => v == null || isNaN(v) ? "-" :
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 const fmtN = (v, casas = 1) => v == null || isNaN(v) ? "-" :
   Number(v).toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas });
+const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+const mesAno = (iso) => { const [a, m] = iso.split("-"); return `${MESES[Number(m) - 1]} de ${a}`; };
 const fmtData = (iso) => iso ? iso.split("-").reverse().join("/") : "-";
 const lerDinheiro = (s) => Number(String(s).replace(/\D/g, "")) || 0;
 const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
@@ -439,6 +441,10 @@ function svgMapa(opts) {
   const vmin = Math.min(...vals), vmax = Math.max(...vals);
   const pos = (v) => (vmax > vmin ? (v - vmin) / (vmax - vmin) * 10 : 5);
   svgMapa.faixa = vals.length ? [vmin, vmax] : null;
+  // bairros que ganham destaque flutuante (maior e menor valor): o nome ja vai na caixa
+  const comValor = opts.destaque ? [] : [...exibidos.values()].map((b) => ({ b, v: valor(b) })).filter((x) => x.v != null);
+  const extremos = comValor.length > 1 ? [comValor.reduce((a, x) => (x.v > a.v ? x : a)), comValor.reduce((a, x) => (x.v < a.v ? x : a))] : [];
+  const codsExtremos = extremos.map((x) => x.b.codbairro);
   let formas = "", rotulos = "";
   for (const [cod, g] of Object.entries(M.bairros)) {
     const b = exibidos.get(cod);
@@ -455,9 +461,31 @@ function svgMapa(opts) {
     }
     formas += `<path class="${classe}" d="${g.d}" style="${estilo}" data-bairro="${cod}" tabindex="0" role="link"
       aria-label="${esc(titulo)}"><title>${esc(titulo)}</title></path>`;
+    if (codsExtremos.includes(cod)) continue;
     rotulos += `<text x="${g.rotulo[0]}" y="${g.rotulo[1]}" font-size="${fonte}"${g.claro && !opts.destaque ? ' class="claro"' : ""}>${esc(b.nome.replace(" (Jacarepaguá)", ""))}</text>`;
   }
-  return `<svg class="mapa-svg" viewBox="${vb}" role="group" aria-label="Mapa dos bairros">${formas}<g class="m-rotulos" aria-hidden="true">${rotulos}</g></svg>`;
+  // destaques flutuantes: bairro com maior e com menor valor (so no mapa do resultado)
+  let chamadas = "";
+  if (extremos.length) {
+    const [maior, menor] = extremos;
+    const [vx, vy, vw] = (opts.cidade ? M.viewbox_cidade : M.viewbox_inicial);
+    const f = fonte * 1.05, alt = f * 2.9;
+    chamadas = [[maior, "Maior nota"], [menor, "Menor nota"]].map(([x, rot]) => {
+      const g = M.bairros[x.b.codbairro], nome = x.b.nome.replace(" (Jacarepaguá)", "");
+      const larg = Math.max(nome.length, rot.length + 2) * f * 0.62 + f * 3.6;
+      const dir = g.rotulo[0] < vx + vw / 2;                       // caixa para o lado de dentro do mapa
+      const bx = dir ? g.rotulo[0] + f * 2.2 : g.rotulo[0] - f * 2.2 - larg, by = g.rotulo[1] - alt - f * 0.8;
+      const cor = corCalor(pos(x.v));
+      return `<g class="m-chamada"><line x1="${g.rotulo[0]}" y1="${g.rotulo[1]}" x2="${dir ? bx : bx + larg}" y2="${by + alt / 2}"/>
+        <circle cx="${g.rotulo[0]}" cy="${g.rotulo[1]}" r="${f * 0.32}"/>
+        <rect x="${bx}" y="${by}" width="${larg}" height="${alt}" rx="${f * 0.5}"/>
+        <text x="${bx + f * 0.6}" y="${by + f * 1.05}" class="m-chamada-rot" font-size="${f * 0.62}">${rot.toUpperCase()}</text>
+        <text x="${bx + f * 0.6}" y="${by + f * 2.15}" class="m-chamada-nome" font-size="${f}">${esc(nome)}</text>
+        <rect x="${bx + larg - f * 2.9}" y="${by + f * 0.55}" width="${f * 2.4}" height="${f * 1.8}" rx="${f * 0.35}" style="fill:${cor}"/>
+        <text x="${bx + larg - f * 1.7}" y="${by + f * 1.82}" class="m-chamada-nota${corClara(cor) ? "" : " claro"}" font-size="${f * 0.85}">${fmtN(x.v)}</text></g>`;
+    }).join("");
+  }
+  return `<svg class="mapa-svg" viewBox="${vb}" role="group" aria-label="Mapa dos bairros">${formas}<g class="m-rotulos" aria-hidden="true">${rotulos}</g><g aria-hidden="true">${chamadas}</g></svg>`;
 }
 
 function ligarMapa(el) {
@@ -501,6 +529,7 @@ function desenharResultado() {
   };
   if (estado.ordem !== "nota") lista.sort(ordens[estado.ordem] || ordens.nota);
 
+  $("#sobretitulo-resultado").textContent = "Ranking · " + mesAno(D.bairros.gerado_em);
   $("#explica-nota").textContent = D.bairros.metodo_nota + " A nota final é a média das 6 notas, pesada pelas suas prioridades.";
   $("#painel-orcamento").innerHTML = painelOrcamento(orc);
   $("#esconder-caros").checked = estado.esconderCaros;
@@ -678,7 +707,7 @@ function desenharComparacao(arg) {
     : `<li><strong>${esc(x.b.nome)}</strong> não fica na frente em nenhum critério desta comparação.</li>`).join("");
 
   alvo.innerHTML = `
-    <h2>Comparar bairros</h2>
+    <div class="secao-cab"><p class="sobretitulo">Comparação · ${cols.length} bairros</p><h2>Comparar bairros</h2></div>
     <p class="pequeno">Notas de 0 a 10 (posição entre os bairros do Rio). Em destaque, o melhor de cada linha.</p>
     <div class="bloco cmp-bloco"><div class="rolagem"><table class="cmp">
       <thead><tr><th></th>${cols.map((x) => `<th scope="col"><div class="cmp-cab">${anel(x.n.final, 56)}
@@ -820,7 +849,7 @@ function desenharBairro(cod) {
     `<a href="${esc(linkPortal(x[modo], x, b))}" target="_blank" rel="noopener noreferrer">${esc(x.nome)}</a>`).join("");
   $("#detalhe-bairro").innerHTML = `
     <div class="detalhe-topo">
-      <div><h2>${esc(b.nome)}</h2>
+      <div><p class="sobretitulo">Bairro · ${esc(localTexto(b).split(" · ")[0])}</p><h2>${esc(b.nome)}</h2>
         <p class="cartao-regiao">${icone("local")}${esc(localTexto(b))} · ${b.populacao_2022.toLocaleString("pt-BR")} moradores (Censo 2022)</p>
         ${destaques(n)}</div>
       <div class="detalhe-nota">${anel(n.final, 84)}<span class="pequeno">nota final</span></div>

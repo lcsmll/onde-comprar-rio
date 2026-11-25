@@ -24,7 +24,7 @@ JS = r"""
     const temTexto = [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
     if (!temTexto) continue;
     const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
-    if (!r.width || !r.height || cs.visibility === "hidden" || el.closest("[hidden]") || el.closest("svg")) continue;
+    if (!r.width || !r.height || cs.visibility === "hidden" || el.closest("[hidden]") || el.closest("svg") || el.closest("[aria-hidden=true]")) continue;  // decorativos ficam de fora
     const a = lum(rgb(cs.color)), b = lum(fundo(el));
     const razao = (Math.max(a,b) + .05) / (Math.min(a,b) + .05);
     const tam = parseFloat(cs.fontSize), negrito = parseInt(cs.fontWeight) >= 700;

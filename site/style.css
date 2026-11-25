@@ -1,14 +1,15 @@
 /*
  * Visual minimalista: fundo claro, bordas finas, preto como cor principal,
  * numeros em fonte monoespacada. Modo escuro automatico pelo sistema.
- * Fonte: usa Geist se estiver disponivel; senao, a fonte do sistema.
+ * Fontes: Nunito (texto) e Quicksand (titulos), hospedadas em site/fonts/.
  */
-/* Fontes Geist (SIL Open Font License, ver site/fonts/OFL.txt), hospedadas junto com o site:
-   nenhum pedido a servidores de terceiros. */
-@font-face { font-family: "Geist"; src: url("fonts/Geist-Variable.woff2") format("woff2");
-  font-weight: 100 900; font-style: normal; font-display: swap; }
-@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Variable.woff2") format("woff2");
-  font-weight: 100 900; font-style: normal; font-display: swap; }
+/* Fontes Nunito (texto) e Quicksand (titulos), SIL Open Font License (site/fonts/OFL-*.txt),
+   baixadas do repositorio oficial google/fonts, convertidas para WOFF2 so com os caracteres
+   do portugues e hospedadas junto com o site: nenhum pedido a servidores de terceiros. */
+@font-face { font-family: "Nunito"; src: url("fonts/Nunito-Variable.woff2") format("woff2");
+  font-weight: 200 1000; font-style: normal; font-display: swap; }
+@font-face { font-family: "Quicksand"; src: url("fonts/Quicksand-Variable.woff2") format("woff2");
+  font-weight: 300 700; font-style: normal; font-display: swap; }
 
 :root {
   --fundo: #f8f6f1;
@@ -32,8 +33,9 @@
   --sombra-hover: 0 4px 10px -2px rgba(24, 33, 30, .08), 0 12px 24px -8px rgba(24, 33, 30, .10);
   --raio: 16px;
   --raio-p: 10px;
-  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --mono: "Geist Mono", ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, monospace;
+  --sans: "Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --titulo: "Quicksand", "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --mono: "Nunito", ui-sans-serif, system-ui, sans-serif;   /* sem fonte monoespacada: visual mais suave */
   color-scheme: light only;
 }
 
@@ -462,7 +464,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .btn-principal { box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--principal) 70%, transparent); }
 .cartao-bairro, .criterio, .bloco, .sobre-fonte, .peso, .passos li, .exemplo-cartao { box-shadow: 0 1px 0 rgba(60, 45, 20, .04), 0 10px 30px -18px rgba(60, 45, 20, .25); }
 h1, h2 { letter-spacing: -.02em; }
-.titulo-secao::before, #tela-resultado h2::before { content: ""; display: block; width: 36px; height: 4px; border-radius: 99px; background: var(--principal); margin-bottom: 10px; }
+
 
 /* ---------- celular e telas de toque: area de toque de pelo menos 44 px ---------- */
 @media (max-width: 720px), (pointer: coarse) {
@@ -479,3 +481,39 @@ h1, h2 { letter-spacing: -.02em; }
   .bolso-titulo a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
   .btn, .btn-principal { min-height: 44px; }
 }
+
+/* ---------- tipografia arredondada ---------- */
+body { font-size: 15.5px; }
+h1, h2, h3, .marca, .cartao-nome, .exemplo-nome, .numeros dt, .anel-valor, .nota-final, .passo-num, .peso-nome, .cmp-cab strong {
+  font-family: var(--titulo); }
+h1 { font-weight: 700; letter-spacing: -.025em; }
+h2 { font-weight: 700; letter-spacing: -.015em; }
+h3 { font-weight: 700; letter-spacing: 0; }
+.passo, .escala, .selo { font-family: var(--sans); letter-spacing: .02em; }
+
+/* ---------- secoes numeradas com sobretitulo ---------- */
+.secao-cab { margin: 28px 0 8px; }
+.secao-num { display: block; font-family: var(--titulo); font-size: 3.2rem; font-weight: 700; line-height: 1;
+  color: #d8ccb4; letter-spacing: -.02em; margin-bottom: 8px; }
+.sobretitulo { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 6px; font-size: 12.5px; font-weight: 800;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--principal); }
+.sobretitulo::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--principal);
+  box-shadow: 0 0 0 3px var(--principal-claro); }
+.secao-cab h2, .detalhe-topo h2 { margin-top: 2px; }
+#tela-resultado .secao-cab, #tela-financiamento .secao-cab, #tela-sobre .secao-cab, #comparacao .secao-cab { margin-top: 8px; }
+
+/* ---------- ilustracao ---------- */
+.ilustracao { height: 150px; margin: 28px -16px 0; background: url("img/ilustracao-rio.svg") center bottom / cover no-repeat;
+  border-bottom: 1px solid var(--linha); }
+@media (min-width: 720px) { .ilustracao { height: 190px; border-radius: 0 0 var(--raio) var(--raio); margin: 28px 0 0; } }
+
+/* ---------- destaques flutuantes do mapa ---------- */
+.m-chamada line { stroke: var(--texto); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+.m-chamada circle { fill: var(--texto); }
+.m-chamada rect:first-of-type { fill: var(--cartao); stroke: var(--linha-forte); stroke-width: 1; vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 2px 3px rgba(60, 45, 20, .18)); }
+.m-chamada text { font-family: var(--titulo); dominant-baseline: middle; }
+.m-chamada-rot { fill: var(--suave); font-weight: 700; letter-spacing: .06em; }
+.m-chamada-nome { fill: var(--texto); font-weight: 700; }
+.m-chamada-nota { fill: #10202a; font-weight: 700; text-anchor: middle; }
+.m-chamada-nota.claro { fill: #ffffff; }

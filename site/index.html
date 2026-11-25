@@ -7,7 +7,8 @@
   <title>Onde Comprar no Rio</title>
   <meta name="description" content="Compare bairros do Rio de Janeiro com dados oficiais e simule o financiamento. Nada do que você digita sai do seu aparelho.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230b6e4f'/%3E%3Cpath d='M3 13V7l5-4 5 4v6H9V9H7v4z' fill='white'/%3E%3C/svg%3E">
-  <link rel="preload" href="fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Nunito-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Quicksand-Variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -41,13 +42,15 @@
         </div>
         <div id="exemplo" class="exemplo" aria-label="Exemplo com dados reais"></div>
       </div>
+      <div class="ilustracao" aria-hidden="true"></div>
       <dl class="numeros">
         <div><dt id="n-bairros">15</dt><dd>bairros na versão inicial</dd></div>
         <div><dt>6</dt><dd>critérios com nota de 0 a 10</dd></div>
         <div><dt id="n-fontes">9</dt><dd>fontes oficiais e gratuitas</dd></div>
         <div><dt>0</dt><dd>dados pessoais coletados</dd></div>
       </dl>
-      <h2 class="titulo-secao">Como funciona</h2>
+      <div class="secao-cab"><span class="secao-num" aria-hidden="true">01</span><p class="sobretitulo">Passo a passo</p>
+        <h2>Como funciona</h2></div>
       <ol class="passos">
         <li><span class="passo-num">1</span><div><strong>Conte quem vai morar</strong><span>Perfil, renda (opcional), tamanho do imóvel e onde você trabalha.</span></div></li>
         <li><span class="passo-num">2</span><div><strong>Diga o que importa mais</strong><span>Arraste cada critério entre pouco e muito importante.</span></div></li>
@@ -164,7 +167,8 @@
 
     <!-- 5. Resultado -->
     <section id="tela-resultado" class="tela" hidden>
-      <h2 id="titulo-resultado">Bairros em ordem de nota</h2>
+      <div class="secao-cab"><p class="sobretitulo" id="sobretitulo-resultado">Ranking</p>
+        <h2 id="titulo-resultado">Bairros em ordem de nota</h2></div>
       <p class="pequeno" id="explica-nota"></p>
       <div id="painel-orcamento"></div>
       <div class="barra-ferramentas">
@@ -213,7 +217,7 @@
     <!-- 7. Financiamento -->
     <section id="tela-financiamento" class="tela" hidden>
       <button class="btn" id="voltar-do-simulador">Voltar</button>
-      <h2>Simulador de financiamento</h2>
+      <div class="secao-cab"><p class="sobretitulo">Financiamento</p><h2>Simulador de financiamento</h2></div>
       <p class="aviso" id="aviso-geral"></p>
       <div id="simulador"></div>
     </section>
@@ -221,7 +225,7 @@
     <!-- 8. Sobre os dados -->
     <section id="tela-sobre" class="tela" hidden>
       <button class="btn" id="voltar-do-sobre">Voltar</button>
-      <h2>Sobre os dados</h2>
+      <div class="secao-cab"><p class="sobretitulo">Metodologia</p><h2>Sobre os dados</h2></div>
       <div id="sobre"></div>
     </section>
   </main>
