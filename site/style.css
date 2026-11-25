@@ -16,7 +16,7 @@
   --cartao: #ffffff;
   --texto: #18211e;
   --texto-2: #46504c;
-  --suave: #6b7571;
+  --suave: #545c58;   /* contraste >= 5,7:1 sobre creme, bege e verde-claro */
   --linha: #e7e3da;
   --linha-forte: #d3cec2;
   --principal: #0f6b5c;
@@ -34,33 +34,10 @@
   --raio-p: 10px;
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, monospace;
-  color-scheme: light;
+  color-scheme: light only;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fundo: #0e1311;
-    --fundo-2: #141a18;
-    --cartao: #161d1a;
-    --texto: #e9efec;
-    --texto-2: #c3ccc8;
-    --suave: #9aa6a1;
-    --linha: #26302c;
-    --linha-forte: #36423d;
-    --principal: #3fbfa5;
-    --principal-escuro: #5fd1ba;
-    --principal-texto: #06231d;
-    --principal-claro: #12302a;
-    --azul: #5fd1ba;
-    --azul-claro: #12302a;
-    --ambar: #ffbe5c;
-    --ambar-claro: #2a1d08;
-    --ambar-linha: #5c3f10;
-    --sombra: 0 0 0 1px rgba(255, 255, 255, .02);
-    --sombra-hover: 0 0 0 1px rgba(255, 255, 255, .06), 0 10px 24px -10px rgba(0, 0, 0, .6);
-    color-scheme: dark;
-  }
-}
+
 
 * { box-sizing: border-box; }
 /* O atributo hidden sempre esconde, mesmo em elementos que o CSS manda mostrar (ex.: label) */
@@ -405,7 +382,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .ordenar { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 400; color: var(--suave); flex-basis: 100%; }
 .ordenar select { width: auto; margin: 0; height: 38px; }
 .vazio-lista { padding: 20px; text-align: center; color: var(--suave); background: var(--cartao); border: 1px dashed var(--linha-forte); border-radius: var(--raio); }
-@media (max-width: 380px) { .bolso-linha strong, .bolso-numeros strong { font-size: .9rem; } }
+@media (max-width: 420px) { .bolso-linha strong, .bolso-numeros strong { font-size: .92rem; } .bolso-numeros > div, .bolso-linha > div { padding: 8px; } }
 
 /* ---------- comparar ---------- */
 .item-bairro { position: relative; }
@@ -480,9 +457,25 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 /* ---------- visual mais acolhedor (referencia: paginas de cidade do BairroSafe) ---------- */
 :root { --fundo: #f6f3ec; --fundo-2: #efeadf; --cartao: #fffdf8; --linha: #e6dfd0; --linha-forte: #d6cdb9; --raio: 20px; }
-@media (prefers-color-scheme: dark) { :root { --fundo: #0e1311; --cartao: #161d1a; } }
+
 .btn, .btn-principal, .btn-comparar, .links-portais a { border-radius: 99px; }
 .btn-principal { box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--principal) 70%, transparent); }
 .cartao-bairro, .criterio, .bloco, .sobre-fonte, .peso, .passos li, .exemplo-cartao { box-shadow: 0 1px 0 rgba(60, 45, 20, .04), 0 10px 30px -18px rgba(60, 45, 20, .25); }
 h1, h2 { letter-spacing: -.02em; }
 .titulo-secao::before, #tela-resultado h2::before { content: ""; display: block; width: 36px; height: 4px; border-radius: 99px; background: var(--principal); margin-bottom: 10px; }
+
+/* ---------- celular e telas de toque: area de toque de pelo menos 44 px ---------- */
+@media (max-width: 720px), (pointer: coarse) {
+  .link-topo, .marca { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; }
+  label.check { min-height: 44px; align-items: center; margin: 6px 0; }
+  label.check input { width: 22px; height: 22px; margin-top: 0; }
+  input[type=range] { height: 44px; }
+  input[type=range]::-webkit-slider-thumb { width: 26px; height: 26px; margin-top: -11px; }
+  input[type=range]::-moz-range-thumb { width: 26px; height: 26px; }
+  .btn-comparar { min-height: 40px; padding: 6px 14px; }
+  select, .ordenar select, .mapa-seletor select { min-height: 44px; }
+  .links-portais a { min-height: 44px; padding: 8px 16px; }
+  .cmp-acoes .btn { min-height: 44px; }
+  .bolso-titulo a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
+  .btn, .btn-principal { min-height: 44px; }
+}
