@@ -180,7 +180,7 @@ bash etl/rodar_tudo.sh               # reaproveita as consultas já salvas do Bi
 bash etl/rodar_tudo.sh --atualizar   # busca de novo os dados do 1746 e do COR no BigQuery
 ```
 
-Leva de 4 a 6 minutos. Cada script mostra um resumo com os 15 bairros e a mediana da cidade. O último (`99_montar_notas.py`, seguido do `12`) mostra a **tabela final de notas**. Confira se nada mudou de forma estranha.
+Leva de 4 a 6 minutos. Cada script mostra um resumo com os bairros da lista `BAIRROS_MVP_NOMES` (usada como amostra de conferência) e a mediana da cidade. O `99_montar_notas.py` mostra a **tabela final de notas** (com a cidade inteira, os 10 primeiros e os 5 últimos). Confira se nada mudou de forma estranha.
 
 Para rodar um passo só: `.venv/bin/python etl/02_violencia.py` (com o mesmo `--atualizar`, se for de BigQuery). Depois rode o `99_montar_notas.py` e o `12_paginas_bairros.py` para refazer o JSON e as prévias.
 
