@@ -623,3 +623,50 @@ input[type=search]:focus { outline: none; border-color: var(--principal); box-sh
   .nav-topo { gap: 0; }
   .link-topo { font-size: 13.5px; padding: 0 6px; }
 }
+
+/* ===================== lista e mapa no celular (cartao compacto + regioes) ===================== */
+.cartao-bairro { padding: 14px 14px 12px; }
+.cartao-topo .anel { width: 52px !important; height: 52px !important; }
+.cartao-nome { font-size: 1.08rem; line-height: 1.2; }
+.bolso-fino { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 10px 0 0; padding: 8px 10px;
+  background: var(--fundo-2); border-radius: var(--raio-p); }
+.bolso-fino > div { min-width: 0; }
+.bolso-fino dt { font-size: 11.5px; color: var(--suave); line-height: 1.2; }
+.bolso-fino dd { margin: 0; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.etiquetas:empty { display: none; }
+.etiquetas { display: flex; flex-wrap: wrap; gap: 6px; }
+.etiquetas .etiqueta { margin-top: 8px; font-size: 12px; }
+.mini-notas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 12px; margin-top: 12px;
+  padding-top: 10px; border-top: 1px solid var(--linha); }
+.mini-nota { display: grid; gap: 1px; min-width: 0; }
+.mini-topo { display: flex; align-items: center; gap: 5px; }
+.mini-topo .icone { width: 14px; height: 14px; color: var(--suave); }
+.mini-topo strong { font-family: var(--titulo); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.mini-rotulo { font-size: 11.5px; color: var(--suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-nota .barra-fundo { height: 4px; margin-top: 3px; }
+.cartao-bairro .chips { margin-top: 10px; }
+.cartao-bairro .chip { font-size: 12px; padding: 2px 9px 2px 7px; }
+.cartao-bairro .ver-mais { min-height: 40px; margin-top: 4px; }
+.btn-comparar { bottom: 14px; min-height: 36px; font-size: 12.5px; }
+@media (min-width: 760px) {
+  .lista-bairros { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  .lista-bairros > .titulo-sem-nota, .lista-bairros > .vazio-lista { grid-column: 1 / -1; }
+}
+
+/* regioes do mapa */
+.regioes-mapa { display: flex; gap: 6px; overflow-x: auto; margin: 12px -4px 0; padding: 2px 4px 4px; scrollbar-width: none; }
+.regioes-mapa::-webkit-scrollbar { display: none; }
+.regiao { flex: none; min-height: 38px; padding: 6px 14px; border-radius: 99px; border: 1px solid var(--linha-forte);
+  background: var(--cartao); color: var(--texto); font-weight: 600; font-size: 13.5px; }
+.regiao[aria-pressed="true"] { background: var(--principal); border-color: var(--principal); color: var(--principal-texto); }
+@media (max-width: 720px), (pointer: coarse) { .regiao { min-height: 44px; } }
+.mapa-svg .m-sel { stroke: var(--texto) !important; stroke-width: 3 !important; }
+.mapa-info { margin-top: 8px; padding: 10px 12px; border: 1px solid var(--linha); border-radius: var(--raio-p); background: var(--cartao);
+  box-shadow: var(--sombra); }
+.mapa-info-conteudo { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; }
+.mapa-info-texto { display: grid; min-width: 0; }
+.mapa-info-texto strong { font-family: var(--titulo); font-size: 1.05rem; }
+.mapa-info-conteudo .btn, .mapa-info-conteudo .btn-principal { min-height: 42px; }
+.mapa-info-botoes { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cartao-id .etiquetas .etiqueta { margin-top: 4px; font-size: 11.5px; padding: 0 7px; }
+.mini-notas { gap: 8px 12px; margin-top: 10px; padding-top: 8px; }

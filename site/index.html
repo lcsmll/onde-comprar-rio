@@ -209,7 +209,9 @@
           <h3>Mapa</h3>
           <label class="mapa-seletor">Pintar por <select id="mapa-modo"></select></label>
         </div>
+        <div class="regioes-mapa" id="regioes-mapa" role="group" aria-label="Aproximar o mapa numa região"></div>
         <div id="mapa" class="mapa"></div>
+        <div id="mapa-info" class="mapa-info" role="status" hidden></div>
         <div class="regua-bloco">
           <p class="regua-titulo"><strong>Cor = nota de 0 a 10</strong> <span id="regua-faixa"></span></p>
           <div class="regua" id="regua" aria-hidden="true"></div>
@@ -218,7 +220,7 @@
             <span class="legenda-fora"><span class="amostra amostra-hachura" aria-hidden="true"></span>listrado: sem nota final</span></p>
         </div>
         <div class="mapa-rodape">
-          <p class="pequeno">Cores relativas aos bairros mostrados: do amarelo (menor nota entre eles) ao azul-escuro (maior). Toque num bairro para ver os detalhes.</p>
+          <p class="pequeno">Do amarelo (menor nota entre os bairros) ao azul-escuro (maior). Escolha uma região para aproximar e toque num bairro para ver o nome e a nota.</p>
           <button class="btn" id="mapa-cidade" type="button">Ver cidade inteira</button>
         </div>
       </div>

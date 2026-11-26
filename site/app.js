@@ -83,7 +83,7 @@ const estado = {
   trabalho: ["", ""],
   pesos: null, esconderCaros: false,
   bairroAtual: null, telaAnterior: "resultado",
-  aluguel: 0, extras: 0, mapaCidade: false, ordem: "nota", comparar: [], limite: 20, filtro: "",
+  aluguel: 0, extras: 0, mapaCidade: false, mapaRegiao: "cidade", mapaSel: null, ordem: "nota", comparar: [], limite: 20, filtro: "",
 };
 
 /* ---------------- utilidades ---------------- */
@@ -227,6 +227,17 @@ function acimaOrcamento(b) {
   return !!estado.precoMax && c.preco > estado.precoMax;
 }
 
+// faixa fina com os numeros do bolso (cartao da lista)
+function blocoBolsoCompacto(c) {
+  if (!c) return `<p class="bolso-fino pequeno">Sem vendas registradas no ITBI no período.</p>`;
+  return `<dl class="bolso-fino">
+      <div><dt>m² (ITBI)</dt><dd>${fmtR(c.rs)}</dd></div>
+      ${c.areaMax != null ? `<div><dt>Cabe até</dt><dd>${c.areaMax > 0 ? "~" + c.areaMax + " m²" : "–"}</dd></div>` : ""}
+      ${c.parcela != null ? `<div><dt>1ª parcela${c.areaInformada ? ` (${c.areaUsada} m²)` : ""}</dt><dd>${c.parcela > 0 ? fmtR(c.parcela) : "sem financiar"}</dd></div>`
+        : `<div><dt>${c.areaInformada ? c.areaUsada + " m²" : "Área média"}</dt><dd>${fmtR(c.preco)}</dd></div>`}
+    </dl>`;
+}
+
 function painelOrcamento(orc) {
   if (!orc) {
     return `<div class="bolso-painel vazio">${icone("preco")}<div><strong>Quer ver quanto cabe no seu bolso em cada bairro?</strong>
@@ -254,7 +265,7 @@ function blocoBolso(b, c) {
   return `<div class="bolso-linha">
       <div><span>m² (ITBI)</span><strong>${fmtR(c.rs)}</strong></div>
       ${c.areaMax != null ? `<div><span>Cabe até</span><strong>${c.areaMax > 0 ? "~" + c.areaMax + " m²" : "-"}</strong></div>` : ""}
-      ${c.parcela != null ? `<div><span>1ª parcela</span><strong>${fmtR(c.parcela)}</strong></div>` : `<div><span>Imóvel</span><strong>${fmtR(c.preco)}</strong></div>`}
+      ${c.parcela != null ? `<div><span>1ª parcela</span><strong>${c.parcela > 0 ? fmtR(c.parcela) : "sem financiar"}</strong></div>` : `<div><span>Imóvel</span><strong>${fmtR(c.preco)}</strong></div>`}
     </div>
     <p class="bolso-ref">${c.parcela != null ? `Parcela de um imóvel de ${ref} ≈ ${fmtR(c.preco)} (${esc(c.linha)}).` : `Para ${ref}.`}</p>`;
 }
@@ -373,6 +384,10 @@ function ligarFormulario() {
   $("#mapa-modo").innerHTML = '<option value="final">Nota final</option>' +
     D.bairros.criterios.map((c) => `<option value="${c}">${ROTULOS[c]}</option>`).join("");
   $("#mapa-modo").addEventListener("change", desenharMapaResultado);
+  $("#regioes-mapa").innerHTML = REGIOES_MAPA.map((r) => `<button type="button" class="regiao" data-regiao="${r.id}">${r.rotulo}</button>`).join("");
+  $$("#regioes-mapa [data-regiao]").forEach((bt) => bt.addEventListener("click", () => {
+    estado.mapaRegiao = bt.dataset.regiao; estado.mapaSel = null; desenharMapaResultado();
+  }));
   $$(".nesta-pagina [data-rolar]").forEach((bt) => bt.addEventListener("click", () => {
     const alvo = document.getElementById(bt.dataset.rolar);
     const topo = alvo.getBoundingClientRect().top + window.scrollY - 120;   // desconta cabecalho + indice fixos
@@ -469,9 +484,9 @@ function svgMapa(opts) {
   const M = D.mapa;
   if (!M) return "";
   const exibidos = new Map(D.bairros.bairros.filter((b) => b.tem_nota).map((b) => [b.codbairro, b]));
-  const vb = (opts.cidade ? M.viewbox_cidade : M.viewbox_inicial).join(" ");
-  const vbArr = opts.cidade ? M.viewbox_cidade : M.viewbox_inicial;
-  const fonte = Math.max(14, Math.round(vbArr[2] / 50));         // letra proporcional a area mostrada
+  const vbArr = opts.vb || (opts.cidade ? M.viewbox_cidade : M.viewbox_inicial);
+  const vb = vbArr.join(" ");
+  const fonte = Math.max(14, Math.round(vbArr[2] / (opts.vb ? 32 : 50)));   // letra proporcional a area mostrada
   const poucos = exibidos.size <= 30;                            // com a cidade inteira, sem nomes (sobrepoem)
   // escala relativa: do menor ao maior valor entre os bairros mostrados (como num mapa de calor)
   const valor = (b) => { const n = notasDoBairro(b); return opts.modo === "final" ? n.final : n[opts.modo]; };
@@ -482,7 +497,9 @@ function svgMapa(opts) {
   svgMapa.valores = opts.destaque ? [] : [...exibidos.values()].map((b) => ({ nome: b.nome, v: valor(b) })).filter((x) => x.v != null);
   svgMapa.cor = (v) => corCalor(pos(v));
   // bairros que ganham destaque flutuante (maior e menor valor): o nome ja vai na caixa
-  const comValor = opts.destaque ? [] : [...exibidos.values()].map((b) => ({ b, v: valor(b) })).filter((x) => x.v != null);
+  // com zoom numa regiao, os destaques (maior e menor nota) sao os da propria regiao
+  const comValor = opts.destaque ? [] : [...exibidos.values()].map((b) => ({ b, v: valor(b) }))
+    .filter((x) => x.v != null && (!opts.rotulosDe || opts.rotulosDe.includes(x.b.codbairro)));
   const extremos = comValor.length > 1 ? [comValor.reduce((a, x) => (x.v > a.v ? x : a)), comValor.reduce((a, x) => (x.v < a.v ? x : a))] : [];
   const codsExtremos = extremos.map((x) => x.b.codbairro);
   let formas = "", rotulos = "";
@@ -498,25 +515,35 @@ function svgMapa(opts) {
       estilo = cor ? `fill:${cor}` : "";
       if (!cor) classe += " m-sem";
       g.claro = cor ? !corClara(cor) : false;
+      if (opts.selecionado === cod) classe += " m-sel";
       titulo = `${b.nome}: ${v == null ? "sem nota" : fmtN(v)}`;
     }
     formas += `<path class="${classe}" d="${g.d}" style="${estilo}" data-bairro="${cod}" tabindex="0" role="link"
       aria-label="${esc(titulo)}"><title>${esc(titulo)}</title></path>`;
     if (codsExtremos.includes(cod)) continue;
-    if (!poucos && !(opts.destaque && [].concat(opts.destaque).includes(cod))) continue;
+    const nomeCurto = b.nome.replace(" (Jacarepaguá)", "");
+    const cx = caixaBairro(cod);
+    const cabe = nomeCurto.length * fonte * 0.56 <= (cx[2] - cx[0]) * 0.95 && fonte * 1.3 <= (cx[3] - cx[1]);
+    const naRegiao = opts.rotulosDe && opts.rotulosDe.includes(cod) && cabe;
+    if (!poucos && !naRegiao && !(opts.destaque && [].concat(opts.destaque).includes(cod))) continue;
     rotulos += `<text x="${g.rotulo[0]}" y="${g.rotulo[1]}" font-size="${fonte}"${g.claro && !opts.destaque ? ' class="claro"' : ""}>${esc(b.nome.replace(" (Jacarepaguá)", ""))}</text>`;
   }
   // destaques flutuantes: bairro com maior e com menor valor (so no mapa do resultado)
   let chamadas = "";
   if (extremos.length) {
     const [maior, menor] = extremos;
-    const [vx, vy, vw] = (opts.cidade ? M.viewbox_cidade : M.viewbox_inicial);
+    const [vx, vy, vw] = vbArr;
     const f = fonte * 1.05, alt = f * 2.9;
     chamadas = [[maior, "Maior nota"], [menor, "Menor nota"]].map(([x, rot]) => {
       const g = M.bairros[x.b.codbairro], nome = x.b.nome.replace(" (Jacarepaguá)", "");
       const larg = Math.max(nome.length, rot.length + 2) * f * 0.62 + f * 3.6;
       const dir = g.rotulo[0] < vx + vw / 2;                       // caixa para o lado de dentro do mapa
-      const bx = dir ? g.rotulo[0] + f * 2.2 : g.rotulo[0] - f * 2.2 - larg, by = g.rotulo[1] - alt - f * 0.8;
+      const [, vy0, , vh] = vbArr;
+      // caixa sempre dentro da area visivel (nao corta no topo nem nas laterais)
+      const bx = Math.min(Math.max(dir ? g.rotulo[0] + f * 2.2 : g.rotulo[0] - f * 2.2 - larg, vx + f * 0.3), vx + vw - larg - f * 0.3);
+      let by = g.rotulo[1] - alt - f * 0.8;
+      if (by < vy0 + f * 0.3) by = g.rotulo[1] + f * 0.8;
+      by = Math.min(by, vy0 + vh - alt - f * 0.3);
       const cor = corCalor(pos(x.v));
       return `<g class="m-chamada"><line x1="${g.rotulo[0]}" y1="${g.rotulo[1]}" x2="${dir ? bx : bx + larg}" y2="${by + alt / 2}"/>
         <circle cx="${g.rotulo[0]}" cy="${g.rotulo[1]}" r="${f * 0.32}"/>
@@ -532,17 +559,76 @@ function svgMapa(opts) {
   return `<svg class="mapa-svg" viewBox="${vb}" role="group" aria-label="Mapa dos bairros">${defs}${formas}<g class="m-rotulos" aria-hidden="true">${rotulos}</g><g aria-hidden="true">${chamadas}</g></svg>`;
 }
 
-function ligarMapa(el) {
+// aoEscolher: o que fazer ao tocar num bairro (padrao: abrir o detalhe)
+function ligarMapa(el, aoEscolher = (cod) => ir("bairro/" + cod)) {
   el.querySelectorAll("[data-bairro]").forEach((p) => {
-    p.addEventListener("click", () => ir("bairro/" + p.dataset.bairro));
-    p.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ir("bairro/" + p.dataset.bairro); } });
+    p.addEventListener("click", () => aoEscolher(p.dataset.bairro));
+    p.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); aoEscolher(p.dataset.bairro); } });
   });
+}
+
+// Regioes para zoom no mapa (agrupamento das Regioes de Planejamento do IPP)
+const REGIOES_MAPA = [
+  { id: "cidade", rotulo: "Cidade toda" },
+  { id: "centro", rotulo: "Centro", rps: ["Centro"] },
+  { id: "sul", rotulo: "Zona Sul", rps: ["Zona Sul"] },
+  { id: "norte", rotulo: "Zona Norte", rps: ["Tijuca", "Méier", "Madureira", "Inhaúma", "Penha", "Pavuna", "Ramos", "Ilha do Governador"] },
+  { id: "jpa", rotulo: "Barra e Jacarepaguá", rps: ["Jacarepaguá", "Barra da Tijuca"] },
+  { id: "oeste", rotulo: "Zona Oeste", rps: ["Bangu", "Campo Grande", "Santa Cruz", "Guaratiba"] },
+];
+const _caixas = {};
+// retangulo do pedaco principal do bairro (ignora ilhas pequenas, ex.: Cagarras), em unidades do SVG
+function caixaBairro(cod) {
+  if (!_caixas[cod]) {
+    let melhor = null, area = -1;
+    for (const parte of D.mapa.bairros[cod].d.split("M").filter(Boolean)) {
+      const nums = parte.match(/-?\d+(\.\d+)?/g).map(Number);
+      const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
+      const cx = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+      const a = (cx[2] - cx[0]) * (cx[3] - cx[1]);
+      if (a > area) { area = a; melhor = cx; }
+    }
+    _caixas[cod] = melhor;
+  }
+  return _caixas[cod];
+}
+function regiaoDoMapa() {
+  const r = REGIOES_MAPA.find((x) => x.id === estado.mapaRegiao) || REGIOES_MAPA[0];
+  if (!r.rps) return { vb: null, cods: null };
+  const cods = D.bairros.bairros.filter((b) => r.rps.includes(b.regiao) && D.mapa.bairros[b.codbairro]).map((b) => b.codbairro);
+  const cx = cods.map(caixaBairro);
+  const x0 = Math.min(...cx.map((c) => c[0])), y0 = Math.min(...cx.map((c) => c[1]));
+  const x1 = Math.max(...cx.map((c) => c[2])), y1 = Math.max(...cx.map((c) => c[3]));
+  const m = Math.max(x1 - x0, y1 - y0) * 0.04;
+  return { vb: [x0 - m, y0 - m, x1 - x0 + 2 * m, y1 - y0 + 2 * m].map(Math.round), cods };
+}
+
+function cartaoDoMapa(cod) {
+  const b = D.bairros.bairros.find((x) => x.codbairro === cod);
+  if (!b || !b.tem_nota) return "";
+  const n = notasDoBairro(b), modo = $("#mapa-modo").value || "final";
+  const v = modo === "final" ? n.final : n[modo];
+  const marcado = estado.comparar.includes(cod);
+  return `<div class="mapa-info-conteudo">
+      ${anel(v, 48)}
+      <div class="mapa-info-texto"><strong>${esc(b.nome)}</strong>
+        <span class="pequeno">${esc(localTexto(b))} · ${modo === "final" ? "nota final" : esc(ROTULOS[modo])}${v == null ? " (sem nota)" : ""}</span></div>
+      <div class="mapa-info-botoes"><button class="btn-principal" type="button" data-ir="bairro/${cod}">Ver detalhes</button>
+        <button class="btn" type="button" id="mapa-info-comparar" aria-pressed="${marcado}">${marcado ? "✓ Comparando" : "+ Comparar"}</button></div>
+    </div>`;
 }
 
 function desenharMapaResultado() {
   if (!D.mapa) { $("#bloco-mapa").hidden = true; return; }
   const modo = $("#mapa-modo").value || "final";
-  $("#mapa").innerHTML = svgMapa({ modo, cidade: estado.mapaCidade });
+  const reg = regiaoDoMapa();
+  $("#mapa").innerHTML = svgMapa({ modo, cidade: estado.mapaCidade, vb: reg.vb, rotulosDe: reg.cods, selecionado: estado.mapaSel });
+  $$("#regioes-mapa [data-regiao]").forEach((bt) => bt.setAttribute("aria-pressed", String(bt.dataset.regiao === (estado.mapaRegiao || "cidade"))));
+  $("#mapa-info").hidden = !estado.mapaSel;
+  if (estado.mapaSel) {
+    $("#mapa-info").innerHTML = cartaoDoMapa(estado.mapaSel);
+    $("#mapa-info-comparar")?.addEventListener("click", () => { alternarComparar(estado.mapaSel); desenharResultado(); atualizarBarraComparar("resultado"); });
+  }
   // regua 0-10: faixa colorida ocupada pelos bairros, um traco por bairro e a mediana do Rio (5)
   if (svgMapa.faixa) {
     const [a, b] = svgMapa.faixa;
@@ -554,10 +640,22 @@ function desenharMapaResultado() {
   $("#mapa-cidade").textContent = estado.mapaCidade ? "Aproximar dos bairros" : "Ver cidade inteira";
   // com a cidade inteira exibida, o enquadramento inicial ja e a cidade: o botao nao faz sentido
   $("#mapa-cidade").hidden = D.mapa.viewbox_inicial.join() === D.mapa.viewbox_cidade.join();
-  ligarMapa($("#mapa"));
+  // tocar num bairro do mapa do resultado: mostra o cartao embaixo (nao sai da tela)
+  ligarMapa($("#mapa"), (cod) => { estado.mapaSel = cod; desenharMapaResultado(); $("#mapa-info").scrollIntoView({ block: "nearest", behavior: "smooth" }); });
 }
 
 /* ---------------- resultado ---------------- */
+// Grade 3x2 com as 6 notas (cartao compacto da lista)
+function miniNotas(n) {
+  return `<div class="mini-notas">${D.bairros.criterios.map((c) => {
+    const v = n[c];
+    return `<div class="mini-nota" title="${esc(ROTULOS[c])}">
+      <span class="mini-topo">${icone(c)}<strong>${v == null ? "–" : fmtN(v)}</strong></span>
+      <span class="mini-rotulo">${esc(ROTULOS[c])}</span>
+      <span class="barra-fundo" aria-hidden="true"><span class="barra-cheia" style="width:${v == null ? 0 : v * 10}%"></span></span></div>`;
+  }).join("")}</div>`;
+}
+
 function barras(n) {
   return `<div class="barras">${D.bairros.criterios.map((c) => {
     const v = n[c];
@@ -617,14 +715,13 @@ function desenharResultado() {
       <button class="cartao-bairro" data-bairro="${b.codbairro}" aria-label="Ver detalhes de ${esc(b.nome)}">
       <div class="cartao-topo">
         <div class="cartao-id"><span class="posicao">${pos ? "#" + pos : "–"}</span>
-          <div><span class="cartao-nome">${esc(b.nome)}</span><span class="cartao-regiao">${icone("local")}${esc(localTexto(b))}</span></div></div>
+          <div><span class="cartao-nome">${esc(b.nome)}</span><span class="cartao-regiao">${icone("local")}${esc(localTexto(b))}</span>
+            <div class="etiquetas">${tag}${pos ? "" : '<span class="etiqueta etiqueta-neutra">Sem nota final</span>'}</div></div></div>
         <div class="cartao-nota">${anel(n.final, 58)}</div>
       </div>
-      ${blocoBolso(b, c)}
-      ${tag}${pos ? "" : '<span class="etiqueta etiqueta-neutra">Sem nota final</span>'}
-      ${destaques(n)}
-      ${barras(n)}
-      <span class="ver-mais">Ver números e fontes →</span>
+      ${blocoBolsoCompacto(c)}
+      ${miniNotas(n)}
+      <span class="ver-mais">Ver detalhes →</span>
     </button></li>`;
   }).join("") || `<li class="vazio-lista">${busca ? "Nenhum bairro com esse nome." : "Nenhum bairro cabe no orçamento com esses números. Desmarque o filtro ou ajuste a renda, a entrada ou a área."}</li>`;
   const resto = visiveis.length - mostrados.length;

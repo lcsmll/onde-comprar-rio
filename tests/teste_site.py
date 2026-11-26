@@ -96,13 +96,20 @@ def fluxo(page, nome):
     # quanto cabe no bolso
     painel = page.inner_text("#painel-orcamento")
     checar("Seu orçamento" in painel and "Imóvel de até" in painel, "painel de orcamento aparece com renda informada")
-    checar(page.locator(".bolso-linha").count() == page.locator(".cartao-bairro").count(), "cada bairro mostra o bloco do bolso")
+    checar(page.locator(".cartao-bairro .bolso-fino").count() == page.locator(".cartao-bairro").count(), "cada bairro mostra os numeros do bolso")
     page.select_option("#ordenar", "parcela")
-    parcelas = [float(t.split("R$")[1].replace(".", "").replace(",", ".").strip())
-                for t in page.locator(".bolso-linha > div:nth-child(3) strong").all_inner_texts()]
-    checar(parcelas == sorted(parcelas), f"ordenar por menor parcela ({parcelas[:3]}...)")
+    parcelas = [0.0 if "sem financiar" in t else float(t.split("R$")[1].replace(".", "").replace(",", ".").strip())
+                for t in page.locator(".cartao-bairro .bolso-fino > div:nth-child(3) dd").all_inner_texts()]
+    checar(len(parcelas) >= 10 and parcelas == sorted(parcelas), f"ordenar por menor parcela ({parcelas[:3]}...)")
     page.select_option("#ordenar", "nota")
     print("     painel:", " | ".join(painel.split("\n")[:5]))
+
+    # mapa: zoom por regiao e cartao ao tocar num bairro (sem sair da tela)
+    page.click("#regioes-mapa [data-regiao=sul]")
+    checar(page.locator("#mapa .m-rotulos text").count() > 0, "mapa: regiao com zoom mostra nomes")
+    page.locator("#mapa [data-bairro='024']").click()
+    checar(page.is_visible("#tela-resultado") and "Copacabana" in page.inner_text("#mapa-info"), "mapa: tocar mostra o cartao do bairro")
+    page.click("#regioes-mapa [data-regiao=cidade]")
 
     # comparar
     checar(page.is_hidden("#barra-comparar"), "barra de comparar escondida sem selecao")
