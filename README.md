@@ -168,7 +168,7 @@ O resto os scripts baixam sozinhos.
 Os valores do Minha Casa, Minha Vida (faixas de renda, tetos e juros) **não têm API**. Estão transcritos em `etl/10_parametros_financiamento.py` (bloco `MCMV`), com a fonte e a data.
 
 1. Abra https://www.gov.br/cidades/pt-br/acesso-a-informacao/acoes-e-programas/habitacao/programa-minha-casa-minha-vida/mcmv-fgts e veja a data "Atualizado em".
-2. Se mudou desde a data em `pagina_atualizada_em`, atualize as faixas, os tetos e os juros no bloco `MCMV` e as datas `pagina_atualizada_em` e `CONSULTA`.
+2. Se mudou desde a data em `pagina_atualizada_em`, atualize as faixas, os tetos e os juros no bloco `MCMV` e as datas `pagina_atualizada_em` e `CONSULTA`. Confira também a cota máxima (bloco `COTA_MAX`), nas fontes citadas ali.
 3. Rode o ETL. O app, o simulador e as perguntas frequentes leem tudo desse arquivo.
 
 A taxa do SBPE é buscada sozinha na API do Banco Central a cada execução.
@@ -258,6 +258,7 @@ Tudo fica em `etl/config.py`. Depois de mudar, rode o ETL (seção 4.4).
 | Mudar o período (meses) do ISP, do 1746 ou do ITBI | `VIOLENCIA_MESES`, `BARULHO_1746_MESES`, `ITBI_MESES` |
 | Usar outra edição do Ideb | `IDEB_ANO` + `bash etl/ferramentas/baixar_dados.sh` |
 | Mudar o comprometimento de renda (30%) ou os avisos do simulador | `etl/10_parametros_financiamento.py` |
+| Mudar a cota máxima de financiamento (% do imóvel que o banco financia) | bloco `COTA_MAX` em `etl/10_parametros_financiamento.py` |
 | Mudar textos e visual | `site/index.html`, `site/app.js`, `site/style.css` |
 
 As decisões já tomadas, e por quê, estão registradas em `docs/ESCOPO.md`.

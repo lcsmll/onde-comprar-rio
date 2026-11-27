@@ -24,6 +24,49 @@ def checar(cond, msg):
         falhas.append(msg)
 
 
+CASO_COTA = """([r, e, f, chave]) => {
+  estado.renda1 = r; estado.renda2 = 0; estado.rendaTipo = 'unica'; estado.entrada = e; estado.fgts = f;
+  estado.cotista = true; estado.precoMax = 0;
+  const juros = chave === 'sbpe' ? D.params.sbpe.juros_ano : faixaMCMV(r).juros_cotista;
+  const c = capacidade(r, juros, D.params.prazo_padrao_anos, null, chave);
+  const o = orcamento();
+  return {sac: c.sac.preco, price: c.price.preco, limSac: c.sac.limite, limPrice: c.price.limite,
+          cotaSac: c.sac.cota, cotaPrice: c.price.cota, orc: o.precoMax, painel: painelOrcamento(o)};
+}"""
+
+
+def casos_cota(page):
+    """Cota maxima de financiamento: o preco maximo nunca passa de (entrada + FGTS) / (1 - cota)."""
+    page.goto(URL)
+    page.wait_for_selector("#tela-inicio:not([hidden])")
+    caso = lambda r, e, f, chave="sbpe": page.evaluate(CASO_COTA, [r, e, f, chave])
+    cota = page.evaluate("D.params.cota_max")
+
+    c = caso(10000, 0, 0)
+    checar(c["orc"] == 0 and c["sac"] == 0 and c["price"] == 0 and "Sem entrada" in c["painel"],
+           f"cota: renda 10 mil sem entrada nem FGTS -> preco maximo R$ 0 com aviso ({c['orc']:.0f})")
+
+    c = caso(10000, 80000, 0)
+    teto_cota = 80000 / (1 - cota["sbpe"]["sac"])
+    checar(cota["sbpe"]["sac"] == 0.8 and c["sac"] <= teto_cota + 0.01 and c["orc"] <= teto_cota + 0.01,
+           f"cota: renda 10 mil, entrada 80 mil, SBPE SAC 80% -> no maximo R$ 400 mil ({c['sac']:.0f}, painel {c['orc']:.0f})")
+    c = caso(20000, 80000, 0)
+    checar(abs(c["sac"] - 400000) < 1 and c["limSac"] == "entrada" and "Limitado pela sua entrada" in c["painel"],
+           f"cota: renda 20 mil, entrada 80 mil -> SAC travado pela entrada em R$ 400 mil ({c['sac']:.0f})")
+
+    c = caso(30000, 500000, 0)
+    checar(c["limSac"] == "renda" and c["limPrice"] == "renda" and c["sac"] < 500000 / (1 - cota["sbpe"]["sac"]),
+           f"cota: renda alta e entrada alta -> limite e a renda ({c['sac']:.0f} SAC, {c['price']:.0f} Price)")
+
+    c = caso(10000, 80000, 0)
+    checar(c["cotaSac"] != c["cotaPrice"] and abs(c["price"] - 80000 / (1 - cota["sbpe"]["price"])) < 1
+           and c["limPrice"] == "entrada" and c["price"] < c["sac"],
+           f"cota: SAC e Price com cotas diferentes no SBPE ({c['cotaSac']} x {c['cotaPrice']}; Price {c['price']:.0f})")
+    c = caso(9000, 30000, 0, "mcmv")
+    checar(c["cotaSac"] == cota["mcmv"]["sac"] and abs(c["sac"] - 30000 / (1 - cota["mcmv"]["sac"])) < 1,
+           f"cota: MCMV usa a cota do MCMV ({c['cotaSac']}; SAC {c['sac']:.0f})")
+
+
 def fluxo(page, nome):
     page.on("console", lambda m: erros.append(f"[{nome}] console {m.type}: {m.text}") if m.type == "error" else None)
     page.on("pageerror", lambda e: erros.append(f"[{nome}] pageerror: {e}"))
@@ -185,6 +228,13 @@ def fluxo(page, nome):
     page.wait_for_timeout(200)
     checar(page.input_value("#a-aluguel") != "", "valor do aluguel se mantem apos recalcular")
     page.screenshot(path=CAP / f"{nome}_7_simulador.png", full_page=True)
+    # entrada abaixo da cota: alerta com a entrada minima e quanto falta
+    page.fill("#s-preco", "800000")
+    page.fill("#s-entrada", "20000")
+    page.fill("#s-fgts", "0")
+    page.wait_for_timeout(200)
+    res = page.inner_text("#s-resultado").replace("\xa0", " ")
+    checar("Entrada mínima" in res and "faltam" in res, "simulador: entrada abaixo da cota mostra entrada minima e quanto falta")
 
     # sobre
     page.click("text=Sobre os dados")
@@ -221,10 +271,13 @@ def fluxo(page, nome):
     # perguntas frequentes: numeros vindos do JSON
     page.click(".nav-topo >> text=Dúvidas")
     page.wait_for_selector("#tela-perguntas:not([hidden]) .pergunta")
-    checar(page.locator(".pergunta").count() == 15, f"15 perguntas frequentes ({page.locator('.pergunta').count()})")
+    checar(page.locator(".pergunta").count() == 16, f"16 perguntas frequentes ({page.locator('.pergunta').count()})")
     page.locator(".pergunta summary", has_text="Minha Casa").click()
     r = page.locator(".pergunta[open] .resposta").inner_text().replace("\xa0", " ")
     checar("Faixa 3" in r and "R$ 400.000" in r and "SBPE" in r, "resposta do MCMV com faixas e tetos do JSON")
+    page.locator(".pergunta summary", has_text="Preciso dar entrada").click()
+    r = page.locator(".pergunta[open] .resposta").last.inner_text()
+    checar("80%" in r and "70%" in r and "Fonte" in r, "resposta sobre entrada com as cotas do JSON")
 
     # impressao: botoes e cabecalho somem, cabecalho de impressao aparece, detalhes abrem
     page.goto(URL + "#comparar/033,043")
@@ -263,6 +316,7 @@ def main():
         nav = p.chromium.launch(channel="chrome", headless=True)
         cel = nav.new_context(viewport={"width": 390, "height": 844}, device_scale_factor=2,
                               is_mobile=True, has_touch=True, locale="pt-BR")
+        casos_cota(cel.new_page())
         fluxo(cel.new_page(), "celular")
         pc = nav.new_context(viewport={"width": 1280, "height": 900}, locale="pt-BR")
         fluxo(pc.new_page(), "computador")

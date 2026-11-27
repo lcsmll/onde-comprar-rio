@@ -240,6 +240,7 @@ O que veio da tela 2 (renda, FGTS, entrada), mais:
   - no **SAC**, a 1ª parcela é a maior, então o limite é calculado para que ela caiba;
   - na **Price**, pela fórmula inversa.
 - **Preço máximo do imóvel** = financiamento máximo + entrada + FGTS, limitado pela **cota máxima de financiamento** e pelo teto da faixa do MCMV.
+  - **Atualizado em 27/11/2026 (seção 23):** a cota foi encontrada em fonte oficial e passou a ser aplicada.
   - **[DECIDIR] F:** ainda não achei a cota máxima (% do imóvel que o banco financia) em fonte oficial aberta. Na Etapa 3 procuro na Caixa e no Ministério. Se não achar, o simulador fica **sem** esse limite e mostra o aviso "o banco pode exigir entrada maior". Tudo bem?
 - **Renda somada:** o simulador mostra lado a lado "só comprador 1" e "comprador 1 + 2": parcela máxima, faixa ou linha, preço máximo e a diferença.
 
@@ -447,3 +448,16 @@ Motivo: a Tijuca aparecia com segurança pior que a Penha (5,7 x 6,5) e transpor
 - **Cartão compacto** na lista: de 547 px para 330 px de altura no celular (cerca de 2,5 cartões por tela). Nome, zona, etiqueta de orçamento e nota no topo; faixa fina com m², quanto cabe e 1ª parcela; as 6 notas numa grade 3x2 (ícone, valor e barrinha). Destaque e atenção saíram do cartão (continuam no detalhe). No computador, a lista vira duas colunas. Quando entrada + FGTS pagam o imóvel inteiro, a parcela aparece como "sem financiar".
 - **Mapa com regiões:** botões Cidade toda, Centro, Zona Sul, Zona Norte, Barra e Jacarepaguá, Zona Oeste (agrupamento das Regiões de Planejamento do IPP). Na cidade toda, 107 dos 163 bairros tinham menos de 12 px na tela; com a região, o tamanho típico passa de ~10 px para ~22 px. Na região, aparecem os nomes que cabem dentro do bairro (sem sobreposição, letra de ~14 px), e os destaques "maior nota / menor nota" passam a ser os da região. O enquadramento ignora ilhas pequenas (ex.: Cagarras).
 - **Tocar num bairro do mapa** mostra um cartão logo abaixo (nome, nota, "Ver detalhes" e "Comparar") em vez de sair da tela; o bairro escolhido fica contornado.
+
+## 23. Cota máxima de financiamento (27/11/2026)
+
+- **Problema:** o preço máximo era "financiamento que cabe em 30% da renda + entrada + FGTS", sem a cota (parte do imóvel que o banco financia). Com entrada zero, o app mostrava preços que nenhum banco aprova (renda de R$ 10 mil e nenhuma entrada: R$ 279 mil). A decisão F (seção 6.4) dizia que não havia fonte oficial; havia.
+- **Fontes encontradas** (detalhes em `FONTES.md`, seção 7):
+  - SBPE (Caixa): 80% no SAC e 70% na Price, CAIXA Notícias de 10/10/2025 e 09/12/2025 (em vigor desde 13/10/2025).
+  - MCMV (FGTS): entrada mínima de 20% (cota de 80%), que o banco pode reduzir a 10% no SAC. IN 48/2022 do Ministério das Cidades, art. 34, compilada em 09/04/2026.
+  - Pró-Cotista: 90% no SAC e 80% na Price (página Financiamentos do FGTS); 50% no usado (IN 30/2024). As notícias que falavam em 80% e 60% não têm fonte oficial e não foram usadas.
+- **Decisões (usuário, 27/11/2026):**
+  - MCMV usa **80% no SAC e na Price** (a regra geral do art. 34, que vale em qualquer caso). O texto avisa que no SAC o banco pode aceitar 10% de entrada e que no usado do Sul e Sudeste a cota é menor (65% na faixa de renda de R$ 4.700,01 a R$ 8.600 e 60% na Classe Média). O app não pergunta se o imóvel é novo ou usado.
+  - Pró-Cotista fica registrado no JSON com os números do FGTS, só para o texto (o app não simula essa linha).
+- **Regra no app:** preço máximo = o **menor** entre (a) financiamento que cabe em 30% da renda + entrada + FGTS, (b) (entrada + FGTS) ÷ (1 − cota) e (c) o teto do MCMV, quando for o caso. A tela diz qual dos três travou o valor. O simulador avisa quando a entrada fica abaixo da mínima (com o valor em reais e quanto falta) e mostra a linha "Entrada mínima" nos custos. Vale para o painel "Seu orçamento", o "Quanto cabe" de cada bairro, a tabela "Renda única x somada" e o simulador.
+- **Dados:** bloco `cota_max` em `parametros_financiamento.json` (por linha e sistema, com fonte, link e data), gerado por `etl/10_parametros_financiamento.py`. Nova pergunta frequente "Preciso dar entrada? De quanto?" e fontes da cota em "Sobre os dados".

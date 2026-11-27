@@ -191,10 +191,12 @@ function orcamento() {
   const opcoes = [];
   if (f) {
     const j = estado.cotista ? f.juros_cotista : f.juros_nao_cotista;
-    opcoes.push({ linha: "MCMV - " + f.faixa, juros: j, preco: capacidade(renda, j, anos, f.teto_imovel).precoSac });
+    const c = capacidade(renda, j, anos, f.teto_imovel, "mcmv").sac;
+    opcoes.push({ linha: "MCMV - " + f.faixa, juros: j, preco: c.preco, lim: c, teto: f.teto_imovel });
   }
   const js = D.params.sbpe.juros_ano;
-  opcoes.push({ linha: "SBPE", juros: js, preco: capacidade(renda, js, anos, null).precoSac });
+  const c = capacidade(renda, js, anos, null, "sbpe").sac;
+  opcoes.push({ linha: "SBPE", juros: js, preco: c.preco, lim: c, teto: null });
   const melhor = opcoes.reduce((a, o) => (o.preco > a.preco ? o : a));
   const limiteUsuario = estado.precoMax || null;
   return { renda, anos, pmax: renda * D.params.comprometimento_renda_max, opcoes, melhor,
@@ -254,7 +256,7 @@ function painelOrcamento(orc) {
     </div>
     <p class="pequeno">Renda de ${fmtR(orc.renda)} · entrada + FGTS de ${fmtR(recursos)} · SAC em ${orc.anos} anos a
       ${fmtN(orc.melhor.juros, 2)}% ao ano · parcela de até ${P.comprometimento_renda_max * 100}% da renda.
-      ${orc.limiteUsuario && orc.limiteUsuario < orc.melhor.preco ? `Limitado ao preço máximo que você definiu (${fmtR(orc.limiteUsuario)}).` : ""}
+      ${orc.limiteUsuario && orc.limiteUsuario < orc.melhor.preco ? `Limitado ao preço máximo que você definiu (${fmtR(orc.limiteUsuario)}).` : esc(textoLimite(orc.melhor.lim, orc.melhor.teto))}
       ${P.simplificacoes}</p>
   </div>`;
 }
@@ -1099,16 +1101,44 @@ function faixaMCMV(renda) {
 function linha(renda, preco) {
   const f = faixaMCMV(renda);
   if (f && (preco == null || preco <= f.teto_imovel)) {
-    return { nome: "MCMV - " + f.faixa, juros: estado.cotista ? f.juros_cotista : f.juros_nao_cotista, teto: f.teto_imovel, faixa: f };
+    return { nome: "MCMV - " + f.faixa, chave: "mcmv", juros: estado.cotista ? f.juros_cotista : f.juros_nao_cotista, teto: f.teto_imovel, faixa: f };
   }
-  return { nome: "SBPE", juros: D.params.sbpe.juros_ano, teto: null, faixa: f };
+  return { nome: "SBPE", chave: "sbpe", juros: D.params.sbpe.juros_ano, teto: null, faixa: f };
 }
 
-function capacidade(renda, juros, anos, teto) {
+// Cota maxima de financiamento (parte do imovel que o banco financia), por linha ("sbpe", "mcmv")
+// e sistema ("sac", "price"). Vem do JSON, com a fonte.
+const cotaDe = (chave, sistema) => D.params.cota_max[chave][sistema];
+const pctTxt = (x) => fmtN(x * 100, 0) + "%";
+
+// Preco maximo = o MENOR entre:
+//  - "renda":   financiamento cuja parcela cabe na renda + entrada + FGTS
+//  - "entrada": (entrada + FGTS) / (1 - cota), porque o banco so financia a cota do imovel
+//  - "teto":    teto do MCMV, quando houver
+function limitePreco(financiavel, recursos, cota, teto) {
+  const op = [["renda", financiavel + recursos], ["entrada", recursos / (1 - cota)]];
+  if (teto) op.push(["teto", teto]);
+  const [limite, preco] = op.reduce((a, o) => (o[1] < a[1] ? o : a));
+  return { preco, limite, cota };
+}
+
+function capacidade(renda, juros, anos, teto, chave) {
   const pmax = renda * D.params.comprometimento_renda_max, i = taxaMensal(juros), n = anos * 12;
   const recursos = estado.entrada + estado.fgts;
-  const lim = (v) => (teto ? Math.min(v, teto) : v);
-  return { pmax, precoSac: lim(maxSac(pmax, i, n) + recursos), precoPrice: lim(maxPrice(pmax, i, n) + recursos) };
+  const sacL = limitePreco(maxSac(pmax, i, n), recursos, cotaDe(chave, "sac"), teto);
+  const priceL = limitePreco(maxPrice(pmax, i, n), recursos, cotaDe(chave, "price"), teto);
+  return { pmax, recursos, sac: sacL, price: priceL, precoSac: sacL.preco, precoPrice: priceL.preco };
+}
+
+// Frase que diz qual limite travou o preco maximo
+function textoLimite(l, teto) {
+  if (l.limite === "entrada") {
+    return l.preco > 0
+      ? `Limitado pela sua entrada: com cota de ${pctTxt(l.cota)}, a entrada (dinheiro + FGTS) precisa ser de pelo menos ${pctTxt(1 - l.cota)} do imóvel.`
+      : `Sem entrada não dá para financiar: o banco financia até ${pctTxt(l.cota)} do imóvel, então a entrada (dinheiro + FGTS) precisa ser de pelo menos ${pctTxt(1 - l.cota)}.`;
+  }
+  if (l.limite === "teto") return `Limitado ao teto do MCMV (${fmtR(teto)}).`;
+  return `Limitado pela sua renda: a parcela cabe em até ${pctTxt(D.params.comprometimento_renda_max)} da renda.`;
 }
 
 function desenharSimulador() {
@@ -1161,11 +1191,23 @@ function calcular(preco, renda, anos, juros, lin, b) {
   if (lin.faixa && ["Faixa 1", "Faixa 2"].includes(lin.faixa.faixa) && lin.nome !== "SBPE") alertas.push(P.mcmv.subsidio_texto);
   if (pmax && s.primeira > pmax) alertas.push(`A 1ª parcela no SAC (${fmtR(s.primeira)}) passa de ${P.comprometimento_renda_max * 100}% da renda (${fmtR(pmax)}).`);
   if (pmax && pr.primeira > pmax) alertas.push(`A parcela na Price (${fmtR(pr.primeira)}) passa de ${P.comprometimento_renda_max * 100}% da renda.`);
+  // cota: o banco so financia uma parte do imovel; o resto e a entrada minima (dinheiro + FGTS)
+  const recursos = estado.entrada + estado.fgts;
+  const cotas = { sac: cotaDe(lin.chave, "sac"), price: cotaDe(lin.chave, "price") };
+  const entMin = { sac: preco * (1 - cotas.sac), price: preco * (1 - cotas.price) };
+  const passa = ["sac", "price"].filter((k) => preco && recursos < entMin[k] - 0.5);
+  const nomeSis = { sac: "no SAC", price: "na Price" };
+  const grupos = cotas.sac === cotas.price ? (passa.length ? [passa] : []) : passa.map((k) => [k]);
+  for (const g of grupos) {
+    const k = g[0], onde = g.map((x) => nomeSis[x]).join(" e ");
+    alertas.push(`O banco financia até ${pctTxt(cotas[k])} do imóvel ${onde} (${fmtR(preco * cotas[k])}). ` +
+      `A entrada mínima (dinheiro + FGTS) é de ${fmtR(entMin[k])}; você tem ${fmtR(recursos)}, faltam ${fmtR(entMin[k] - recursos)}.`);
+  }
 
   // renda unica x somada
   let comparaRenda = "";
   if (estado.rendaTipo === "somada" && estado.renda1 && estado.renda2) {
-    const linhaPara = (r) => { const l = linha(r, null); return { l, c: capacidade(r, l.juros, anos, l.teto) }; };
+    const linhaPara = (r) => { const l = linha(r, null); return { l, c: capacidade(r, l.juros, anos, l.teto, l.chave) }; };
     const a = linhaPara(estado.renda1), t = linhaPara(estado.renda1 + estado.renda2);
     comparaRenda = `<div class="bloco"><h3>Renda única x somada</h3>
       <div class="rolagem"><table class="tabela"><thead><tr><th></th><th>Só comprador 1</th><th>Os dois</th></tr></thead><tbody>
@@ -1175,9 +1217,10 @@ function calcular(preco, renda, anos, juros, lin, b) {
          ["Preço máximo (Price)", a.c.precoPrice, t.c.precoPrice]].map(([r, x, y]) =>
         `<tr><td>${r}</td><td>${fmtR(x)}</td><td>${fmtR(y)}<br><span class="pequeno">+${fmtR(y - x)}</span></td></tr>`).join("")}
       <tr><td>Linha provável</td><td style="white-space:normal">${esc(a.l.nome)}</td><td style="white-space:normal">${esc(t.l.nome)}</td></tr>
-      </tbody></table></div><p class="pequeno">Cada coluna usa a linha provável daquela renda; o preço máximo respeita o teto do MCMV quando for o caso.</p></div>`;
+      </tbody></table></div><p class="pequeno">Cada coluna usa a linha provável daquela renda; o preço máximo respeita a cota de financiamento e o teto do MCMV quando for o caso.</p></div>`;
   }
-  const cap = renda ? capacidade(renda, juros, anos, lin.teto) : null;
+  const cap = renda ? capacidade(renda, juros, anos, lin.teto, lin.chave) : null;
+  const fonteCota = P.cota_max[lin.chave];
 
   $("#s-resultado").innerHTML = `
     <div class="bloco"><h3>Linha provável: ${esc(lin.nome)} · ${fmtN(juros, 2)}% ao ano</h3>
@@ -1195,16 +1238,22 @@ function calcular(preco, renda, anos, juros, lin, b) {
     </div>
     ${cap ? `<div class="bloco"><h3>Quanto cabe na sua renda</h3>
       <p>Parcela máxima (${P.comprometimento_renda_max * 100}% da renda): <strong>${fmtR(cap.pmax)}</strong></p>
-      <p>Preço máximo do imóvel: <strong>${fmtR(cap.precoSac)}</strong> no SAC · <strong>${fmtR(cap.precoPrice)}</strong> na Price${lin.teto ? ` (limitado ao teto de ${fmtR(lin.teto)})` : ""}.</p>
-      <p class="pequeno">${esc(P.comprometimento_renda_texto)} ${esc(P.cota_max_texto)}</p></div>` : ""}
+      <p>Preço máximo do imóvel: <strong>${fmtR(cap.precoSac)}</strong> no SAC · <strong>${fmtR(cap.precoPrice)}</strong> na Price.</p>
+      ${cap.sac.limite === cap.price.limite && cap.sac.cota === cap.price.cota
+        ? `<p class="pequeno">${esc(textoLimite(cap.sac, lin.teto))}</p>`
+        : `<p class="pequeno">SAC: ${esc(textoLimite(cap.sac, lin.teto))}</p><p class="pequeno">Price: ${esc(textoLimite(cap.price, lin.teto))}</p>`}
+      <p class="pequeno">${esc(P.comprometimento_renda_texto)} ${esc(fonteCota.texto)} Fonte: ${esc(fonteCota.fonte)}.</p></div>` : ""}
     ${comparaRenda}
     <div class="bloco"><h3>Custos para fechar a compra</h3>
       <div class="rolagem"><table class="tabela"><tbody>
+        ${(cotas.sac === cotas.price ? [["", "sac"]] : [[" no SAC", "sac"], [" na Price", "price"]]).map(([onde, k]) =>
+          `<tr><td>Entrada mínima${onde} (${pctTxt(1 - cotas[k])})</td><td>${fmtR(entMin[k])}</td></tr>`).join("")}
         <tr><td>Entrada (dinheiro)</td><td>${fmtR(estado.entrada)}</td></tr>
         <tr><td>ITBI (${fmtN(P.itbi.aliquota * 100, 0)}%)</td><td>${fmtR(itbi)}</td></tr>
         ${P.custos_sem_valor.map((c) => `<tr><td>${esc(c.item)}</td><td>consulte</td></tr>`).join("")}
         <tr><th>Dinheiro necessário (sem cartório e avaliação)</th><th>${fmtR(estado.entrada + itbi)}</th></tr>
       </tbody></table></div>
+      <p class="pequeno">A entrada mínima pode ser paga com dinheiro e FGTS (${esc(lin.nome)}: o banco financia até ${pctTxt(cotas.sac)} no SAC e ${pctTxt(cotas.price)} na Price).</p>
       <p class="pequeno">ITBI: ${esc(P.itbi.nota)} Fonte: ${esc(P.itbi.fonte)}.</p>
       ${P.custos_sem_valor.map((c) => `<p class="pequeno">${esc(c.item)}: ${esc(c.texto)}</p>`).join("")}
     </div>
@@ -1267,6 +1316,12 @@ function desenharPerguntas() {
       Fora dessas condições, a linha comum é o SBPE (no app: ${fmtN(P.sbpe.juros_ano, 2)}% ao ano, média da Caixa no Banco Central em ${esc(P.sbpe.mes)}).`],
     ["SAC ou Price: qual escolher?",
      "No SAC, você paga a mesma amortização todo mês, então a parcela começa maior e vai caindo, e o total de juros é menor. Na Price, a parcela é fixa: começa menor, mas o total de juros é maior. O simulador mostra os dois lado a lado. Os bancos costumam aprovar o valor pela 1ª parcela, que no SAC é a maior."],
+    ["Preciso dar entrada? De quanto?",
+     `Sim. O banco financia só uma parte do valor do imóvel (a cota); o resto é a entrada, que pode ser paga com dinheiro e FGTS.
+      <ul><li><strong>SBPE (Caixa)</strong>: financia até ${pct(P.cota_max.sbpe.sac)} no SAC e ${pct(P.cota_max.sbpe.price)} na Price, então a entrada é de pelo menos ${pct(1 - P.cota_max.sbpe.sac)} ou ${pct(1 - P.cota_max.sbpe.price)}. Fonte: ${esc(P.cota_max.sbpe.fonte)}.</li>
+      <li><strong>Minha Casa, Minha Vida</strong>: financia até ${pct(P.cota_max.mcmv.sac)}, então a entrada é de pelo menos ${pct(1 - P.cota_max.mcmv.sac)}. ${esc(P.cota_max.mcmv.texto)} Fonte: ${esc(P.cota_max.mcmv.fonte)}.</li>
+      <li><strong>Pró-Cotista</strong>: ${esc(P.cota_max.pro_cotista.texto)}</li></ul>
+      Por isso, sem entrada o preço máximo é zero, mesmo com renda alta. Outros bancos podem ter cotas diferentes.`],
     ["Quanto da renda posso comprometer com a parcela?",
      `O app usa até ${pct(P.comprometimento_renda_max)} da renda bruta. ${esc(P.comprometimento_renda_texto)} Cada banco faz a própria análise.`],
     ["Posso usar o FGTS?",
@@ -1324,7 +1379,9 @@ function desenharSobre() {
     <div class="sobre-fonte"><h3>Simulador</h3>
       <ul><li>${esc(P.mcmv.fonte)}, página atualizada em ${fmtData(P.mcmv.pagina_atualizada_em)} · <a href="${esc(P.mcmv.url)}" target="_blank" rel="noopener noreferrer">link</a></li>
       <li>${esc(P.sbpe.fonte)}, ${esc(P.sbpe.mes)} · <a href="${esc(P.sbpe.url)}" target="_blank" rel="noopener noreferrer">link</a></li>
-      <li>${esc(P.itbi.fonte)} · <a href="${esc(P.itbi.url)}" target="_blank" rel="noopener noreferrer">link</a></li></ul>
+      <li>${esc(P.itbi.fonte)} · <a href="${esc(P.itbi.url)}" target="_blank" rel="noopener noreferrer">link</a></li>
+      ${["sbpe", "mcmv", "pro_cotista"].map((k) => `<li>Cota de financiamento: ${esc(P.cota_max[k].fonte)} · <a href="${esc(P.cota_max[k].url)}" target="_blank" rel="noopener noreferrer">link</a></li>`).join("")}</ul>
+      <p class="pequeno">${esc(P.cota_max_texto)}</p>
       <p class="pequeno">${esc(P.mcmv.divergencia)}</p><p class="pequeno">${esc(P.simplificacoes)}</p></div>
     <div class="sobre-fonte"><h3>Imóveis e anúncios</h3>
       <p class="pequeno">Imóveis da Caixa: lista oficial de imóveis retomados (venda direta e leilão)${D.caixa.data_lista ? `, de ${fmtData(D.caixa.data_lista)}` : ""}.

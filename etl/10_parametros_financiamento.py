@@ -6,6 +6,7 @@
 - Taxa SBPE padrao: buscada automaticamente na API de taxas de juros do Banco Central
   (media das operacoes contratadas da Caixa no ultimo mes publicado).
 - ITBI: aliquota da Prefeitura (Carioca Digital).
+- Cota maxima de financiamento (COTA_MAX): por linha e sistema, com fonte. Conferir junto com o MCMV.
 """
 import json
 from datetime import date
@@ -57,6 +58,54 @@ MCMV = {
 }
 
 
+# Cota maxima de financiamento: % do valor do imovel que o banco financia (o resto e a entrada,
+# em dinheiro e/ou FGTS). Uma por linha e por sistema de amortizacao, cada uma com a fonte oficial.
+# Decisao do usuario (27/11/2026): MCMV com 80% no SAC e na Price (regra geral da IN 48/2022, art. 34),
+# Pro-Cotista registrado com os numeros da pagina do FGTS (o app nao simula essa linha).
+URL_CAIXA_SBPE = ("https://caixanoticias.caixa.gov.br/Paginas/Not%C3%ADcias/2025/12-DEZEMBRO/"
+                  "CAIXA-volta-a-permitir-mais-de-um-financiamento--imobiliario-pelo-SBPE.aspx")
+URL_IN48 = ("https://www.gov.br/cidades/pt-br/acesso-a-informacao/institucional/base-juridica/"
+            "instrucoes-normativas/IN_48_de_19.12.22__compilada_em_09.04.2026_.pdf")
+URL_IN30 = ("https://www.gov.br/cidades/pt-br/acesso-a-informacao/institucional/base-juridica/"
+            "instrucoes-normativas/20251118_INSTRUO_NORMATIVA_N._30__COMPILADA.pdf")
+URL_CLASSE_MEDIA = ("https://www.gov.br/cidades/pt-br/acesso-a-informacao/acoes-e-programas/habitacao/"
+                    "programa-minha-casa-minha-vida/minha-casa-minha-vida-classe-media/minha-casa-minha-vida-classe-media-1")
+URL_FGTS_FIN = "https://www.fgts.gov.br/Paginas/subpaginas/financiamentos.aspx"
+
+COTA_MAX = {
+    "sbpe": {
+        "sac": 0.80, "price": 0.70,
+        "fonte": "CAIXA Notícias: \"CAIXA volta a permitir mais de um financiamento imobiliário pelo SBPE\" (09/12/2025)",
+        "url": URL_CAIXA_SBPE, "data": "2025-12-09", "consultado_em": "2026-11-27",
+        "texto": "A Caixa financia pelo SBPE até 80% do valor do imóvel no SAC e até 70% na Price "
+                 "(regra em vigor desde 13/10/2025). Outros bancos podem ter cotas diferentes.",
+    },
+    "mcmv": {
+        "sac": 0.80, "price": 0.80,
+        "fonte": "Ministério das Cidades: Instrução Normativa nº 48/2022, art. 34 (versão compilada em 09/04/2026)",
+        "url": URL_IN48, "data": "2026-04-09", "consultado_em": "2026-11-27",
+        "texto": "No Minha Casa, Minha Vida (FGTS), a entrada mínima é de 20% do valor do imóvel, ou seja, "
+                 "o financiamento vai até 80%. No SAC, o banco pode aceitar entrada de até 10%; o app usa os 20%, "
+                 "que valem em qualquer caso. Para imóvel usado no Sul e no Sudeste a cota é menor: 65% para renda "
+                 "de R$ 4.700,01 a R$ 8.600 (IN 30/2024, orçamento do FGTS de 2025) e 60% na Classe Média.",
+        "usado_sudeste": [
+            {"linha": "Renda de R$ 4.700,01 a R$ 8.600", "cota": 0.65,
+             "fonte": "IN 30/2024, art. 3º (orçamento do FGTS de 2025)", "url": URL_IN30},
+            {"linha": "Classe Média", "cota": 0.60,
+             "fonte": "IN 30/2024, art. 5º-A, e página da Classe Média", "url": URL_CLASSE_MEDIA},
+        ],
+    },
+    "pro_cotista": {
+        "sac": 0.90, "price": 0.80,
+        "fonte": "FGTS: página Financiamentos, Programa Pró-Cotista",
+        "url": URL_FGTS_FIN, "data": None, "consultado_em": "2026-11-27",
+        "texto": "Pró-Cotista: até 90% do valor de avaliação no SAC e 80% na Price. Para imóvel usado, "
+                 "até 50% (IN 30/2024, art. 4º). O app não simula esta linha.",
+        "usado": {"cota": 0.50, "fonte": "IN 30/2024, art. 4º, parágrafo único", "url": URL_IN30},
+    },
+}
+
+
 def taxa_sbpe_bcb():
     """Ultimo mes publicado: taxa media anual da Caixa, credito imobiliario a taxas de mercado, TR."""
     from urllib.parse import quote  # a API do BCB exige espacos como %20 (nao aceita "+")
@@ -101,14 +150,19 @@ def main():
             "O imóvel deve ser residencial e estar dentro das regras do SFH.",
         ],
         "simplificacoes": "Sem TR, sem seguros obrigatórios (MIP e DFI) e sem tarifas mensais: os valores reais ficam um pouco maiores.",
-        "cota_max_financiamento": None,
-        "cota_max_texto": "O banco pode exigir entrada maior; este app não aplica limite de cota por falta de fonte oficial aberta.",
+        "cota_max": COTA_MAX,
+        "cota_max_texto": "O banco financia só uma parte do imóvel (a cota); o resto é a entrada, em dinheiro e FGTS. "
+                          "O app usa a cota da Caixa no SBPE (80% no SAC e 70% na Price, CAIXA Notícias, dez/2025) "
+                          "e a do Minha Casa, Minha Vida (80%, IN 48/2022 do Ministério das Cidades). "
+                          "Imóvel usado e outros bancos podem exigir entrada maior.",
         "aluguel_aviso": "Comparação simples: não considera valorização do imóvel, reajuste do aluguel nem rendimento "
                          "da entrada se ela ficasse aplicada.",
     }
     (SITE_DATA / "parametros_financiamento.json").write_text(json.dumps(p, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Taxa SBPE padrao: {sbpe['juros_ano']}% a.a. ({sbpe['banco']}, {sbpe['mes']})")
     print(f"MCMV: {len(MCMV['faixas'])} sub-faixas; pagina do Ministerio de {MCMV['pagina_atualizada_em']}")
+    for k, c in COTA_MAX.items():
+        print(f"Cota {k}: SAC {c['sac']:.0%}, Price {c['price']:.0%}")
     print("Gravado site/data/parametros_financiamento.json")
 
 
