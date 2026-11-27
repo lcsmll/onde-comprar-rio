@@ -132,27 +132,20 @@ FAVELA_CORTE_PCT = 50
 CRITERIOS_SUBNOTIFICADOS = ["violencia", "barulho"]
 
 # ---------------------------------------------------------------------------
-# Seguranca com dados insuficientes (decisao do usuario, 27/11/2026)
+# Seguranca com dados insuficientes (decisao do usuario, 27/11/2026; revista no mesmo dia)
 # A taxa da delegacia (CISP) e crimes / moradores da CISP inteira. Ela nao representa um bairro
-# separado fisicamente da area principal da sua delegacia, nem um bairro com poucos moradores
-# perto do total da delegacia. Nesses bairros, Seguranca fica como "dados insuficientes", o bairro
-# nao recebe nota final nem posicao no ranking (mesmo caminho da subnotificacao em favela) e sai da
-# base de comparacao de Seguranca. Os outros criterios continuam.
+# SEPARADO FISICAMENTE da area principal da sua delegacia (ilha). Nesses bairros, Seguranca fica como
+# "dados insuficientes", o bairro nao recebe nota final nem posicao no ranking (mesmo caminho da
+# subnotificacao em favela) e sai da base de comparacao de Seguranca. Os outros criterios continuam.
+# Ser pequeno perto da delegacia NAO entra aqui: todo bairro usa a taxa da delegacia inteira, seja
+# 4% ou 30% dela (ver docs/ESCOPO.md, secao 25).
 # Chave = nome exato do bairro na malha oficial; valor = motivo (aparece no site).
-# Candidatos levantados em 27/11/2026: bairro separado da area principal da sua CISP ou com menos de
-# 5% dos moradores dela (ver docs/ESCOPO.md, secao 24).
 # ---------------------------------------------------------------------------
-_MOTIVO_POUCOS = ("os moradores do bairro são menos de 5% dos moradores da área da sua delegacia, "
-                  "então a taxa reflete sobretudo os outros bairros da delegacia")
 BAIRROS_SEGURANCA_INSUFICIENTE = {
     "Paquetá": "Paquetá é uma ilha e fica na área da 5ª DP, a mesma do Centro. A taxa da delegacia reflete "
                "o movimento do Centro, não o da ilha",
     "Cidade Universitária": "a Cidade Universitária é uma ilha separada do resto da área da 37ª DP (Ilha do "
                             "Governador), e seus moradores são menos de 1% dos moradores da delegacia",
-    **{nome: _MOTIVO_POUCOS for nome in [
-        "Grumari", "Camorim", "Argentino", "Joá", "Campo dos Afonsos", "Zumbi", "Jabour", "Ribeira",
-        "Barra de Guaratiba", "Ilha de Guaratiba", "Cocotá", "Praia da Bandeira", "Moneró",
-        "Engenheiro Leal", "Parque Colúmbia", "Deodoro", "Gardênia Azul", "Gericinó"]},
 }
 
 # ---------------------------------------------------------------------------

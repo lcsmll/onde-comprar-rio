@@ -963,13 +963,19 @@ function fmtMediana(i) {
   return fmtValor({ ...i, valor: i.mediana_cidade });
 }
 
+// delegacia onde mora a maior parte do bairro (a lista do JSON vem em ordem de numero da CISP)
+function cispPrincipal(b) {
+  const l = b.criterios.violencia.cisps || [];
+  return l.length ? l.reduce((a, x) => (x.pct_pop > a.pct_pop ? x : a)).cisp : null;
+}
+
 function blocoCriterio(b, c, n) {
   const cr = b.criterios[c];
   let extra = "";
   if (c === "violencia" && cr.cisps?.length) {
     const lista = cr.cisps.map((x) => `${x.cisp}ª DP (${fmtN(x.pct_pop * 100, 0)}% dos moradores)`).join(", ");
-    const vizinhos = D.bairros.bairros.filter((o) => o.codbairro !== b.codbairro &&
-      o.criterios.violencia.cisps?.[0]?.cisp === cr.cisps[0].cisp).map((o) => o.nome);
+    const principal = cispPrincipal(b);
+    const vizinhos = D.bairros.bairros.filter((o) => o.codbairro !== b.codbairro && cispPrincipal(o) === principal).map((o) => o.nome);
     extra = `<p class="pequeno">Área de delegacia: ${lista}.${vizinhos.length ? ` Mesma delegacia principal de: ${esc(vizinhos.join(", "))}.` : ""}</p>`;
   }
   if (c === "escolas") {
@@ -1350,7 +1356,7 @@ function desenharPerguntas() {
       São eles: ${esc(D.bairros.subnotificacao.bairros.join(", "))}.</p>
       ${D.bairros.seguranca_insuficiente.bairros.length ? `<p>Em outros ${D.bairros.seguranca_insuficiente.bairros.length} bairros, só Segurança fica sem nota (e por isso também a nota final):
       a taxa do ISP é calculada para a área inteira da delegacia, e nesses bairros ela não representa bem quem mora ali
-      (bairro separado do resto da delegacia ou com poucos moradores perto do total da delegacia).
+      (bairro separado fisicamente do resto da área da delegacia, como uma ilha).
       São eles: ${esc(D.bairros.seguranca_insuficiente.bairros.map((x) => x.nome).join(", "))}.</p>` : ""}`],
     ["Por que alguns bairros têm aviso de \"muita gente de fora\" em Segurança?",
      `A taxa de crimes é dividida só pelos moradores. Onde muita gente vai trabalhar, comprar ou passear, os roubos de rua acontecem com quem está de passagem,

@@ -270,7 +270,10 @@ def fluxo(page, nome):
 
     # seguranca com dados insuficientes (config BAIRROS_SEGURANCA_INSUFICIENTE): sem nota de seguranca e fora do ranking
     ins = page.evaluate("D.bairros.seguranca_insuficiente.bairros.map(x => x.nome)")
-    checar("Paquetá" in ins, f"Paquetá na lista de seguranca insuficiente ({len(ins)} bairros)")
+    checar(sorted(ins) == ["Cidade Universitária", "Paquetá"], f"seguranca insuficiente so nas 2 ilhas ({ins})")
+    com_nota = page.evaluate("""() => ['Engenheiro Leal', 'Zumbi'].map(n => {
+      const b = D.bairros.bairros.find(x => x.nome === n); return b.criterios.violencia.nota != null && notasDoBairro(b).final != null; })""")
+    checar(all(com_nota), "Engenheiro Leal e Zumbi com nota de seguranca e nota final")
     paq = page.evaluate("""(() => { const b = D.bairros.bairros.find(x => x.nome === 'Paquetá');
       return {cod: b.codbairro, nota: b.criterios.violencia.nota, insuf: !!b.criterios.violencia.dados_insuficientes,
               final: notasDoBairro(b).final, barulho: b.criterios.barulho.nota}; })()""")
@@ -289,6 +292,9 @@ def fluxo(page, nome):
     cods = page.evaluate("""(nomes) => nomes.map(n => D.bairros.bairros.find(b => b.nome === n).codbairro)""", ["Centro", "Tijuca"])
     page.goto(URL + "#bairro/" + cods[0])
     page.wait_for_selector(".perfil-bairro")
+    det = page.inner_text("#tela-bairro")
+    checar("Mesma delegacia principal de:" in det and "Lapa" in det and "5ª DP (76%" in det,
+           "Centro: delegacia principal (5ª DP) e bairros que dividem a delegacia")
     checar("muita gente de fora" in page.inner_text("#tela-bairro") and page.locator(".detalhe-nota .anel-valor").inner_text() != "-",
            "Centro: aviso de gente de fora no detalhe, com nota final")
     page.goto(URL + "#comparar/" + ",".join(cods))
