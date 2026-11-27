@@ -153,6 +153,7 @@ def main():
                 continue
             notas = {c: b["criterios"][c]["nota"] for c in d["criterios"]}
             final = None if b.get("sem_nota_final") else sum(notas.values()) / len(notas)
+            sem_nota = [ROTULOS[c] for c, v in notas.items() if v is None]
             zona = ZONAS.get(zonas.get(b["regiao"], ""), "Rio de Janeiro")
             fortes = [c for c, v in sorted(((c, v) for c, v in notas.items() if v is not None), key=lambda x: -x[1]) if v >= 6.5][:3]
             desc = (f"{zona}. " + (f"Entre os {N} bairros do Rio, se destaca em {juntar([TXT_FORTE[c] for c in fortes])}. " if fortes else "")
@@ -166,7 +167,8 @@ def main():
             img = pasta / "previa.jpg"
             (pasta / "previa.png").unlink(missing_ok=True)          # versao antiga (PNG)
             foto(cartao_html(b["nome"], f"Bairro · {zona}", final, list(notas.items()), rodape,
-                             "Sem nota final: Segurança e Menos barulho com dados insuficientes (registros oficiais incompletos)."), img)
+                             f"Sem nota final: {juntar(sem_nota)} com dados insuficientes. Veja o motivo no app."
+                             if sem_nota else ""), img)
             (pasta / "index.html").write_text(
                 pagina_html(titulo, desc, url, url + "previa.jpg", f"../../#bairro/{b['codbairro']}", b["nome"]), encoding="utf-8")
             feitas.append((b["nome"], "-" if final is None else fmt(final), img.stat().st_size // 1024))

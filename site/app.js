@@ -706,8 +706,9 @@ function desenharResultado() {
     if (!pos && !jaTitulo) {
       jaTitulo = true;
       titulo = `<li class="titulo-sem-nota"><strong>Bairros sem nota final</strong>
-        <span>Mais da metade dos moradores vive em área de favela (IPP), onde ocorrências e chamados ao 1746 são pouco registrados.
-        Segurança e Menos barulho ficam sem nota; os outros critérios, o preço e o simulador continuam valendo.</span></li>`;
+        <span>Os registros oficiais não representam bem quem mora nestes bairros: em áreas de favela, ocorrências e chamados ao 1746
+        são pouco registrados; em outros, a taxa da delegacia reflete sobretudo outros bairros. Algumas notas ficam sem valor
+        (veja o motivo no detalhe); os outros critérios, o preço e o simulador continuam valendo.</span></li>`;
     }
     const tag = !c ? "" : caro ? `<span class="etiqueta">${orc ? "Acima do que cabe" : "Acima do seu preço máximo"}</span>`
       : orc ? '<span class="etiqueta etiqueta-ok">Cabe no seu bolso</span>' : "";
@@ -758,7 +759,8 @@ function resumoTexto(b, n) {
   } else {
     frases.push("Não fica entre os 35% de resultado mais baixo da cidade em nenhum critério.");
   }
-  if (b.sem_nota_final) frases.push("Segurança e Menos barulho não têm nota neste bairro, porque os registros oficiais (ISP e 1746) tendem a ser incompletos em áreas de favela.");
+  if (b.sem_nota_final) frases.push(b.sem_nota_final_motivo);
+  if (b.criterios.violencia.aviso_publico_de_fora) frases.push(b.criterios.violencia.aviso_publico_de_fora);
   const med = D.bairros.preco_mediana_rs_m2;
   if (b.preco_itbi && med) {
     const dif = (b.preco_itbi.rs_m2 / med - 1) * 100;
@@ -883,6 +885,12 @@ function desenharComparacao(arg) {
     ? `<li><strong>${esc(x.b.nome)}</strong> fica na frente em ${lideres[i].map((c) => TXT_FORTE[c]).join(", ").replace(/, ([^,]*)$/, " e $1")}.</li>`
     : `<li><strong>${esc(x.b.nome)}</strong> não fica na frente em nenhum critério desta comparação.</li>`).join("");
 
+  // avisos que mudam a leitura das notas (sem nota final; muita gente de fora na area da delegacia)
+  const avisosCmp = cols.flatMap((x) => [
+    x.b.sem_nota_final ? `<p class="aviso"><strong>${esc(x.b.nome)}:</strong> sem nota final. ${esc(x.b.sem_nota_final_motivo)}</p>` : "",
+    x.b.criterios.violencia.aviso_publico_de_fora ? `<p class="aviso"><strong>${esc(x.b.nome)}, Segurança:</strong> ${esc(x.b.criterios.violencia.aviso_publico_de_fora)}</p>` : "",
+  ]).join("");
+
   alvo.innerHTML = `
     <div class="secao-cab"><p class="sobretitulo">Comparação · ${cols.length} bairros</p><h2>Comparar bairros</h2></div>
     <p class="pequeno">Notas de 0 a 10 (posição entre os bairros do Rio). Em destaque, o melhor de cada linha.</p>
@@ -897,6 +905,7 @@ function desenharComparacao(arg) {
       <div class="cmp-acoes" style="grid-template-columns: var(--cmp-rotulo) repeat(${cols.length}, 1fr)"><span></span>${cols.map((x) => `<div><button class="btn" data-ir="bairro/${x.b.codbairro}">Detalhes</button>
         <button class="btn" data-ir="financiamento/${x.b.codbairro}">Simular</button></div>`).join("")}</div>
     </div>
+    ${avisosCmp ? `<div class="bloco cmp-avisos"><h3>Avisos sobre os dados</h3>${avisosCmp}</div>` : ""}
     <div class="bloco"><h3>Formato de cada bairro</h3>
       <p class="pequeno">Quanto mais longe do centro, melhor a nota naquele critério.</p>
       ${radar(cols.map((x, i) => ({ nome: x.b.nome, notas: x.n, cor: CORES_SERIE[i] })), 340)}</div>
@@ -980,6 +989,7 @@ function blocoCriterio(b, c, n) {
     <td class="num">${i.nota == null ? "-" : fmtN(i.nota)}</td></tr>`).join("");
   const pct = cr.dados_insuficientes ? "Sem nota: dados insuficientes." : n[c] == null ? "" : `Melhor que ${fmtN(n[c] * 10, 0)}% dos bairros do Rio neste critério.`;
   if (cr.dados_insuficientes) extra = `<p class="aviso">${esc(cr.dados_insuficientes)}</p>` + extra;
+  if (cr.aviso_publico_de_fora) extra = `<p class="aviso">${esc(cr.aviso_publico_de_fora)}</p>` + extra;
   return `<div class="criterio"><div class="criterio-topo"><span class="criterio-icone">${icone(c)}</span>
       <div><h3>${ROTULOS[c]}</h3><p class="pequeno">${pct}</p></div>${anel(n[c], 52)}</div>
     <div class="rolagem"><table class="indicadores"><tbody><tr class="pequeno"><td>Indicador</td><td class="num">Valor<br>(mediana da cidade)</td><td class="num">Nota</td></tr>${linhas}</tbody></table></div>
@@ -1039,7 +1049,7 @@ function desenharBairro(cod) {
         <p class="pequeno">Texto gerado a partir das notas e do ITBI; cada número tem a fonte nos blocos abaixo.</p></div>
       ${radar([{ nome: b.nome, notas: n, cor: CORES_SERIE[0] }], 300)}
     </div>
-    ${b.sem_nota_final ? `<p class="aviso">Este bairro não tem nota final nem posição no ranking: ${fmtN(b.pct_favela, 0)}% dos moradores vivem em área de favela (Limite de Favelas 2022, IPP), onde ocorrências e chamados ao 1746 são pouco registrados. Os outros critérios, o preço e o simulador continuam valendo.</p>` : ""}
+    ${b.sem_nota_final ? `<p class="aviso">Este bairro não tem nota final nem posição no ranking. ${esc(b.sem_nota_final_motivo)} Os outros critérios, o preço e o simulador continuam valendo.</p>` : ""}
     ${!estado.perfil && !b.sem_nota_final ? '<p class="destaque">Nota final com todos os critérios com o mesmo peso. <a href="#perfil">Responda as perguntas</a> para ajustar às suas prioridades.</p>' : ""}
     <div class="compartilhar">
       <a class="btn btn-whats" id="whats" target="_blank" rel="noopener noreferrer"
@@ -1334,10 +1344,19 @@ function desenharPerguntas() {
     ["O app guarda ou envia meus dados?",
      "Não. Tudo é calculado no seu aparelho. Renda, entrada e prioridades ficam só na memória da página e somem ao fechar. Os links de compartilhar levam só o bairro (ou o perfil e as prioridades), nunca valores."],
     ["Por que alguns bairros não têm nota final?",
-     `Em ${D.bairros.subnotificacao.bairros.length} bairros, ${D.bairros.subnotificacao.corte_pct}% ou mais dos moradores vivem em área de favela (${esc(D.bairros.subnotificacao.fonte)}).
+     `<p>Em ${D.bairros.subnotificacao.bairros.length} bairros, ${D.bairros.subnotificacao.corte_pct}% ou mais dos moradores vivem em área de favela (${esc(D.bairros.subnotificacao.fonte)}).
       Nessas áreas, boletins de ocorrência e chamados ao 1746 costumam ser pouco registrados, e o app leria "pouco registro" como "pouco problema".
       Por isso esses bairros ficam sem nota de Segurança e de Menos barulho e sem nota final; os outros critérios, o preço e o simulador continuam.
-      São eles: ${esc(D.bairros.subnotificacao.bairros.join(", "))}.`],
+      São eles: ${esc(D.bairros.subnotificacao.bairros.join(", "))}.</p>
+      ${D.bairros.seguranca_insuficiente.bairros.length ? `<p>Em outros ${D.bairros.seguranca_insuficiente.bairros.length} bairros, só Segurança fica sem nota (e por isso também a nota final):
+      a taxa do ISP é calculada para a área inteira da delegacia, e nesses bairros ela não representa bem quem mora ali
+      (bairro separado do resto da delegacia ou com poucos moradores perto do total da delegacia).
+      São eles: ${esc(D.bairros.seguranca_insuficiente.bairros.map((x) => x.nome).join(", "))}.</p>` : ""}`],
+    ["Por que alguns bairros têm aviso de \"muita gente de fora\" em Segurança?",
+     `A taxa de crimes é dividida só pelos moradores. Onde muita gente vai trabalhar, comprar ou passear, os roubos de rua acontecem com quem está de passagem,
+      mas entram na conta como se fossem dos moradores. O app marca as áreas de delegacia em que o roubo de rua passa de ${fmtN(D.bairros.publico_de_fora.fator_mediana, 0)} vezes
+      a mediana dos bairros (${fmtN(D.bairros.publico_de_fora.mediana, 0)} por 100 mil). Hoje isso vale para: ${esc(D.bairros.publico_de_fora.bairros.join(", "))}.
+      A nota não muda; o aviso serve para ler o número com cuidado.`],
     ["Por que meu bairro não aparece?",
      `O app tem ${D.bairros.bairros.filter((b) => b.tem_nota).length} bairros. Ficam de fora os bairros com menos de mil moradores no Censo 2022 (${esc(D.bairros.bairros.filter((b) => !b.tem_nota).map((b) => b.nome).join(", "))}), porque as taxas por habitante ficariam instáveis.`],
     ["De quando são os dados?",

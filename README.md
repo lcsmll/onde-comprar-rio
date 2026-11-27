@@ -36,7 +36,7 @@ fontes oficiais ──> etl/ (Python) ──> site/data/*.json ──> site/ (HT
 ```
 
 - O **ETL** (`etl/`) baixa e trata os dados e calcula os indicadores de **todos os bairros da cidade**, e o site exibe a cidade inteira (`EXIBIR_TODOS = True` em `etl/config.py`). Para voltar a uma lista menor, use `EXIBIR_TODOS = False` e `BAIRROS_MVP_NOMES`.
-- **Bairros sem nota final:** nos bairros com 50% ou mais dos moradores em área de favela (Limite de Favelas 2022, IPP), Segurança e Menos barulho ficam como "dados insuficientes" (boletins de ocorrência e chamados ao 1746 são pouco registrados nessas áreas) e o bairro não entra no ranking. O corte fica em `FAVELA_CORTE_PCT`.
+- **Bairros sem nota final:** nos bairros com 50% ou mais dos moradores em área de favela (Limite de Favelas 2022, IPP), Segurança e Menos barulho ficam como "dados insuficientes" (boletins de ocorrência e chamados ao 1746 são pouco registrados nessas áreas) e o bairro não entra no ranking. O corte fica em `FAVELA_CORTE_PCT`. Também ficam sem nota de Segurança (e sem nota final) os bairros da lista `BAIRROS_SEGURANCA_INSUFICIENTE`, em que a taxa da delegacia não representa os moradores (ex.: Paquetá, ilha na área da delegacia do Centro). Bairros em áreas com muita gente de fora (regra `PUBLICO_DE_FORA`) mantêm a nota, com um aviso.
 - O resultado são arquivos **JSON** em `site/data/`, mais as páginas de prévia em `site/bairro/`.
 - O **site** é estático: lê os JSON e faz as contas no aparelho de quem acessa. Nenhum número de regra fica no código do site. Pesos, faixas do MCMV, juros e ITBI vêm dos JSON.
 - A **publicação** é automática: a cada `git push` na branch `main`, o GitHub publica a pasta `site/`.
@@ -249,6 +249,8 @@ Tudo fica em `etl/config.py`. Depois de mudar, rode o ETL (seção 4.4).
 | Exibir só alguns bairros | `EXIBIR_TODOS = False` e a lista `BAIRROS_MVP_NOMES` (nomes exatos da malha oficial) |
 | Exibir a cidade inteira (atual) | `EXIBIR_TODOS = True` |
 | Mudar o corte de subnotificação (favela) | `FAVELA_CORTE_PCT` e `CRITERIOS_SUBNOTIFICADOS` |
+| Tirar a nota de Segurança de um bairro mal representado pela delegacia | `BAIRROS_SEGURANCA_INSUFICIENTE` (nome do bairro e motivo) |
+| Mudar a regra do aviso "muita gente de fora" | `PUBLICO_DE_FORA` e `PUBLICO_DE_FORA_AVISO` |
 | Mudar os pesos padrão de cada perfil | `PESOS_PERFIL` |
 | Mudar os pesos dentro de segurança | `VIOLENCIA_INDICADORES` (hoje: letalidade 70%, roubos 10% cada) |
 | Mudar como o transporte é medido | `TRANSPORTE_PESOS`, `TRANSPORTE_MODOS_TRILHO` |

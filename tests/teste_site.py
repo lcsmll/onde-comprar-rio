@@ -268,10 +268,38 @@ def fluxo(page, nome):
         checar(page.locator(".detalhe-nota .anel-valor").inner_text() == "-" and page.locator("#tela-bairro .aviso").count() >= 2,
                "bairro sem nota final: sem nota e com explicacao")
 
+    # seguranca com dados insuficientes (config BAIRROS_SEGURANCA_INSUFICIENTE): sem nota de seguranca e fora do ranking
+    ins = page.evaluate("D.bairros.seguranca_insuficiente.bairros.map(x => x.nome)")
+    checar("Paquetá" in ins, f"Paquetá na lista de seguranca insuficiente ({len(ins)} bairros)")
+    paq = page.evaluate("""(() => { const b = D.bairros.bairros.find(x => x.nome === 'Paquetá');
+      return {cod: b.codbairro, nota: b.criterios.violencia.nota, insuf: !!b.criterios.violencia.dados_insuficientes,
+              final: notasDoBairro(b).final, barulho: b.criterios.barulho.nota}; })()""")
+    checar(paq["nota"] is None and paq["insuf"] and paq["final"] is None and paq["barulho"] is not None,
+           "Paquetá: seguranca 'dados insuficientes', sem nota final, outros criterios mantidos")
+    page.goto(URL + "#bairro/" + paq["cod"])
+    page.wait_for_selector(".perfil-bairro")
+    txt = page.inner_text("#tela-bairro")
+    checar("Dados insuficientes" in txt and "ilha" in txt and page.locator(".detalhe-nota .anel-valor").inner_text() == "-",
+           "Paquetá: detalhe explica o motivo e nao mostra nota final")
+
+    # aviso de muita gente de fora: detalhe do bairro e comparacao (nota nao muda)
+    pf = page.evaluate("D.bairros.publico_de_fora")
+    checar({"Centro", "Santo Cristo", "Lapa"} <= set(pf["bairros"]) and "Paquetá" not in pf["bairros"],
+           f"aviso 'gente de fora': {', '.join(pf['bairros'])}")
+    cods = page.evaluate("""(nomes) => nomes.map(n => D.bairros.bairros.find(b => b.nome === n).codbairro)""", ["Centro", "Tijuca"])
+    page.goto(URL + "#bairro/" + cods[0])
+    page.wait_for_selector(".perfil-bairro")
+    checar("muita gente de fora" in page.inner_text("#tela-bairro") and page.locator(".detalhe-nota .anel-valor").inner_text() != "-",
+           "Centro: aviso de gente de fora no detalhe, com nota final")
+    page.goto(URL + "#comparar/" + ",".join(cods))
+    page.wait_for_selector("table.cmp")
+    av = page.inner_text("#comparacao")
+    checar("Centro, Segurança:" in av and "Tijuca, Segurança:" not in av, "comparacao: aviso so no bairro marcado")
+
     # perguntas frequentes: numeros vindos do JSON
     page.click(".nav-topo >> text=Dúvidas")
     page.wait_for_selector("#tela-perguntas:not([hidden]) .pergunta")
-    checar(page.locator(".pergunta").count() == 16, f"16 perguntas frequentes ({page.locator('.pergunta').count()})")
+    checar(page.locator(".pergunta").count() == 17, f"17 perguntas frequentes ({page.locator('.pergunta').count()})")
     page.locator(".pergunta summary", has_text="Minha Casa").click()
     r = page.locator(".pergunta[open] .resposta").inner_text().replace("\xa0", " ")
     checar("Faixa 3" in r and "R$ 400.000" in r and "SBPE" in r, "resposta do MCMV com faixas e tetos do JSON")

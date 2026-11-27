@@ -130,3 +130,37 @@ SITE_URL = "https://lcsmll.github.io/onde-comprar-rio/"
 # ---------------------------------------------------------------------------
 FAVELA_CORTE_PCT = 50
 CRITERIOS_SUBNOTIFICADOS = ["violencia", "barulho"]
+
+# ---------------------------------------------------------------------------
+# Seguranca com dados insuficientes (decisao do usuario, 27/11/2026)
+# A taxa da delegacia (CISP) e crimes / moradores da CISP inteira. Ela nao representa um bairro
+# separado fisicamente da area principal da sua delegacia, nem um bairro com poucos moradores
+# perto do total da delegacia. Nesses bairros, Seguranca fica como "dados insuficientes", o bairro
+# nao recebe nota final nem posicao no ranking (mesmo caminho da subnotificacao em favela) e sai da
+# base de comparacao de Seguranca. Os outros criterios continuam.
+# Chave = nome exato do bairro na malha oficial; valor = motivo (aparece no site).
+# Candidatos levantados em 27/11/2026: bairro separado da area principal da sua CISP ou com menos de
+# 5% dos moradores dela (ver docs/ESCOPO.md, secao 24).
+# ---------------------------------------------------------------------------
+_MOTIVO_POUCOS = ("os moradores do bairro são menos de 5% dos moradores da área da sua delegacia, "
+                  "então a taxa reflete sobretudo os outros bairros da delegacia")
+BAIRROS_SEGURANCA_INSUFICIENTE = {
+    "Paquetá": "Paquetá é uma ilha e fica na área da 5ª DP, a mesma do Centro. A taxa da delegacia reflete "
+               "o movimento do Centro, não o da ilha",
+    "Cidade Universitária": "a Cidade Universitária é uma ilha separada do resto da área da 37ª DP (Ilha do "
+                            "Governador), e seus moradores são menos de 1% dos moradores da delegacia",
+    **{nome: _MOTIVO_POUCOS for nome in [
+        "Grumari", "Camorim", "Argentino", "Joá", "Campo dos Afonsos", "Zumbi", "Jabour", "Ribeira",
+        "Barra de Guaratiba", "Ilha de Guaratiba", "Cocotá", "Praia da Bandeira", "Moneró",
+        "Engenheiro Leal", "Parque Colúmbia", "Deodoro", "Gardênia Azul", "Gericinó"]},
+}
+
+# ---------------------------------------------------------------------------
+# Areas com muita gente de fora (decisao do usuario, 27/11/2026): SO AVISO, a nota nao muda.
+# CISPs cuja taxa de roubo de rua passa de FATOR x a mediana dos bairros. O aviso vai para o
+# bairro com pelo menos PCT_MORADORES_MIN dos moradores nessas CISPs.
+# Hoje pega as CISPs 1, 4, 5 e 18 (Centro, Lapa, Gamboa, Santo Cristo, Saude, Maracana, Praca da Bandeira).
+# ---------------------------------------------------------------------------
+PUBLICO_DE_FORA = {"indicador": "roubo_rua_100k", "fator_mediana": 3, "pct_moradores_min": 0.5}
+PUBLICO_DE_FORA_AVISO = ("Área com muita gente de fora (comércio e trabalho). A taxa usa só os moradores na conta, "
+                         "então pode parecer maior do que o risco para quem mora ali.")

@@ -67,7 +67,18 @@ def main():
     ref = referencia()
     # bairros com muitos moradores em favela: registros (ISP, 1746) subnotificados -> sem nota nesses criterios
     sub = b.loc[b["pct_favela"] >= config.FAVELA_CORTE_PCT].index.tolist()
-    ref_sub = [c for c in ref if c not in sub]
+    # bairros em que a taxa da delegacia nao representa os moradores -> sem nota de Seguranca (config)
+    cod_por_nome = {n: c for c, n in b["nome"].items()}
+    faltam = [n for n in config.BAIRROS_SEGURANCA_INSUFICIENTE if n not in cod_por_nome]
+    if faltam:
+        raise SystemExit(f"BAIRROS_SEGURANCA_INSUFICIENTE: nomes que nao existem na malha oficial: {faltam}")
+    seg = {cod_por_nome[n]: m for n, m in config.BAIRROS_SEGURANCA_INSUFICIENTE.items() if cod_por_nome[n] not in sub}
+    # criterios sem nota em cada bairro; o bairro fica sem nota final e sai da base desses criterios
+    insuf = {c: set(config.CRITERIOS_SUBNOTIFICADOS) for c in sub}
+    for c in seg:
+        insuf.setdefault(c, set()).add("violencia")
+    fora_de = {crit: [c for c, cs in insuf.items() if crit in cs] for crit in config.CRITERIOS}
+    ref_de = {crit: [c for c in ref if c not in fora_de[crit]] for crit in config.CRITERIOS}
     exibidos = list(b.index) if config.EXIBIR_TODOS else codigos_mvp()
 
     criterios, metas = {}, {}
@@ -75,8 +86,8 @@ def main():
         df, meta = ler(crit)
         metas[crit] = meta
         ind_meta = meta["indicadores"]
-        r_crit = ref_sub if crit in config.CRITERIOS_SUBNOTIFICADOS else ref
-        valores = {k: (df[k].where(~df.index.isin(sub)) if crit in config.CRITERIOS_SUBNOTIFICADOS else df[k]) for k in ind_meta}
+        r_crit = ref_de[crit]
+        valores = {k: df[k].where(~df.index.isin(fora_de[crit])) for k in ind_meta}
         notas = pd.DataFrame({k: nota_percentil(valores[k], v["maior_e_pior"], r_crit) for k, v in ind_meta.items()})
         if crit == "escolas":
             por_tipo = {t: media_ponderada(notas, p) for t, p in config.ESCOLAS_PESOS.items()}
@@ -87,11 +98,26 @@ def main():
         criterios[crit] = {"df": df, "notas": notas, "nota": nota, "por_tipo": por_tipo}
 
     preco, meta_preco = ler("preco")
-    medianas = {c: criterios[c]["df"].reindex(ref_sub if c in config.CRITERIOS_SUBNOTIFICADOS else ref).median(numeric_only=True)
-                for c in criterios}
+    medianas = {c: criterios[c]["df"].reindex(ref_de[c]).median(numeric_only=True) for c in criterios}
     aviso_sub = ("Dados insuficientes: {pct}% dos moradores vivem em área de favela (Limite de Favelas 2022, IPP), "
                  "onde boletins de ocorrência e chamados ao 1746 costumam ser pouco registrados. Por isso não calculamos "
                  "esta nota nem a nota final do bairro.")
+    aviso_seg = "Dados insuficientes: {motivo}. Por isso não calculamos esta nota nem a nota final do bairro."
+    primeira_maiuscula = lambda t: t[:1].upper() + t[1:]
+
+    def motivo_sem_nota(cod):
+        """Frase do detalhe do bairro explicando por que ele nao tem nota final."""
+        if cod in sub:
+            return (f"{b.at[cod, 'pct_favela']:.0f}% dos moradores vivem em área de favela (Limite de Favelas 2022, IPP), "
+                    "onde ocorrências e chamados ao 1746 são pouco registrados. Segurança e Menos barulho ficam sem nota.")
+        return f"Segurança fica sem nota: {seg[cod]}."
+
+    # areas com muita gente de fora: CISPs com roubo de rua acima de FATOR x a mediana dos bairros (so aviso)
+    pf = config.PUBLICO_DE_FORA
+    med_pf = float(medianas["violencia"][pf["indicador"]])
+    limite_pf = pf["fator_mediana"] * med_pf
+    cisps_pf = sorted(int(c) for c, t in metas["violencia"]["taxas_cisp"].items() if t[pf["indicador"]] > limite_pf)
+    bairros_pf = []
 
     # distribuicao de referencia do emprego (o site recalcula a nota se o usuario escolher o polo)
     emp = criterios["emprego"]["df"]
@@ -106,7 +132,9 @@ def main():
                 "populacao_2022": int(linha["pop2022_oficial"]) if pd.notna(linha["pop2022_oficial"]) else int(linha["pop2022"]),
                 "tem_nota": cod in ref, "criterios": {}, "ruido_db_oficial": None,
                 "pct_favela": r1(linha["pct_favela"]),
-                "sem_nota_final": cod in sub}
+                "sem_nota_final": cod in insuf}
+        if cod in insuf:
+            item["sem_nota_final_motivo"] = motivo_sem_nota(cod)
         for crit, c in criterios.items():
             df, notas = c["df"], c["notas"]
             inds = []
@@ -117,14 +145,19 @@ def main():
                              "nota": r1(notas.at[cod, k]) if cod in notas.index else None,
                              "peso": v.get("peso"), "maior_e_pior": v["maior_e_pior"]})
             bloco = {"nota": r1(c["nota"].get(cod)), "indicadores": inds}
-            if cod in sub and crit in config.CRITERIOS_SUBNOTIFICADOS:
+            if crit in insuf.get(cod, ()):
                 bloco["nota"] = None
-                bloco["dados_insuficientes"] = aviso_sub.format(pct=f"{linha['pct_favela']:.0f}")
+                bloco["dados_insuficientes"] = (aviso_sub.format(pct=f"{linha['pct_favela']:.0f}") if cod in sub
+                                                else aviso_seg.format(motivo=primeira_maiuscula(seg[cod])))
             if c["por_tipo"]:
                 bloco["nota_por_tipo"] = {t: r1(s.get(cod)) for t, s in c["por_tipo"].items()}
             if crit == "violencia":
                 cisps = df.at[cod, "cisps"] if cod in df.index else "[]"
                 bloco["cisps"] = json.loads(cisps.replace("'", '"')) if isinstance(cisps, str) else []
+                pct_pf = sum(x["pct_pop"] for x in bloco["cisps"] if x["cisp"] in cisps_pf)
+                if pct_pf >= pf["pct_moradores_min"] and "violencia" not in insuf.get(cod, ()):
+                    bloco["aviso_publico_de_fora"] = config.PUBLICO_DE_FORA_AVISO
+                    bairros_pf.append(linha["nome"])
             if crit == "escolas":
                 bloco["contagem_no_bairro"] = {k: inteiro(pega(df, cod, k)) for k in
                                                ("n_publicas_no_bairro", "n_privadas_no_bairro", "n_com_ideb_no_bairro")}
@@ -153,6 +186,11 @@ def main():
         "subnotificacao": {"corte_pct": config.FAVELA_CORTE_PCT, "criterios": config.CRITERIOS_SUBNOTIFICADOS,
                            "bairros": [b.at[c, "nome"] for c in sub],
                            "fonte": "Limite de Favelas 2022 (Instituto Pereira Passos / Data.Rio)"},
+        "seguranca_insuficiente": {"bairros": [{"nome": b.at[c, "nome"], "motivo": m} for c, m in seg.items()]},
+        "publico_de_fora": {"indicador": pf["indicador"], "fator_mediana": pf["fator_mediana"],
+                            "mediana": round(med_pf, 1), "limite": round(limite_pf, 1), "cisps": cisps_pf,
+                            "pct_moradores_min": pf["pct_moradores_min"], "bairros": bairros_pf,
+                            "aviso": config.PUBLICO_DE_FORA_AVISO},
         "referencia_codigos": ref,
         # mediana do R$/m2 (ITBI) dos bairros de referencia: usada no resumo em texto do site
         "preco_mediana_rs_m2": int(round(preco.reindex(ref)["rs_m2"].median())),
@@ -173,8 +211,11 @@ def main():
     t.insert(0, "bairro", b.loc[exibidos, "nome"])
     for perfil, pesos in config.PESOS_PERFIL.items():
         t[f"FINAL_{perfil}"] = sum(t[c] * w for c, w in pesos.items()) / sum(pesos.values())
-    t.loc[t.index.isin(sub), [f"FINAL_{p}" for p in config.PESOS_PERFIL]] = None
+    t.loc[t.index.isin(list(insuf)), [f"FINAL_{p}" for p in config.PESOS_PERFIL]] = None
     print(f"Sem nota final por subnotificacao ({config.FAVELA_CORTE_PCT}% ou mais em favela): {len(sub)} bairros")
+    print(f"Sem nota final por seguranca insuficiente (config): {len(seg)} bairros: {', '.join(b.loc[list(seg), 'nome'])}")
+    print(f"Muita gente de fora (so aviso): roubo de rua > {limite_pf:.0f} (= {pf['fator_mediana']} x mediana {med_pf:.0f}); "
+          f"CISPs {cisps_pf}; bairros: {', '.join(bairros_pf)}")
     t["R$/m2"] = preco.reindex(exibidos)["rs_m2"].round(0)
     pd.set_option("display.width", 250)
     print(f"Bairros de referencia: {len(ref)} | exibidos: {len(exibidos)}")
