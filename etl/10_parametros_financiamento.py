@@ -60,25 +60,34 @@ MCMV = {
 
 # Cota maxima de financiamento: % do valor do imovel que o banco financia (o resto e a entrada,
 # em dinheiro e/ou FGTS). Uma por linha e por sistema de amortizacao, cada uma com a fonte oficial.
-# Decisao do usuario (27/11/2026): MCMV com 80% no SAC e na Price (regra geral da IN 48/2022, art. 34),
+# Decisao do usuario (27/11/2026): MCMV com 80% no SAC e na Price (regra geral da IN 48/2022, art. 34)
+# e cota menor de imovel usado pela norma do orcamento do FGTS em vigor (IN 45/2025),
 # Pro-Cotista registrado com os numeros da pagina do FGTS (o app nao simula essa linha).
 URL_CAIXA_SBPE = ("https://caixanoticias.caixa.gov.br/Paginas/Not%C3%ADcias/2025/12-DEZEMBRO/"
                   "CAIXA-volta-a-permitir-mais-de-um-financiamento--imobiliario-pelo-SBPE.aspx")
 URL_IN48 = ("https://www.gov.br/cidades/pt-br/acesso-a-informacao/institucional/base-juridica/"
             "instrucoes-normativas/IN_48_de_19.12.22__compilada_em_09.04.2026_.pdf")
-URL_IN30 = ("https://www.gov.br/cidades/pt-br/acesso-a-informacao/institucional/base-juridica/"
-            "instrucoes-normativas/20251118_INSTRUO_NORMATIVA_N._30__COMPILADA.pdf")
+# Orcamento do FGTS de 2026 (revoga a IN 30/2024, que tinha a cota de 65% no usado para renda de
+# R$ 4.700,01 a R$ 8.600). Ver docs/ESCOPO.md, secao 26.
+URL_IN45 = ("https://www.gov.br/cidades/pt-br/acesso-a-informacao/institucional/base-juridica/"
+            "instrucoes-normativas/2026/20261014_INSTRUO_NORMATIVA_N._45_COMPILADA_ARQUIVOCORRIGIDO.pdf")
+FONTE_IN45 = "IN MCID 45/2025 (orçamento do FGTS de 2026, versão compilada em 14/10/2026)"
 URL_CLASSE_MEDIA = ("https://www.gov.br/cidades/pt-br/acesso-a-informacao/acoes-e-programas/habitacao/"
                     "programa-minha-casa-minha-vida/minha-casa-minha-vida-classe-media/minha-casa-minha-vida-classe-media-1")
 URL_FGTS_FIN = "https://www.fgts.gov.br/Paginas/subpaginas/financiamentos.aspx"
 
 COTA_MAX = {
+    # Cada linha: "sac" e "price" = cota de imovel novo; "usado" = regras de cota menor para imovel usado
+    # no Sul e Sudeste (o Rio esta no Sudeste). Cada regra vale para uma faixa do MCMV ("faixa") ou para
+    # um intervalo de renda ("renda_de" e "renda_ate"); o site usa a menor entre a cota da linha e a da regra.
     "sbpe": {
         "sac": 0.80, "price": 0.70,
         "fonte": "CAIXA Notícias: \"CAIXA volta a permitir mais de um financiamento imobiliário pelo SBPE\" (09/12/2025)",
         "url": URL_CAIXA_SBPE, "data": "2025-12-09", "consultado_em": "2026-11-27",
         "texto": "A Caixa financia pelo SBPE até 80% do valor do imóvel no SAC e até 70% na Price "
                  "(regra em vigor desde 13/10/2025). Outros bancos podem ter cotas diferentes.",
+        "usado": [],
+        "usado_texto": "A Caixa não publica cota diferente para imóvel usado no SBPE; o app usa a mesma.",
     },
     "mcmv": {
         "sac": 0.80, "price": 0.80,
@@ -86,22 +95,22 @@ COTA_MAX = {
         "url": URL_IN48, "data": "2026-04-09", "consultado_em": "2026-11-27",
         "texto": "No Minha Casa, Minha Vida (FGTS), a entrada mínima é de 20% do valor do imóvel, ou seja, "
                  "o financiamento vai até 80%. No SAC, o banco pode aceitar entrada de até 10%; o app usa os 20%, "
-                 "que valem em qualquer caso. Para imóvel usado no Sul e no Sudeste a cota é menor: 65% para renda "
-                 "de R$ 4.700,01 a R$ 8.600 (IN 30/2024, orçamento do FGTS de 2025) e 60% na Classe Média.",
-        "usado_sudeste": [
-            {"linha": "Renda de R$ 4.700,01 a R$ 8.600", "cota": 0.65,
-             "fonte": "IN 30/2024, art. 3º (orçamento do FGTS de 2025)", "url": URL_IN30},
-            {"linha": "Classe Média", "cota": 0.60,
-             "fonte": "IN 30/2024, art. 5º-A, e página da Classe Média", "url": URL_CLASSE_MEDIA},
+                 "que valem em qualquer caso.",
+        "usado": [
+            {"faixa": "Classe Média", "cota": 0.60, "regiao": "Sul e Sudeste",
+             "fonte": FONTE_IN45 + ", art. 6º", "url": URL_IN45},
         ],
+        "usado_texto": "Para imóvel usado no Sul e no Sudeste, a cota da Classe Média cai para 60% "
+                       "(IN 45/2025, orçamento do FGTS de 2026). Nas Faixas 1, 2 e 3 não há cota menor para "
+                       "usado em 2026: a regra de 65% da IN 30/2024 foi revogada.",
     },
     "pro_cotista": {
         "sac": 0.90, "price": 0.80,
         "fonte": "FGTS: página Financiamentos, Programa Pró-Cotista",
         "url": URL_FGTS_FIN, "data": None, "consultado_em": "2026-11-27",
         "texto": "Pró-Cotista: até 90% do valor de avaliação no SAC e 80% na Price. Para imóvel usado, "
-                 "até 50% (IN 30/2024, art. 4º). O app não simula esta linha.",
-        "usado": {"cota": 0.50, "fonte": "IN 30/2024, art. 4º, parágrafo único", "url": URL_IN30},
+                 "até 50%, com renda de até R$ 12 mil (IN 45/2025, art. 5º). O app não simula esta linha.",
+        "usado": [{"renda_de": 0, "renda_ate": 12000, "cota": 0.50, "fonte": FONTE_IN45 + ", art. 5º", "url": URL_IN45}],
     },
 }
 
@@ -153,8 +162,8 @@ def main():
         "cota_max": COTA_MAX,
         "cota_max_texto": "O banco financia só uma parte do imóvel (a cota); o resto é a entrada, em dinheiro e FGTS. "
                           "O app usa a cota da Caixa no SBPE (80% no SAC e 70% na Price, CAIXA Notícias, dez/2025) "
-                          "e a do Minha Casa, Minha Vida (80%, IN 48/2022 do Ministério das Cidades). "
-                          "Imóvel usado e outros bancos podem exigir entrada maior.",
+                          "e a do Minha Casa, Minha Vida (80%, IN 48/2022 do Ministério das Cidades; 60% no imóvel usado "
+                          "da Classe Média, IN 45/2025). Outros bancos podem exigir entrada maior.",
         "aluguel_aviso": "Comparação simples: não considera valorização do imóvel, reajuste do aluguel nem rendimento "
                          "da entrada se ela ficasse aplicada.",
     }

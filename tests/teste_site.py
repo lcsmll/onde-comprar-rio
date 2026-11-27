@@ -24,13 +24,14 @@ def checar(cond, msg):
         falhas.append(msg)
 
 
-CASO_COTA = """([r, e, f, chave]) => {
+CASO_COTA = """([r, e, f, chave, usado = true]) => {
+  estado.imovelUsado = usado;
   estado.renda1 = r; estado.renda2 = 0; estado.rendaTipo = 'unica'; estado.entrada = e; estado.fgts = f;
   estado.cotista = true; estado.precoMax = 0;
   const juros = chave === 'sbpe' ? D.params.sbpe.juros_ano : faixaMCMV(r).juros_cotista;
   const c = capacidade(r, juros, D.params.prazo_padrao_anos, null, chave);
   const o = orcamento();
-  return {sac: c.sac.preco, price: c.price.preco, limSac: c.sac.limite, limPrice: c.price.limite,
+  return {sac: c.sac.preco, price: c.price.preco, limSac: c.sac.limite, limPrice: c.price.limite, texto: c.sac.regra.texto,
           cotaSac: c.sac.cota, cotaPrice: c.price.cota, orc: o.precoMax, painel: painelOrcamento(o)};
 }"""
 
@@ -39,7 +40,7 @@ def casos_cota(page):
     """Cota maxima de financiamento: o preco maximo nunca passa de (entrada + FGTS) / (1 - cota)."""
     page.goto(URL)
     page.wait_for_selector("#tela-inicio:not([hidden])")
-    caso = lambda r, e, f, chave="sbpe": page.evaluate(CASO_COTA, [r, e, f, chave])
+    caso = lambda r, e, f, chave="sbpe", usado=True: page.evaluate(CASO_COTA, [r, e, f, chave, usado])
     cota = page.evaluate("D.params.cota_max")
 
     c = caso(10000, 0, 0)
@@ -65,6 +66,26 @@ def casos_cota(page):
     c = caso(9000, 30000, 0, "mcmv")
     checar(c["cotaSac"] == cota["mcmv"]["sac"] and abs(c["sac"] - 30000 / (1 - cota["mcmv"]["sac"])) < 1,
            f"cota: MCMV usa a cota do MCMV ({c['cotaSac']}; SAC {c['sac']:.0f})")
+
+    # imovel usado no MCMV (regra do orcamento do FGTS em vigor, vinda do JSON)
+    usado = {u.get("faixa"): u["cota"] for u in cota["mcmv"]["usado"]}
+    c = caso(6000, 70000, 0, "mcmv", True)
+    cota_f3 = usado.get("Faixa 3", cota["mcmv"]["sac"])
+    checar(c["cotaSac"] == cota_f3 and c["sac"] <= 70000 / (1 - cota_f3) + 0.01 and c["sac"] <= 400000,
+           f"usado: renda 6 mil (Faixa 3), entrada 70 mil -> cota {c['cotaSac']}, preco {c['sac']:.0f} (renda, cota e teto)")
+    c2 = caso(6000, 70000, 0, "mcmv", False)
+    checar(c2["cotaSac"] == cota["mcmv"]["sac"] and "novo" in c2["texto"], f"novo: renda 6 mil -> cota {c2['cotaSac']}")
+    c = caso(12000, 100000, 0, "mcmv", True)
+    checar(c["cotaSac"] == usado["Classe Média"] and abs(c["sac"] - 100000 / (1 - usado["Classe Média"])) < 1
+           and "usado" in c["texto"] and "60%" in c["texto"],
+           f"usado: Classe Média -> cota {c['cotaSac']}, preco {c['sac']:.0f} ({c['texto'][:60]}...)")
+    c2 = caso(12000, 100000, 0, "mcmv", False)
+    checar(c2["cotaSac"] == cota["mcmv"]["sac"] and c2["sac"] > c["sac"], f"novo: Classe Média -> cota {c2['cotaSac']}, preco {c2['sac']:.0f}")
+    cols = page.evaluate("""() => { estado.imovelUsado = true; estado.entrada = 100000; estado.fgts = 0;
+      return [6000, 12000].map(r => { const l = linha(r, null); const c = capacidade(r, l.juros, 30, l.teto, l.chave);
+        return {linha: l.nome, cota: c.sac.cota}; }); }""")
+    checar(cols[0]["cota"] == cota_f3 and cols[1]["cota"] == usado["Classe Média"],
+           f"renda unica x somada: cada coluna com a cota da propria renda ({cols})")
 
 
 def fluxo(page, nome):
@@ -98,6 +119,7 @@ def fluxo(page, nome):
 
     # imovel
     checar(page.is_visible("#trabalho2"), "familia: campo de trabalho da 2a pessoa aparece")
+    checar(page.get_attribute("[data-usado='1']", "aria-pressed") == "true", "imovel: 'usado' marcado por padrao")
     page.click("[data-tipo=apartamento]")
     page.fill("#area", "70")
     page.fill("#preco-max", "350000")

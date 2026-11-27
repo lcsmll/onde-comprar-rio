@@ -79,7 +79,7 @@ let distancias = null; // carregado sob demanda (opcao "outro bairro")
 const estado = {
   perfil: null, escola: "tanto_faz",
   rendaTipo: "unica", renda1: 0, renda2: 0, fgts: 0, entrada: 0, cotista: false, jaTemImovel: false,
-  tipo: "", area: null, precoMax: null,
+  tipo: "", imovelUsado: true, area: null, precoMax: null,
   trabalho: ["", ""],
   pesos: null, esconderCaros: false,
   bairroAtual: null, telaAnterior: "resultado",
@@ -349,6 +349,9 @@ function ligarFormulario() {
       estado.rendaTipo = b.dataset.rendaTipo; marcar("#tela-renda", "data-renda-tipo", estado.rendaTipo);
       ajustarTextosRenda();
     }
+    if (b.dataset.usado !== undefined && b.classList.contains("opcao")) {
+      estado.imovelUsado = b.dataset.usado === "1"; marcar("#tela-imovel", "data-usado", b.dataset.usado);
+    }
     if (b.dataset.tipo !== undefined && b.classList.contains("opcao")) {
       estado.tipo = b.dataset.tipo; marcar("#tela-imovel", "data-tipo", estado.tipo);
     }
@@ -411,6 +414,7 @@ function ligarFormulario() {
   $("#voltar-do-sobre").addEventListener("click", () => ir(estado.telaAnterior || "inicio"));
   marcar("#tela-renda", "data-renda-tipo", "unica");
   marcar("#tela-imovel", "data-tipo", "");
+  marcar("#tela-imovel", "data-usado", estado.imovelUsado ? "1" : "0");
 }
 
 // Nivel em texto (so para leitores de tela). Na tela nao aparece numero: a escolha e visual,
@@ -447,7 +451,8 @@ function desenharPesos() {
 
 /* ---------------- link de compartilhamento (so perfil e pesos, nunca renda) ---------------- */
 function copiarLink() {
-  const p = new URLSearchParams({ p: estado.perfil, w: D.bairros.criterios.map((c) => estado.pesos[c]).join(""), e: estado.escola });
+  const p = new URLSearchParams({ p: estado.perfil, w: D.bairros.criterios.map((c) => estado.pesos[c]).join(""), e: estado.escola,
+    u: estado.imovelUsado ? "1" : "0" });
   const url = location.origin + location.pathname + "?" + p.toString() + "#resultado";
   const ok = () => ($("#msg-link").textContent = "Link copiado. Ele leva só o perfil e as prioridades, nunca renda ou valores.");
   if (navigator.clipboard) navigator.clipboard.writeText(url).then(ok, () => ($("#msg-link").textContent = url));
@@ -462,6 +467,9 @@ function lerLinkCompartilhado() {
   if (w && /^[1-5]{6}$/.test(w)) D.bairros.criterios.forEach((c, i) => (estado.pesos[c] = Number(w[i])));
   if (["publica", "particular", "tanto_faz"].includes(q.get("e"))) estado.escola = q.get("e");
   marcar("#opcoes-escola", "data-escola", estado.escola);
+  if (["0", "1"].includes(q.get("u"))) {
+    estado.imovelUsado = q.get("u") === "1"; marcar("#tela-imovel", "data-usado", q.get("u"));
+  }
 }
 
 /* ---------------- mapa (SVG gerado pelo ETL, sem servidores externos) ---------------- */
@@ -1122,36 +1130,50 @@ function linha(renda, preco) {
   return { nome: "SBPE", chave: "sbpe", juros: D.params.sbpe.juros_ano, teto: null, faixa: f };
 }
 
-// Cota maxima de financiamento (parte do imovel que o banco financia), por linha ("sbpe", "mcmv")
-// e sistema ("sac", "price"). Vem do JSON, com a fonte.
-const cotaDe = (chave, sistema) => D.params.cota_max[chave][sistema];
+// Cota maxima de financiamento (parte do imovel que o banco financia). Vem do JSON, com a fonte:
+// por linha ("sbpe", "mcmv") e sistema ("sac", "price"); no imovel usado, a regra de usado da faixa
+// ou da renda (a menor das duas). A renda entra porque a tabela "renda unica x somada" usa rendas diferentes.
+function regraCota(chave, sistema, renda) {
+  const L = D.params.cota_max[chave], base = L[sistema];
+  const nomeLinha = chave === "mcmv" ? "no MCMV" : "no SBPE";
+  if (!estado.imovelUsado) return { cota: base, texto: `Imóvel novo ${nomeLinha}: o banco financia até ${pctTxt(base)}.` };
+  const f = chave === "mcmv" ? faixaMCMV(renda) : null;
+  const r = (L.usado || []).find((u) => (u.faixa ? f && u.faixa === f.faixa : renda >= u.renda_de && renda <= u.renda_ate));
+  const quem = f ? ` (${f.faixa})` : "";
+  if (!r || r.cota >= base) {
+    return { cota: base, texto: `Imóvel usado ${nomeLinha}${quem}: o banco financia até ${pctTxt(base)}, a mesma cota do imóvel novo.` };
+  }
+  return { cota: r.cota, texto: `Imóvel usado ${nomeLinha}${quem} com renda de ${fmtR(renda)}: o banco financia até ${pctTxt(r.cota)} (${r.fonte}).` };
+}
 const pctTxt = (x) => fmtN(x * 100, 0) + "%";
 
 // Preco maximo = o MENOR entre:
 //  - "renda":   financiamento cuja parcela cabe na renda + entrada + FGTS
 //  - "entrada": (entrada + FGTS) / (1 - cota), porque o banco so financia a cota do imovel
 //  - "teto":    teto do MCMV, quando houver
-function limitePreco(financiavel, recursos, cota, teto) {
+function limitePreco(financiavel, recursos, regra, teto) {
+  const cota = regra.cota;
   const op = [["renda", financiavel + recursos], ["entrada", recursos / (1 - cota)]];
   if (teto) op.push(["teto", teto]);
   const [limite, preco] = op.reduce((a, o) => (o[1] < a[1] ? o : a));
-  return { preco, limite, cota };
+  return { preco, limite, cota, regra };
 }
 
 function capacidade(renda, juros, anos, teto, chave) {
   const pmax = renda * D.params.comprometimento_renda_max, i = taxaMensal(juros), n = anos * 12;
   const recursos = estado.entrada + estado.fgts;
-  const sacL = limitePreco(maxSac(pmax, i, n), recursos, cotaDe(chave, "sac"), teto);
-  const priceL = limitePreco(maxPrice(pmax, i, n), recursos, cotaDe(chave, "price"), teto);
+  const sacL = limitePreco(maxSac(pmax, i, n), recursos, regraCota(chave, "sac", renda), teto);
+  const priceL = limitePreco(maxPrice(pmax, i, n), recursos, regraCota(chave, "price", renda), teto);
   return { pmax, recursos, sac: sacL, price: priceL, precoSac: sacL.preco, precoPrice: priceL.preco };
 }
 
 // Frase que diz qual limite travou o preco maximo
 function textoLimite(l, teto) {
   if (l.limite === "entrada") {
-    return l.preco > 0
+    return (l.preco > 0
       ? `Limitado pela sua entrada: com cota de ${pctTxt(l.cota)}, a entrada (dinheiro + FGTS) precisa ser de pelo menos ${pctTxt(1 - l.cota)} do imóvel.`
-      : `Sem entrada não dá para financiar: o banco financia até ${pctTxt(l.cota)} do imóvel, então a entrada (dinheiro + FGTS) precisa ser de pelo menos ${pctTxt(1 - l.cota)}.`;
+      : `Sem entrada não dá para financiar: o banco financia até ${pctTxt(l.cota)} do imóvel, então a entrada (dinheiro + FGTS) precisa ser de pelo menos ${pctTxt(1 - l.cota)}.`)
+      + " " + l.regra.texto;
   }
   if (l.limite === "teto") return `Limitado ao teto do MCMV (${fmtR(teto)}).`;
   return `Limitado pela sua renda: a parcela cabe em até ${pctTxt(D.params.comprometimento_renda_max)} da renda.`;
@@ -1174,6 +1196,8 @@ function desenharSimulador() {
         <label>FGTS<input type="text" inputmode="numeric" id="s-fgts" class="dinheiro" value="${estado.fgts ? fmtR(estado.fgts) : ""}"></label>
         <label>Prazo (anos)<input type="number" id="s-prazo" min="5" max="${P.mcmv.prazo_max_anos}" value="${P.prazo_padrao_anos}"></label>
         <label>Juros ao ano (%)<input type="number" id="s-juros" step="0.01" min="0" max="30" value="${lin0.juros}"></label>
+        <label>O imóvel é novo ou usado?<select id="s-usado"><option value="1"${estado.imovelUsado ? " selected" : ""}>Usado</option>
+          <option value="0"${estado.imovelUsado ? "" : " selected"}>Novo</option></select></label>
       </div>
       ${b && b.preco_itbi ? `<p class="pequeno">Preço sugerido: R$/m² médio do ITBI do bairro × ${estado.area ? estado.area + " m²" : "área média"}. Edite à vontade.</p>` : ""}
     </div>
@@ -1186,6 +1210,7 @@ function desenharSimulador() {
   const recalcular = () => {
     estado.entrada = lerDinheiro($("#s-entrada").value);
     estado.fgts = lerDinheiro($("#s-fgts").value);
+    estado.imovelUsado = $("#s-usado").value === "1";
     const preco = lerDinheiro($("#s-preco").value), renda = lerDinheiro($("#s-renda").value);
     const lin = linha(renda, preco || null);
     if (!jurosEditado) $("#s-juros").value = lin.juros;
@@ -1209,7 +1234,8 @@ function calcular(preco, renda, anos, juros, lin, b) {
   if (pmax && pr.primeira > pmax) alertas.push(`A parcela na Price (${fmtR(pr.primeira)}) passa de ${P.comprometimento_renda_max * 100}% da renda.`);
   // cota: o banco so financia uma parte do imovel; o resto e a entrada minima (dinheiro + FGTS)
   const recursos = estado.entrada + estado.fgts;
-  const cotas = { sac: cotaDe(lin.chave, "sac"), price: cotaDe(lin.chave, "price") };
+  const regras = { sac: regraCota(lin.chave, "sac", renda), price: regraCota(lin.chave, "price", renda) };
+  const cotas = { sac: regras.sac.cota, price: regras.price.cota };
   const entMin = { sac: preco * (1 - cotas.sac), price: preco * (1 - cotas.price) };
   const passa = ["sac", "price"].filter((k) => preco && recursos < entMin[k] - 0.5);
   const nomeSis = { sac: "no SAC", price: "na Price" };
@@ -1258,7 +1284,9 @@ function calcular(preco, renda, anos, juros, lin, b) {
       ${cap.sac.limite === cap.price.limite && cap.sac.cota === cap.price.cota
         ? `<p class="pequeno">${esc(textoLimite(cap.sac, lin.teto))}</p>`
         : `<p class="pequeno">SAC: ${esc(textoLimite(cap.sac, lin.teto))}</p><p class="pequeno">Price: ${esc(textoLimite(cap.price, lin.teto))}</p>`}
-      <p class="pequeno">${esc(P.comprometimento_renda_texto)} ${esc(fonteCota.texto)} Fonte: ${esc(fonteCota.fonte)}.</p></div>` : ""}
+      ${cap.sac.limite !== "entrada" && cap.price.limite !== "entrada"
+        ? `<p class="pequeno">Cota usada: ${esc(regras.sac.texto)}${cotas.price !== cotas.sac ? ` Na Price: ${pctTxt(cotas.price)}.` : ""}</p>` : ""}
+      <p class="pequeno">${esc(P.comprometimento_renda_texto)} ${esc(fonteCota.texto)} Fonte: ${esc(fonteCota.fonte)}. ${esc(fonteCota.usado_texto || "")}</p></div>` : ""}
     ${comparaRenda}
     <div class="bloco"><h3>Custos para fechar a compra</h3>
       <div class="rolagem"><table class="tabela"><tbody>
@@ -1336,6 +1364,8 @@ function desenharPerguntas() {
      `Sim. O banco financia só uma parte do valor do imóvel (a cota); o resto é a entrada, que pode ser paga com dinheiro e FGTS.
       <ul><li><strong>SBPE (Caixa)</strong>: financia até ${pct(P.cota_max.sbpe.sac)} no SAC e ${pct(P.cota_max.sbpe.price)} na Price, então a entrada é de pelo menos ${pct(1 - P.cota_max.sbpe.sac)} ou ${pct(1 - P.cota_max.sbpe.price)}. Fonte: ${esc(P.cota_max.sbpe.fonte)}.</li>
       <li><strong>Minha Casa, Minha Vida</strong>: financia até ${pct(P.cota_max.mcmv.sac)}, então a entrada é de pelo menos ${pct(1 - P.cota_max.mcmv.sac)}. ${esc(P.cota_max.mcmv.texto)} Fonte: ${esc(P.cota_max.mcmv.fonte)}.</li>
+      <li><strong>Imóvel usado</strong>: ${P.cota_max.mcmv.usado.map((u) => `${esc(u.faixa || "renda de " + fmtR(u.renda_de) + " a " + fmtR(u.renda_ate))} no MCMV: até ${pct(u.cota)} (${esc(u.fonte)})`).join("; ")}.
+        ${esc(P.cota_max.mcmv.usado_texto)} ${esc(P.cota_max.sbpe.usado_texto)} O app pergunta se o imóvel é novo ou usado e começa com "usado", que é o caso mais comum.</li>
       <li><strong>Pró-Cotista</strong>: ${esc(P.cota_max.pro_cotista.texto)}</li></ul>
       Por isso, sem entrada o preço máximo é zero, mesmo com renda alta. Outros bancos podem ter cotas diferentes.`],
     ["Quanto da renda posso comprometer com a parcela?",
