@@ -1238,6 +1238,11 @@ function calcular(preco, renda, anos, juros, lin, b) {
   const cotas = { sac: regras.sac.cota, price: regras.price.cota };
   const entMin = { sac: preco * (1 - cotas.sac), price: preco * (1 - cotas.price) };
   const passa = ["sac", "price"].filter((k) => preco && recursos < entMin[k] - 0.5);
+  // dinheiro na assinatura: a entrada digitada ou, se for menor, a entrada minima menos o FGTS; mais o ITBI
+  const minDin = { sac: Math.max(entMin.sac - estado.fgts, 0), price: Math.max(entMin.price - estado.fgts, 0) };
+  const dinheiro = { sac: Math.max(estado.entrada, minDin.sac) + itbi, price: Math.max(estado.entrada, minDin.price) + itbi };
+  const sistemas = cotas.sac === cotas.price ? [["", "sac"]] : [[" no SAC", "sac"], [" na Price", "price"]];
+  const abaixo = sistemas.filter(([, k]) => estado.entrada < minDin[k] - 0.5);
   const nomeSis = { sac: "no SAC", price: "na Price" };
   const grupos = cotas.sac === cotas.price ? (passa.length ? [passa] : []) : passa.map((k) => [k]);
   for (const g of grupos) {
@@ -1292,11 +1297,15 @@ function calcular(preco, renda, anos, juros, lin, b) {
       <div class="rolagem"><table class="tabela"><tbody>
         ${(cotas.sac === cotas.price ? [["", "sac"]] : [[" no SAC", "sac"], [" na Price", "price"]]).map(([onde, k]) =>
           `<tr><td>Entrada mínima${onde} (${pctTxt(1 - cotas[k])})</td><td>${fmtR(entMin[k])}</td></tr>`).join("")}
-        <tr><td>Entrada (dinheiro)</td><td>${fmtR(estado.entrada)}</td></tr>
+        ${abaixo.length
+          ? `<tr><td>Entrada em dinheiro: você informou</td><td>${fmtR(estado.entrada)}</td></tr>` +
+            abaixo.map(([onde, k]) => `<tr><td>Entrada em dinheiro: mínimo exigido${onde} (já descontado o FGTS)</td><td>${fmtR(minDin[k])}</td></tr>`).join("")
+          : `<tr><td>Entrada (dinheiro)</td><td>${fmtR(estado.entrada)}</td></tr>`}
         <tr><td>ITBI (${fmtN(P.itbi.aliquota * 100, 0)}%)</td><td>${fmtR(itbi)}</td></tr>
         ${P.custos_sem_valor.map((c) => `<tr><td>${esc(c.item)}</td><td>consulte</td></tr>`).join("")}
-        <tr><th>Dinheiro necessário (sem cartório e avaliação)</th><th>${fmtR(estado.entrada + itbi)}</th></tr>
+        ${sistemas.map(([onde, k]) => `<tr><th>Dinheiro necessário${onde} (sem cartório e avaliação)</th><th>${fmtR(dinheiro[k])}</th></tr>`).join("")}
       </tbody></table></div>
+      ${abaixo.length ? `<p class="pequeno">O dinheiro necessário usa a entrada mínima, porque a que você informou é menor que ela.</p>` : ""}
       <p class="pequeno">A entrada mínima pode ser paga com dinheiro e FGTS (${esc(lin.nome)}: o banco financia até ${pctTxt(cotas.sac)} no SAC e ${pctTxt(cotas.price)} na Price).</p>
       <p class="pequeno">ITBI: ${esc(P.itbi.nota)} Fonte: ${esc(P.itbi.fonte)}.</p>
       ${P.custos_sem_valor.map((c) => `<p class="pequeno">${esc(c.item)}: ${esc(c.texto)}</p>`).join("")}
@@ -1322,7 +1331,8 @@ function calcular(preco, renda, anos, juros, lin, b) {
       <tr><td>Condomínio + IPTU</td><td>${fmtR(ex)}</td><td>${fmtR(ex)}</td><td>${fmtR(ex)}</td></tr>
       <tr><th>Total</th><th>${fmtR(al + ex)}</th><th>${fmtR(s.primeira + ex)}</th><th>${fmtR(pr.primeira + ex)}</th></tr></tbody></table></div>
       ${renda ? `<p>Cabe em ${P.comprometimento_renda_max * 100}% da renda (${fmtR(pmax)})? Alugar: <strong>${al + ex <= pmax ? "sim" : "não"}</strong>.</p>` : ""}
-      <p>Para comprar, você imobiliza <strong>${fmtR(estado.entrada + estado.fgts + itbi)}</strong> (entrada + FGTS + ITBI).</p>`;
+      <p>Para comprar, você imobiliza ${sistemas.map(([onde, k]) => `<strong>${fmtR(dinheiro[k] + estado.fgts)}</strong>${onde}`).join(" e ")}
+        (entrada + FGTS + ITBI${abaixo.length ? "; com a entrada mínima, porque a informada é menor" : ""}).</p>`;
   };
   $$("#s-resultado .dinheiro").forEach((inp) => inp.addEventListener("input", () => {
     const v = lerDinheiro(inp.value); inp.value = v ? fmtR(v) : "";

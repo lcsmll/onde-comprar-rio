@@ -257,6 +257,25 @@ def fluxo(page, nome):
     page.wait_for_timeout(200)
     res = page.inner_text("#s-resultado").replace("\xa0", " ")
     checar("Entrada mínima" in res and "faltam" in res, "simulador: entrada abaixo da cota mostra entrada minima e quanto falta")
+    # dinheiro necessario considera a entrada minima (SBPE: renda acima do MCMV)
+    page.fill("#s-renda", "15000")
+    page.fill("#s-preco", "300000")
+    page.fill("#s-entrada", "20000")
+    page.fill("#s-fgts", "10000")
+    page.wait_for_timeout(200)
+    custos = page.locator("#s-resultado .bloco", has_text="Custos para fechar").inner_text().replace("\xa0", " ")
+    checar("você informou" in custos and "mínimo exigido no SAC" in custos and "R$ 50.000" in custos
+           and "Dinheiro necessário no SAC (sem cartório e avaliação)\tR$ 59.000" in custos
+           and "Dinheiro necessário na Price (sem cartório e avaliação)\tR$ 89.000" in custos,
+           "dinheiro necessario: entrada minima 60 mil - FGTS 10 mil + ITBI 9 mil = R$ 59.000 (SAC); R$ 89.000 (Price)")
+    page.fill("#a-aluguel", "1800")
+    imob = page.inner_text("#a-resultado").replace("\xa0", " ")
+    checar("R$ 69.000 no SAC" in imob and "R$ 99.000 na Price" in imob, f"aluguel: imobiliza com a entrada minima ({imob.split('imobiliza')[-1][:60]})")
+    page.fill("#s-entrada", "100000")
+    page.wait_for_timeout(200)
+    custos = page.locator("#s-resultado .bloco", has_text="Custos para fechar").inner_text().replace("\xa0", " ")
+    checar("mínimo exigido" not in custos and custos.count("R$ 109.000") == 2,
+           "dinheiro necessario: entrada acima da minima usa a digitada (R$ 109.000)")
 
     # sobre
     page.click("text=Sobre os dados")

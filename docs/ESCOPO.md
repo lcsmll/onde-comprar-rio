@@ -485,3 +485,10 @@ Motivo: a Tijuca aparecia com segurança pior que a Penha (5,7 x 6,5) e transpor
 - **Interface:** pergunta "O imóvel é novo ou usado?" na etapa do imóvel e no simulador, começando em **usado** (caso mais comum e mais conservador), guardada em `estado.imovelUsado`. A cota vem da renda de cada cálculo (a tabela "Renda única x somada" usa a cota da renda de cada coluna). O texto do limite diz qual cota foi usada e por quê (ex.: "Imóvel usado no MCMV (Classe Média) com renda de R$ 12.000: o banco financia até 60% (IN MCID 45/2025...)"). O link de compartilhar leva "novo/usado" (`u=1` ou `u=0`), nunca valores. A pergunta frequente sobre entrada lista as regras de usado.
 - **Diferença em relação ao pedido:** o pedido citava 65% para renda de R$ 4.700,01 a R$ 8.600. Essa regra foi revogada para 2026, então o caso "renda R$ 6.000, usado, entrada R$ 70 mil" fica com cota de 80% (preço máximo de R$ 271 mil, limitado pela renda), e não 65%.
 - Observação: o art. 13 da IN 45 diz "entra em vigor em 1° de janeiro de 2025", o que parece erro de digitação (o título e o art. 1º falam do exercício de 2026).
+
+## 27. Dinheiro necessário com a entrada mínima (27/11/2026)
+
+- **Problema:** "Dinheiro necessário (sem cartório e avaliação)" somava a entrada digitada com o ITBI. Com entrada abaixo da mínima, o total ficava menor que o dinheiro de verdade.
+- **Regra:** dinheiro necessário = o maior entre (entrada digitada) e (entrada mínima − FGTS, sem ficar negativo), mais o ITBI. Quando a entrada digitada é menor que a mínima, a tabela mostra "Entrada em dinheiro: você informou" e "Entrada em dinheiro: mínimo exigido (já descontado o FGTS)". Se SAC e Price têm cotas diferentes (SBPE), mostra o mínimo e o dinheiro necessário nos dois.
+- A frase "Para comprar, você imobiliza..." da comparação com aluguel usa a mesma conta (mais o FGTS).
+- Conferido: imóvel de R$ 300 mil no SBPE, entrada de R$ 20 mil e FGTS de R$ 10 mil: entrada mínima de R$ 60 mil no SAC, dinheiro necessário de R$ 50 mil + ITBI de R$ 9 mil = R$ 59 mil (Price: R$ 89 mil). Com entrada de R$ 100 mil, vale a digitada (R$ 109 mil).
